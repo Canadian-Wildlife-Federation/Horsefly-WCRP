@@ -5,4 +5,21 @@
 
 # Table 2. Additional Key Actors in the Horsefly River watershed. Key Actors are the individuals, groups, and/or organizations, outside of the planning team, with influence and relevant experience in the watershed, whose engagement will be critical for the successful implementation of this WCRP. 
 
-# 
+# Table 2. Additional Key Actors in the Horsefly River watershed. Key Actors are the individuals, groups, and/or organizations, outside of the planning team, with influence and relevant experience in the watershed, whose engagement will be critical for the successful implementation of this WCRP. 
+
+# In[1]:
+
+
+from IPython.display import display
+import pandas as pd
+
+data = pd.read_csv('tables\key_actors.csv', index_col=False).style.hide_index()
+
+data = data.set_table_styles([
+                            {
+                                "selector":"thead",
+                                "props":"background-color:#00827F; color:white;"
+                            },
+                        ])
+display(data)
+
