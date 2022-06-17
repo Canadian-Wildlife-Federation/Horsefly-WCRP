@@ -6,13 +6,13 @@ The primary geographic scope of this WCRP is the Horsefly River watershed, locat
 
 The Horsefly River watershed comprises parts of Secwepemcúl’ecw, the traditional territory of the Northern Secwepemc te Qelmucw (NStQ), represented by the Northern Shuswap Tribal Council and four member communities or autonomous nations: 
 
-Xatśūll Cmetem’ (Soda Creek First Nations) 
+- Xatśūll Cmetem’ (Soda Creek First Nations) 
 
-Stswēceḿc Xgāt’tem (Canoe Creek/Dog Creek First Nations) 
+- Stswēceḿc Xgāt’tem (Canoe Creek/Dog Creek First Nations) 
 
-T’ēxelc (Williams Lake First Nation) 
+- T’ēxelc (Williams Lake First Nation) 
 
-Tsq’ēsceń (Canim Lake First Nation) 
+- Tsq’ēsceń (Canim Lake First Nation) 
 
 The NStQ steward the land and the waters of the Horsefly River watershed based on balance and respect between the people, the animals and fish, the land, and the plants (N. Singtha, Williams Lake First Nation, pers. comm.). It is necessary to receive permission from the member communities for any work to occur on their territory. 
 
