@@ -15,11 +15,5 @@ import pandas as pd
 
 data = pd.read_csv('tables\key_actors.csv', index_col=False).style.hide_index()
 
-data = data.set_table_styles([
-                            {
-                                "selector":"thead",
-                                "props":"background-color:#00827F; color:white;"
-                            },
-                        ])
 display(data)
 
