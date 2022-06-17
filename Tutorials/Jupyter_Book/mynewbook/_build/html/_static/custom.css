@@ -2,3 +2,12 @@ p {
     text-align: justify;
     color: black;
 }
+
+h1 {
+    color: #008270 !important;
+}
+
+thead {
+    background-color: #008270;
+    color: white;
+}
