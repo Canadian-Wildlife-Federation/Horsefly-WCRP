@@ -13,10 +13,10 @@ import json
 
 
 #make the map
-m = Map(center=(50,-120), zoom=6, basemap = basemaps.Esri.DeLorme)
+m = Map(center=(60,-120), zoom=5, basemap = basemaps.Esri.DeLorme)
 
 #add the layers
-with open('test.geojson') as f:
+with open('test1.geojson') as f:
     data = json.load(f)
 
 geo = GeoJSON(data=data,
@@ -26,40 +26,25 @@ geo = GeoJSON(data=data,
 
 m.add_layer(geo)
 
-# #attempt at querying data from pg_featureserv API for bcfishpass
-
-# import requests
-# import json
-
-# response_API = requests.get('https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.streams/items.json')
-# print(response_API.status_code)
-
-# parse = response_API.text
-# gjson = json.loads(parse)
-
-# geo1 = GeoJSON(data=gjson,
-#               style = {
-#                 'color': 'blue'
-#               })
-
-# m.add_layer(geo1)
-
-
-m
-
-
-# In[43]:
-
-
 #attempt at querying data from pg_featureserv API for bcfishpass
 
 import requests
 import json
 
-response_API = requests.get('https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.streams/items.json')
-print(response_API.status_code)
+query = '?watershed_group_code=BULK'
 
-data = response_API.text
-json.loads(data)
+response_API = requests.get('https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.barriers_bt/items.json'+query)
 
+parse = response_API.text
+gjson = json.loads(parse)
+
+geo1 = GeoJSON(data=gjson,
+              style = {
+                'color': 'black'
+              })
+
+m.add_layer(geo1)
+
+
+m
 
