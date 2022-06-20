@@ -23,10 +23,10 @@ m = Map(center=(52.6,-120.5), zoom=8)
 dm_layer = basemap_to_tiles(basemaps.CartoDB.DarkMatter)
 m.add_layer(dm_layer)
 
-
+#caching
 #querying data from pg_featureserv API for bcfishpass
 request = 'https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.streams/items.json'
-query = '?filter=watershed_group_code%20=%20%27HORS%27' #this query slows things down for some reason
+query = '?properties=watershed_group_code&filter=watershed_group_code%20=%20%27HORS%27' #this query slows things down for some reason
 
 request1 = 'https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.crossings/items.json'
 query1 = '?filter=watershed_group_code%20=%20%27HORS%27%20AND%20all_spawningrearing_km%3e0'
@@ -95,7 +95,5 @@ m.add_control(control)
 
 
 #displaying map inline
-display(m)
+display(m, metadata={"tags":["hide-input"]})
 
-
-# 
