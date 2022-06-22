@@ -9,11 +9,11 @@
 
 
 import dash
-from dash import dcc, html, Input, Output #pip install dash
+from dash import Dash, dcc, html, Input, Output #pip install dash
 import jupyter_dash #integrated in jupyter notebooks
 from jupyter_dash import JupyterDash as JD
 import dash_leaflet as dl
-#import dash_leaflet.express as dlx
+import dash_leaflet.express as dlx
 import requests
 import json
 from dash_extensions.javascript import assign
@@ -43,8 +43,12 @@ gjson = json.loads(parse1)
 
 
 #configuring the app
+#useful resources include:
+#https://github.com/Coding-with-Adam/Dash-by-Plotly/blob/master/Other/Dash_Introduction/intro.py
+#https://dash-leaflet.herokuapp.com/
+#https://github.com/plotly/jupyter-dash/blob/master/notebooks/getting_started.ipynb
 
-app = JD(__name__)
+app = Dash(__name__)
 
 #making dropdown option based on property in data table
 id_list = []
@@ -53,7 +57,7 @@ features = gjson['features']
 for i in range(len(features)):
     lati=features[i]['geometry']['coordinates'][1]
     long=features[i]['geometry']['coordinates'][0]
-    cross_id = (features[i]['id'])
+    cross_id = str(features[i]['id'])
 
     temp = dict(name = cross_id, lat = lati, lon = long)
 
@@ -62,10 +66,13 @@ for i in range(len(features)):
 dd_options = [dict(value=j['name'], label=j['name']) for j in id_list]
 dd_defaults = [o['value'] for o in dd_options]
 
-# Generate geojson with a marker for each city and name as tooltip.
-#geojson = dl.dicts_to_geojson([{**c, **dict(tooltip=c['name'])} for c in id_list])
+# print(dd_defaults)
+# print(type(dd_defaults[2]))
 
-gjson_filter = assign("function(feature, context){return context.props.hideout.includes(feature.properties.name);}")
+# # Generate geojson with a marker for each city and name as tooltip.
+geojson = dlx.dicts_to_geojson([{**c, **dict(tooltip=c['name'])} for c in id_list])
+
+gjson_filter = assign("function(feature, context){return context.props.hideout.includes(feature.name);}")
 
 
 
@@ -75,9 +82,10 @@ app.layout = html.Div([
 
     html.H1("Web Application Dashboard for Fish Passage BC", style={'text-align': 'center'}),
 
-    dcc.Dropdown(id="TableValue",
-                 value=dd_defaults,
+    dcc.Dropdown(id="dd",
                  options=dd_options,
+                 value=dd_defaults,
+                 multi=True,
                  style={'width': "40%"}
                  ),
     
@@ -85,13 +93,15 @@ app.layout = html.Div([
     dl.Map(center=[52.6,-120.5], zoom=8, children=[
         dl.TileLayer(),
         dl.GeoJSON(data=stream, id="streams"),
-        dl.GeoJSON(data=gjson, options= dict(filter=gjson_filter), id="crossings", cluster=True, zoomToBoundsOnClick=True, hideout=dd_defaults)
+        dl.GeoJSON(data=geojson, options=dict(filter=geojson_filter), hideout=dd_defaults, id="geojson", zoomToBounds=True)
         ]
         ,style={'width': '800px', 'height': '500px'} #style is key as map will not show up without it
 
     ),
 
-    html.Div(id='stream')
+    #html.Div(id='stream'),
+
+    #html.H3(id='cross')
 
     #html.Div(id='output_container', children=[]),
     #html.Br(),
@@ -103,21 +113,21 @@ app.layout = html.Div([
 # ------------------------------------------------------------------------------
 # Connect Leaflet Map to Dash Components
 @app.callback(
-    Output('stream', 'children'), [Input('streams', 'click_feature')]
+   Output('stream', 'children'), [Input('streams', 'click_feature')]
 )
 def stream_click(feature):
     if feature is not None:
         return f"The stream is {feature['properties']['segmented_stream_id']}"
 
-# @app.callback(
-#     Output('crossings', 'hideout'), [Input('TableValue', 'value')]
-# )
-# def cross_click(feature):
-#     return feature
+@app.callback(
+    Output('geojson', 'hideout'), [Input('dd', 'value')]
+)
+def cross_click(feature):
+    return feature
 
-app.clientside_callback("function(x){return x;}", Output("crossings", "hideout"), Input("TableValue", "value"))
+#app.clientside_callback("function(x){return x;}", Output("crossings", "hideout"), Input("TableValue", "value"))
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
-    app.run_server(mode='inline', port=2223)
+    app.run_server()
 

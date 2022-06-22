@@ -51,6 +51,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="API practice" href="API.html" />
@@ -373,11 +375,11 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dash</span>
-<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span> <span class="c1">#pip install dash</span>
+<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">Dash</span><span class="p">,</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span> <span class="c1">#pip install dash</span>
 <span class="kn">import</span> <span class="nn">jupyter_dash</span> <span class="c1">#integrated in jupyter notebooks</span>
 <span class="kn">from</span> <span class="nn">jupyter_dash</span> <span class="kn">import</span> <span class="n">JupyterDash</span> <span class="k">as</span> <span class="n">JD</span>
 <span class="kn">import</span> <span class="nn">dash_leaflet</span> <span class="k">as</span> <span class="nn">dl</span>
-<span class="c1">#import dash_leaflet.express as dlx</span>
+<span class="kn">import</span> <span class="nn">dash_leaflet.express</span> <span class="k">as</span> <span class="nn">dlx</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">dash_extensions.javascript</span> <span class="kn">import</span> <span class="n">assign</span>
@@ -409,8 +411,12 @@ title="Print to PDF"
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#configuring the app</span>
+<span class="c1">#useful resources include:</span>
+<span class="c1">#https://github.com/Coding-with-Adam/Dash-by-Plotly/blob/master/Other/Dash_Introduction/intro.py</span>
+<span class="c1">#https://dash-leaflet.herokuapp.com/</span>
+<span class="c1">#https://github.com/plotly/jupyter-dash/blob/master/notebooks/getting_started.ipynb</span>
 
-<span class="n">app</span> <span class="o">=</span> <span class="n">JD</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Dash</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="c1">#making dropdown option based on property in data table</span>
 <span class="n">id_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -419,7 +425,7 @@ title="Print to PDF"
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">)):</span>
     <span class="n">lati</span><span class="o">=</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;geometry&#39;</span><span class="p">][</span><span class="s1">&#39;coordinates&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">long</span><span class="o">=</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;geometry&#39;</span><span class="p">][</span><span class="s1">&#39;coordinates&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">cross_id</span> <span class="o">=</span> <span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
+    <span class="n">cross_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
 
     <span class="n">temp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="n">cross_id</span><span class="p">,</span> <span class="n">lat</span> <span class="o">=</span> <span class="n">lati</span><span class="p">,</span> <span class="n">lon</span> <span class="o">=</span> <span class="n">long</span><span class="p">)</span>
 
@@ -428,10 +434,13 @@ title="Print to PDF"
 <span class="n">dd_options</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">j</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">j</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">id_list</span><span class="p">]</span>
 <span class="n">dd_defaults</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">dd_options</span><span class="p">]</span>
 
-<span class="c1"># Generate geojson with a marker for each city and name as tooltip.</span>
-<span class="c1">#geojson = dl.dicts_to_geojson([{**c, **dict(tooltip=c[&#39;name&#39;])} for c in id_list])</span>
+<span class="c1"># print(dd_defaults)</span>
+<span class="c1"># print(type(dd_defaults[2]))</span>
 
-<span class="n">gjson_filter</span> <span class="o">=</span> <span class="n">assign</span><span class="p">(</span><span class="s2">&quot;function(feature, context){return context.props.hideout.includes(feature.properties.name);}&quot;</span><span class="p">)</span>
+<span class="c1"># # Generate geojson with a marker for each city and name as tooltip.</span>
+<span class="n">geojson</span> <span class="o">=</span> <span class="n">dlx</span><span class="o">.</span><span class="n">dicts_to_geojson</span><span class="p">([{</span><span class="o">**</span><span class="n">c</span><span class="p">,</span> <span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="n">tooltip</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])}</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">id_list</span><span class="p">])</span>
+
+<span class="n">gjson_filter</span> <span class="o">=</span> <span class="n">assign</span><span class="p">(</span><span class="s2">&quot;function(feature, context){return context.props.hideout.includes(feature.name);}&quot;</span><span class="p">)</span>
 
 
 
@@ -441,9 +450,10 @@ title="Print to PDF"
 
     <span class="n">html</span><span class="o">.</span><span class="n">H1</span><span class="p">(</span><span class="s2">&quot;Web Application Dashboard for Fish Passage BC&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;text-align&#39;</span><span class="p">:</span> <span class="s1">&#39;center&#39;</span><span class="p">}),</span>
 
-    <span class="n">dcc</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;TableValue&quot;</span><span class="p">,</span>
-                 <span class="n">value</span><span class="o">=</span><span class="n">dd_defaults</span><span class="p">,</span>
+    <span class="n">dcc</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;dd&quot;</span><span class="p">,</span>
                  <span class="n">options</span><span class="o">=</span><span class="n">dd_options</span><span class="p">,</span>
+                 <span class="n">value</span><span class="o">=</span><span class="n">dd_defaults</span><span class="p">,</span>
+                 <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s2">&quot;40%&quot;</span><span class="p">}</span>
                  <span class="p">),</span>
     
@@ -451,13 +461,15 @@ title="Print to PDF"
     <span class="n">dl</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mf">52.6</span><span class="p">,</span><span class="o">-</span><span class="mf">120.5</span><span class="p">],</span> <span class="n">zoom</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span>
         <span class="n">dl</span><span class="o">.</span><span class="n">TileLayer</span><span class="p">(),</span>
         <span class="n">dl</span><span class="o">.</span><span class="n">GeoJSON</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;streams&quot;</span><span class="p">),</span>
-        <span class="n">dl</span><span class="o">.</span><span class="n">GeoJSON</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">gjson</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="n">gjson_filter</span><span class="p">),</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;crossings&quot;</span><span class="p">,</span> <span class="n">cluster</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">zoomToBoundsOnClick</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">hideout</span><span class="o">=</span><span class="n">dd_defaults</span><span class="p">)</span>
+        <span class="n">dl</span><span class="o">.</span><span class="n">GeoJSON</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">geojson</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="n">geojson_filter</span><span class="p">),</span> <span class="n">hideout</span><span class="o">=</span><span class="n">dd_defaults</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;geojson&quot;</span><span class="p">,</span> <span class="n">zoomToBounds</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="p">]</span>
         <span class="p">,</span><span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;800px&#39;</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;500px&#39;</span><span class="p">}</span> <span class="c1">#style is key as map will not show up without it</span>
 
     <span class="p">),</span>
 
-    <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s1">&#39;stream&#39;</span><span class="p">)</span>
+    <span class="c1">#html.Div(id=&#39;stream&#39;),</span>
+
+    <span class="c1">#html.H3(id=&#39;cross&#39;)</span>
 
     <span class="c1">#html.Div(id=&#39;output_container&#39;, children=[]),</span>
     <span class="c1">#html.Br(),</span>
@@ -469,85 +481,37 @@ title="Print to PDF"
 <span class="c1"># ------------------------------------------------------------------------------</span>
 <span class="c1"># Connect Leaflet Map to Dash Components</span>
 <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>
-    <span class="n">Output</span><span class="p">(</span><span class="s1">&#39;stream&#39;</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="p">),</span> <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;streams&#39;</span><span class="p">,</span> <span class="s1">&#39;click_feature&#39;</span><span class="p">)]</span>
+   <span class="n">Output</span><span class="p">(</span><span class="s1">&#39;stream&#39;</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="p">),</span> <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;streams&#39;</span><span class="p">,</span> <span class="s1">&#39;click_feature&#39;</span><span class="p">)]</span>
 <span class="p">)</span>
 <span class="k">def</span> <span class="nf">stream_click</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">feature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;The stream is </span><span class="si">{</span><span class="n">feature</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">][</span><span class="s1">&#39;segmented_stream_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
 
-<span class="c1"># @app.callback(</span>
-<span class="c1">#     Output(&#39;crossings&#39;, &#39;hideout&#39;), [Input(&#39;TableValue&#39;, &#39;value&#39;)]</span>
-<span class="c1"># )</span>
-<span class="c1"># def cross_click(feature):</span>
-<span class="c1">#     return feature</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>
+    <span class="n">Output</span><span class="p">(</span><span class="s1">&#39;geojson&#39;</span><span class="p">,</span> <span class="s1">&#39;hideout&#39;</span><span class="p">),</span> <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;dd&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)]</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">cross_click</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">feature</span>
 
-<span class="n">app</span><span class="o">.</span><span class="n">clientside_callback</span><span class="p">(</span><span class="s2">&quot;function(x){return x;}&quot;</span><span class="p">,</span> <span class="n">Output</span><span class="p">(</span><span class="s2">&quot;crossings&quot;</span><span class="p">,</span> <span class="s2">&quot;hideout&quot;</span><span class="p">),</span> <span class="n">Input</span><span class="p">(</span><span class="s2">&quot;TableValue&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">))</span>
+<span class="c1">#app.clientside_callback(&quot;function(x){return x;}&quot;, Output(&quot;crossings&quot;, &quot;hideout&quot;), Input(&quot;TableValue&quot;, &quot;value&quot;))</span>
 
 <span class="c1"># ------------------------------------------------------------------------------</span>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">run_server</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;inline&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">2223</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run_server</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">OSError</span><span class="g g-Whitespace">                                   </span>Traceback (most recent call last)
-<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_9212</span>\<span class="mf">1833507890.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">     </span><span class="mi">76</span> <span class="c1"># ------------------------------------------------------------------------------</span>
-<span class="g g-Whitespace">     </span><span class="mi">77</span> <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-<span class="ne">---&gt; </span><span class="mi">78</span>     <span class="n">app</span><span class="o">.</span><span class="n">run_server</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;inline&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">2223</span><span class="p">)</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_11356</span>\<span class="mf">649193150.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">     </span><span class="mi">50</span>         <span class="n">dl</span><span class="o">.</span><span class="n">TileLayer</span><span class="p">(),</span>
+<span class="g g-Whitespace">     </span><span class="mi">51</span>         <span class="n">dl</span><span class="o">.</span><span class="n">GeoJSON</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;streams&quot;</span><span class="p">),</span>
+<span class="ne">---&gt; </span><span class="mi">52</span>         <span class="n">dl</span><span class="o">.</span><span class="n">GeoJSON</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">geojson</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="n">geojson_filter</span><span class="p">),</span> <span class="n">hideout</span><span class="o">=</span><span class="n">dd_defaults</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;geojson&quot;</span><span class="p">,</span> <span class="n">zoomToBounds</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">53</span>         <span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">54</span>         <span class="p">,</span><span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;800px&#39;</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;500px&#39;</span><span class="p">}</span> <span class="c1">#style is key as map will not show up without it</span>
 
-<span class="nn">~\anaconda3.1\envs\test\lib\site-packages\jupyter_dash\jupyter_app.py</span> in <span class="ni">run_server</span><span class="nt">(self, mode, width, height, inline_exceptions, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">337</span>                 <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">338</span> 
-<span class="ne">--&gt; </span><span class="mi">339</span>         <span class="n">wait_for_app</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">340</span> 
-<span class="g g-Whitespace">    </span><span class="mi">341</span>         <span class="k">if</span> <span class="n">JupyterDash</span><span class="o">.</span><span class="n">_in_colab</span><span class="p">:</span>
-
-<span class="nn">~\anaconda3.1\envs\test\lib\site-packages\retrying.py</span> in <span class="ni">wrapped_f</span><span class="nt">(*args, **kw)</span>
-<span class="g g-Whitespace">     </span><span class="mi">47</span>             <span class="nd">@six</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">48</span>             <span class="k">def</span> <span class="nf">wrapped_f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-<span class="ne">---&gt; </span><span class="mi">49</span>                 <span class="k">return</span> <span class="n">Retrying</span><span class="p">(</span><span class="o">*</span><span class="n">dargs</span><span class="p">,</span> <span class="o">**</span><span class="n">dkw</span><span class="p">)</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">50</span> 
-<span class="g g-Whitespace">     </span><span class="mi">51</span>             <span class="k">return</span> <span class="n">wrapped_f</span>
-
-<span class="nn">~\anaconda3.1\envs\test\lib\site-packages\retrying.py</span> in <span class="ni">call</span><span class="nt">(self, fn, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">210</span>                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_exception</span> <span class="ow">and</span> <span class="n">attempt</span><span class="o">.</span><span class="n">has_exception</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">211</span>                     <span class="c1"># get() on an attempt with an exception should cause it to be raised, but raise just in case</span>
-<span class="ne">--&gt; </span><span class="mi">212</span>                     <span class="k">raise</span> <span class="n">attempt</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span>                 <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span>                     <span class="k">raise</span> <span class="n">RetryError</span><span class="p">(</span><span class="n">attempt</span><span class="p">)</span>
-
-<span class="nn">~\anaconda3.1\envs\test\lib\site-packages\retrying.py</span> in <span class="ni">get</span><span class="nt">(self, wrap_exception)</span>
-<span class="g g-Whitespace">    </span><span class="mi">245</span>                 <span class="k">raise</span> <span class="n">RetryError</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">246</span>             <span class="k">else</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">247</span>                 <span class="n">six</span><span class="o">.</span><span class="n">reraise</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="g g-Whitespace">    </span><span class="mi">248</span>         <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">249</span>             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
-
-<span class="nn">~\anaconda3.1\envs\test\lib\site-packages\six.py</span> in <span class="ni">reraise</span><span class="nt">(tp, value, tb)</span>
-<span class="g g-Whitespace">    </span><span class="mi">717</span>             <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">__traceback__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">tb</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">718</span>                 <span class="k">raise</span> <span class="n">value</span><span class="o">.</span><span class="n">with_traceback</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">719</span>             <span class="k">raise</span> <span class="n">value</span>
-<span class="g g-Whitespace">    </span><span class="mi">720</span>         <span class="k">finally</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">721</span>             <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="nn">~\anaconda3.1\envs\test\lib\site-packages\retrying.py</span> in <span class="ni">call</span><span class="nt">(self, fn, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">198</span>         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">199</span>             <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">200</span>                 <span class="n">attempt</span> <span class="o">=</span> <span class="n">Attempt</span><span class="p">(</span><span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">attempt_number</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">201</span>             <span class="k">except</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">202</span>                 <span class="n">tb</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
-
-<span class="nn">~\anaconda3.1\envs\test\lib\site-packages\jupyter_dash\jupyter_app.py</span> in <span class="ni">wait_for_app</span><span class="nt">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">333</span>                     <span class="s2">&quot;Address &#39;</span><span class="si">{url}</span><span class="s2">&#39; already in use.</span><span class="se">\n</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">334</span>                     <span class="s2">&quot;    Try passing a different port to run_server.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-<span class="ne">--&gt; </span><span class="mi">335</span>                         <span class="n">url</span><span class="o">=</span><span class="n">url</span>
-<span class="g g-Whitespace">    </span><span class="mi">336</span>                     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">337</span>                 <span class="p">)</span>
-
-<span class="ne">OSError</span>: Address &#39;http://127.0.0.1:2223&#39; already in use.
-    <span class="n">Try</span> <span class="n">passing</span> <span class="n">a</span> <span class="n">different</span> <span class="n">port</span> <span class="n">to</span> <span class="n">run_server</span><span class="o">.</span>
+<span class="ne">NameError</span>: name &#39;geojson_filter&#39; is not defined
 </pre></div>
 </div>
 </div>

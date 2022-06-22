@@ -51,8 +51,6 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Key Ecological Attributes and Current Connectivity Status" href="EcoAttributes.html" />
@@ -155,6 +153,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="API.html">
    API practice
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Dash.html">
+   Dash App using Dash-leaflet
   </a>
  </li>
 </ul>
@@ -423,36 +426,11 @@ title="Print to PDF"
 <section id="chinook-salmon-kekesu-oncorhynchus-tshawytscha">
 <h2>Chinook Salmon | Kekèsu | Oncorhynchus tshawytscha<a class="headerlink" href="#chinook-salmon-kekesu-oncorhynchus-tshawytscha" title="Permalink to this headline">#</a></h2>
 <p>Table 4. Chinook Salmon population assessments in the Horsefly River watershed. Conservation Unit assessments were undertaken by the <a class="reference external" href="https://www.salmonexplorer.ca/#%21/fraser/chinook/middle-fraser-river-spring-5-2">Pacific Salmon Foundation</a> (<a class="reference external" href="https://salmonwatersheds.ca/libraryfiles/lib_459.pdf">2020</a>). Designated Unit assessments were undertaken by <a class="reference external" href="https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/cosewic-assessments-status-reports/chinook-salmon-2018.html">COSEWIC</a> (2018).</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
-<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;tables\chinook.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">hide_index</span><span class="p">()</span>
-
-<span class="n">HTML</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;&lt;script&gt;</span>
-<span class="s1">code_show=true; </span>
-<span class="s1">function code_toggle() {</span>
-<span class="s1"> if (code_show){</span>
-<span class="s1"> $(&#39;div.input&#39;).hide();</span>
-<span class="s1"> } else {</span>
-<span class="s1"> $(&#39;div.input&#39;).show();</span>
-<span class="s1"> }</span>
-<span class="s1"> code_show = !code_show</span>
-<span class="s1">} </span>
-<span class="s1">$( document ).ready(code_toggle);</span>
-<span class="s1">&lt;/script&gt;</span>
-<span class="s1">The raw code for this IPython notebook is by default hidden for easier reading.</span>
-<span class="s1">To toggle on/off the raw code, click &lt;a href=&quot;javascript:code_toggle()&quot;&gt;here&lt;/a&gt;.&#39;&#39;&#39;</span><span class="p">)</span>
-
-<span class="n">display</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_html"><style type="text/css">
 </style>
-<table id="T_2876e_">
+<table id="T_ee4db_">
   <thead>
     <tr>
       <th class="col_heading level0 col0" >Conservation Unit</th>
@@ -464,18 +442,18 @@ title="Print to PDF"
   </thead>
   <tbody>
     <tr>
-      <td id="T_2876e_row0_col0" class="data row0 col0" >Middle Skeena – Mainstem Tributaries</td>
-      <td id="T_2876e_row0_col1" class="data row0 col1" >Good</td>
-      <td id="T_2876e_row0_col2" class="data row0 col2" >July-September</td>
-      <td id="T_2876e_row0_col3" class="data row0 col3" >575%</td>
-      <td id="T_2876e_row0_col4" class="data row0 col4" >-63%</td>
+      <td id="T_ee4db_row0_col0" class="data row0 col0" >Middle Skeena – Mainstem Tributaries</td>
+      <td id="T_ee4db_row0_col1" class="data row0 col1" >Good</td>
+      <td id="T_ee4db_row0_col2" class="data row0 col2" >July-September</td>
+      <td id="T_ee4db_row0_col3" class="data row0 col3" >575%</td>
+      <td id="T_ee4db_row0_col4" class="data row0 col4" >-63%</td>
     </tr>
     <tr>
-      <td id="T_2876e_row1_col0" class="data row1 col0" >Upper Bulkley River</td>
-      <td id="T_2876e_row1_col1" class="data row1 col1" >Data Deficient</td>
-      <td id="T_2876e_row1_col2" class="data row1 col2" >Data Deficient</td>
-      <td id="T_2876e_row1_col3" class="data row1 col3" >Data Deficient</td>
-      <td id="T_2876e_row1_col4" class="data row1 col4" >Data Deficient</td>
+      <td id="T_ee4db_row1_col0" class="data row1 col0" >Upper Bulkley River</td>
+      <td id="T_ee4db_row1_col1" class="data row1 col1" >Data Deficient</td>
+      <td id="T_ee4db_row1_col2" class="data row1 col2" >Data Deficient</td>
+      <td id="T_ee4db_row1_col3" class="data row1 col3" >Data Deficient</td>
+      <td id="T_ee4db_row1_col4" class="data row1 col4" >Data Deficient</td>
     </tr>
   </tbody>
 </table>
