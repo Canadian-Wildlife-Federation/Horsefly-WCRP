@@ -23,20 +23,5 @@ import pandas as pd
 
 data = pd.read_csv('tables\chinook.csv', index_col=False).style.hide_index()
 
-HTML('''<script>
-code_show=true; 
-function code_toggle() {
- if (code_show){
- $('div.input').hide();
- } else {
- $('div.input').show();
- }
- code_show = !code_show
-} 
-$( document ).ready(code_toggle);
-</script>
-The raw code for this IPython notebook is by default hidden for easier reading.
-To toggle on/off the raw code, click <a href="javascript:code_toggle()">here</a>.''')
-
 display(data)
 
