@@ -7,12 +7,7 @@
 # 
 #  
 
-# In[1]:
-
-
-from IPython.display import Image
-Image(url='figure1.png')
-
+# ![figure1](figure1.png)
 
 # Figure 1. The primary geographic scope — the Horsefly River watershed — located in the Fraser River system. 
 
@@ -20,7 +15,7 @@ Image(url='figure1.png')
 
 # Table 3. Target fish species in the Horsefly River watershed. The Secwepemctsín and Western common and scientific species names are provided. 
 
-# In[2]:
+# In[1]:
 
 
 from IPython.display import display
@@ -43,11 +38,6 @@ display(data)
 # 
 # The geographic scope of this WCRP was further refined by identifying “potentially accessible” stream segments, which are defined as streams that target species should be able to access in the absence of anthropogenic barriers (Figure 2). Potentially accessible stream segments were spatially delineated using fish species observation and distribution data, as well as data on "exclusionary points". These include waterfalls greater than 5 m in height, gradient barriers based on species-specific swimming abilities, and watershed exclusion areas, which are portions of the watershed where barrier remediation efforts should not occur. These maps were explored by the planning team to incorporate additional local knowledge, ensure accuracy, and finalize the constraints on potentially accessible stream segments. The planning team identified certain tributaries to the mainstem Horsefly River as "watershed exclusion areas", which were excluded from further consideration under this plan, due to intermittent or insufficient flows to support restoring connectivity for the target species. The geographic scope was further refined based on several confirmed impassable waterfalls and modelled gradient barriers. Specifically, there are two impassable waterfalls that severely limit potentially accessible habitat: one on the mainstem Horsefly River approximately 4 km upstream of the confluence with McKinley Creek, and the second on Moffat Creek approximately 5 km upstream from where it flows into the Horsefly River. All stream segments not identified as potentially accessible were removed from the scope for further consideration. The "constrained geographic scope" formed the foundation for all subsequent analyses and planning steps, including mapping and modelling useable habitat types, quantifying the current connectivity status, goal setting, and action planning (Mazany-Wright et al. 2021a). 
 
-# In[3]:
-
-
-from IPython.display import Image
-Image(url='figure2.png')
-
+# ![figure2](figure2.png)
 
 # Figure 2. Potentially accessible stream segments within the Horsefly River watershed. These do not represent useable habitat types, but rather identifies the stream segments within which habitat modelling and barrier mapping and prioritization was undertaken. 
