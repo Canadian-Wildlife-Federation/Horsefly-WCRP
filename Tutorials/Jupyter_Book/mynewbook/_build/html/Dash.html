@@ -51,8 +51,6 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="API practice" href="API.html" />
@@ -372,146 +370,13 @@ title="Print to PDF"
   <section class="tex2jax_ignore mathjax_ignore" id="dash-app-using-dash-leaflet">
 <h1>Dash App using Dash-leaflet<a class="headerlink" href="#dash-app-using-dash-leaflet" title="Permalink to this headline">#</a></h1>
 <p>This is a basic app using data called from the api as well as some interactivity.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dash</span>
-<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">Dash</span><span class="p">,</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span> <span class="c1">#pip install dash</span>
-<span class="kn">import</span> <span class="nn">jupyter_dash</span> <span class="c1">#integrated in jupyter notebooks</span>
-<span class="kn">from</span> <span class="nn">jupyter_dash</span> <span class="kn">import</span> <span class="n">JupyterDash</span> <span class="k">as</span> <span class="n">JD</span>
-<span class="kn">import</span> <span class="nn">dash_leaflet</span> <span class="k">as</span> <span class="nn">dl</span>
-<span class="kn">import</span> <span class="nn">dash_leaflet.express</span> <span class="k">as</span> <span class="nn">dlx</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">from</span> <span class="nn">dash_extensions.javascript</span> <span class="kn">import</span> <span class="n">assign</span>
-</pre></div>
+<div class="cell tag_remove-input docutils container">
 </div>
+<div class="cell tag_remove-input docutils container">
 </div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#querying data from pg_featureserv API for bcfishpass</span>
-<span class="n">request</span> <span class="o">=</span> <span class="s1">&#39;https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.streams/items.json&#39;</span>
-<span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;?properties=watershed_group_code,segmented_stream_id&amp;filter=watershed_group_code%20=</span><span class="si">%20%</span><span class="s1">27HORS%27&#39;</span> <span class="c1">#this query slows things down for some reason</span>
-
-<span class="n">request1</span> <span class="o">=</span> <span class="s1">&#39;https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.crossings/items.json&#39;</span>
-<span class="n">query1</span> <span class="o">=</span> <span class="s1">&#39;?filter=watershed_group_code%20=</span><span class="si">%20%</span><span class="s1">27HORS</span><span class="si">%27%</span><span class="s1">20AND</span><span class="si">%20a</span><span class="s1">ll_spawningrearing_km</span><span class="si">%3e</span><span class="s1">0&#39;</span>
-
-<span class="n">response_API</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">request</span><span class="o">+</span><span class="n">query</span><span class="p">)</span>
-<span class="n">response_API1</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">request1</span><span class="o">+</span><span class="n">query1</span><span class="p">)</span>
-
-<span class="n">parse</span> <span class="o">=</span> <span class="n">response_API</span><span class="o">.</span><span class="n">text</span>
-<span class="n">stream</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">parse</span><span class="p">)</span>
-
-<span class="n">parse1</span> <span class="o">=</span> <span class="n">response_API1</span><span class="o">.</span><span class="n">text</span>
-<span class="n">gjson</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">parse1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#configuring the app</span>
-<span class="c1">#useful resources include:</span>
-<span class="c1">#https://github.com/Coding-with-Adam/Dash-by-Plotly/blob/master/Other/Dash_Introduction/intro.py</span>
-<span class="c1">#https://dash-leaflet.herokuapp.com/</span>
-<span class="c1">#https://github.com/plotly/jupyter-dash/blob/master/notebooks/getting_started.ipynb</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Dash</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
-<span class="c1">#making dropdown option based on property in data table</span>
-<span class="n">id_list</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="n">features</span> <span class="o">=</span> <span class="n">gjson</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">)):</span>
-    <span class="n">lati</span><span class="o">=</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;geometry&#39;</span><span class="p">][</span><span class="s1">&#39;coordinates&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">long</span><span class="o">=</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;geometry&#39;</span><span class="p">][</span><span class="s1">&#39;coordinates&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">cross_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
-
-    <span class="n">temp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="n">cross_id</span><span class="p">,</span> <span class="n">lat</span> <span class="o">=</span> <span class="n">lati</span><span class="p">,</span> <span class="n">lon</span> <span class="o">=</span> <span class="n">long</span><span class="p">)</span>
-
-    <span class="n">id_list</span> <span class="o">=</span> <span class="n">id_list</span> <span class="o">+</span> <span class="p">[</span><span class="n">temp</span><span class="p">,]</span>
-
-<span class="n">dd_options</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">j</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">j</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">id_list</span><span class="p">]</span>
-<span class="n">dd_defaults</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">dd_options</span><span class="p">]</span>
-
-<span class="c1"># print(dd_defaults)</span>
-<span class="c1"># print(type(dd_defaults[2]))</span>
-
-<span class="c1"># # Generate geojson with a marker for each city and name as tooltip.</span>
-<span class="n">geojson</span> <span class="o">=</span> <span class="n">dlx</span><span class="o">.</span><span class="n">dicts_to_geojson</span><span class="p">([{</span><span class="o">**</span><span class="n">c</span><span class="p">,</span> <span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="n">tooltip</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])}</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">id_list</span><span class="p">])</span>
-
-<span class="n">gjson_filter</span> <span class="o">=</span> <span class="n">assign</span><span class="p">(</span><span class="s2">&quot;function(feature, context){return context.props.hideout.includes(feature.name);}&quot;</span><span class="p">)</span>
-
-
-
-<span class="c1"># ------------------------------------------------------------------------------</span>
-<span class="c1"># App layout</span>
-<span class="n">app</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">([</span>
-
-    <span class="n">html</span><span class="o">.</span><span class="n">H1</span><span class="p">(</span><span class="s2">&quot;Web Application Dashboard for Fish Passage BC&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;text-align&#39;</span><span class="p">:</span> <span class="s1">&#39;center&#39;</span><span class="p">}),</span>
-
-    <span class="n">dcc</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;dd&quot;</span><span class="p">,</span>
-                 <span class="n">options</span><span class="o">=</span><span class="n">dd_options</span><span class="p">,</span>
-                 <span class="n">value</span><span class="o">=</span><span class="n">dd_defaults</span><span class="p">,</span>
-                 <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s2">&quot;40%&quot;</span><span class="p">}</span>
-                 <span class="p">),</span>
-    
-    <span class="c1">#Map ...use geobuf for faster option in cumputing</span>
-    <span class="n">dl</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mf">52.6</span><span class="p">,</span><span class="o">-</span><span class="mf">120.5</span><span class="p">],</span> <span class="n">zoom</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">dl</span><span class="o">.</span><span class="n">TileLayer</span><span class="p">(),</span>
-        <span class="n">dl</span><span class="o">.</span><span class="n">GeoJSON</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;streams&quot;</span><span class="p">),</span>
-        <span class="n">dl</span><span class="o">.</span><span class="n">GeoJSON</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">geojson</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="n">geojson_filter</span><span class="p">),</span> <span class="n">hideout</span><span class="o">=</span><span class="n">dd_defaults</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;geojson&quot;</span><span class="p">,</span> <span class="n">zoomToBounds</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="p">]</span>
-        <span class="p">,</span><span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;800px&#39;</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;500px&#39;</span><span class="p">}</span> <span class="c1">#style is key as map will not show up without it</span>
-
-    <span class="p">),</span>
-
-    <span class="c1">#html.Div(id=&#39;stream&#39;),</span>
-
-    <span class="c1">#html.H3(id=&#39;cross&#39;)</span>
-
-    <span class="c1">#html.Div(id=&#39;output_container&#39;, children=[]),</span>
-    <span class="c1">#html.Br(),</span>
-
-    <span class="c1">#dcc.Graph(id=&#39;my_bee_map&#39;, figure={}) #add a graph if need be</span>
-
-<span class="p">])</span>
-
-<span class="c1"># ------------------------------------------------------------------------------</span>
-<span class="c1"># Connect Leaflet Map to Dash Components</span>
-<span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>
-   <span class="n">Output</span><span class="p">(</span><span class="s1">&#39;stream&#39;</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="p">),</span> <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;streams&#39;</span><span class="p">,</span> <span class="s1">&#39;click_feature&#39;</span><span class="p">)]</span>
-<span class="p">)</span>
-<span class="k">def</span> <span class="nf">stream_click</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">feature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;The stream is </span><span class="si">{</span><span class="n">feature</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">][</span><span class="s1">&#39;segmented_stream_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>
-    <span class="n">Output</span><span class="p">(</span><span class="s1">&#39;geojson&#39;</span><span class="p">,</span> <span class="s1">&#39;hideout&#39;</span><span class="p">),</span> <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s1">&#39;dd&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)]</span>
-<span class="p">)</span>
-<span class="k">def</span> <span class="nf">cross_click</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">feature</span>
-
-<span class="c1">#app.clientside_callback(&quot;function(x){return x;}&quot;, Output(&quot;crossings&quot;, &quot;hideout&quot;), Input(&quot;TableValue&quot;, &quot;value&quot;))</span>
-
-<span class="c1"># ------------------------------------------------------------------------------</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">run_server</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="o">~</span>\<span class="n">AppData</span>\<span class="n">Local</span>\<span class="n">Temp</span>\<span class="n">ipykernel_11356</span>\<span class="mf">649193150.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">     </span><span class="mi">50</span>         <span class="n">dl</span><span class="o">.</span><span class="n">TileLayer</span><span class="p">(),</span>
-<span class="g g-Whitespace">     </span><span class="mi">51</span>         <span class="n">dl</span><span class="o">.</span><span class="n">GeoJSON</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;streams&quot;</span><span class="p">),</span>
-<span class="ne">---&gt; </span><span class="mi">52</span>         <span class="n">dl</span><span class="o">.</span><span class="n">GeoJSON</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">geojson</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="n">geojson_filter</span><span class="p">),</span> <span class="n">hideout</span><span class="o">=</span><span class="n">dd_defaults</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;geojson&quot;</span><span class="p">,</span> <span class="n">zoomToBounds</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">53</span>         <span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">54</span>         <span class="p">,</span><span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;800px&#39;</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;500px&#39;</span><span class="p">}</span> <span class="c1">#style is key as map will not show up without it</span>
-
-<span class="ne">NameError</span>: name &#39;geojson_filter&#39; is not defined
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dash app running on http://127.0.0.1:2000/
 </pre></div>
 </div>
 </div>

@@ -9,7 +9,7 @@
 
 
 import dash
-from dash import Dash, dcc, html, Input, Output #pip install dash
+from dash import Dash, dcc, html, Input, Output, dash_table #pip install dash
 import jupyter_dash #integrated in jupyter notebooks
 from jupyter_dash import JupyterDash as JD
 import dash_leaflet as dl
@@ -17,6 +17,8 @@ import dash_leaflet.express as dlx
 import requests
 import json
 from dash_extensions.javascript import assign
+import pandas as pd
+import geopandas as gpd
 
 
 # In[2]:
@@ -27,7 +29,7 @@ request = 'https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.st
 query = '?properties=watershed_group_code,segmented_stream_id&filter=watershed_group_code%20=%20%27HORS%27' #this query slows things down for some reason
 
 request1 = 'https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.crossings/items.json'
-query1 = '?filter=watershed_group_code%20=%20%27HORS%27%20AND%20all_spawningrearing_km%3e0'
+query1 = '?properties=aggregated_crossings_id,pscis_status,barrier_status,access_model_ch_co_sk,all_spawningrearing_per_barrier,all_spawningrearing_km&filter=watershed_group_code%20=%20%27HORS%27%20AND%20all_spawningrearing_km%3e0'
 
 response_API = requests.get(request+query)
 response_API1 = requests.get(request1+query1)
@@ -48,86 +50,70 @@ gjson = json.loads(parse1)
 #https://dash-leaflet.herokuapp.com/
 #https://github.com/plotly/jupyter-dash/blob/master/notebooks/getting_started.ipynb
 
-app = Dash(__name__)
+app =JD(__name__)
 
 #making dropdown option based on property in data table
 id_list = []
 
+#data  = [{'x': 1, 'y': 2},{'x': 2, 'y': 3}]
+
 features = gjson['features']
 for i in range(len(features)):
-    lati=features[i]['geometry']['coordinates'][1]
-    long=features[i]['geometry']['coordinates'][0]
-    cross_id = str(features[i]['id'])
+    pscis=features[i]['properties']['pscis_status']
+    barr=features[i]['properties']['barrier_status']
+    acc=features[i]['properties']['access_model_ch_co_sk']
+    all=features[i]['properties']['all_spawningrearing_per_barrier']
+    cross_id = str(features[i]['properties']['aggregated_crossings_id'])
 
-    temp = dict(name = cross_id, lat = lati, lon = long)
+    temp = dict(id = cross_id, pscis_status=pscis, barrier_status=barr, access_model_ch_co_sk=acc, all_spawningrearing_per_barrier=all)
 
     id_list = id_list + [temp,]
-
-dd_options = [dict(value=j['name'], label=j['name']) for j in id_list]
-dd_defaults = [o['value'] for o in dd_options]
-
-# print(dd_defaults)
-# print(type(dd_defaults[2]))
-
-# # Generate geojson with a marker for each city and name as tooltip.
-geojson = dlx.dicts_to_geojson([{**c, **dict(tooltip=c['name'])} for c in id_list])
-
-gjson_filter = assign("function(feature, context){return context.props.hideout.includes(feature.name);}")
-
-
 
 # ------------------------------------------------------------------------------
 # App layout
 app.layout = html.Div([
 
-    html.H1("Web Application Dashboard for Fish Passage BC", style={'text-align': 'center'}),
+    html.H1("Web Application Dashboard for Fish Passage BC", style={'text-align': 'left'}),
 
-    dcc.Dropdown(id="dd",
-                 options=dd_options,
-                 value=dd_defaults,
-                 multi=True,
-                 style={'width': "40%"}
-                 ),
-    
-    #Map ...use geobuf for faster option in cumputing
     dl.Map(center=[52.6,-120.5], zoom=8, children=[
         dl.TileLayer(),
         dl.GeoJSON(data=stream, id="streams"),
-        dl.GeoJSON(data=geojson, options=dict(filter=geojson_filter), hideout=dd_defaults, id="geojson", zoomToBounds=True)
+        dl.GeoJSON(data=gjson, zoomToBounds=True, zoomToBoundsOnClick=True, id="cross", cluster=True)
         ]
-        ,style={'width': '800px', 'height': '500px'} #style is key as map will not show up without it
-
+        ,style={'width': '1000px', 'height': '500px'} #style is key as map will not show up without it
+        ,id='map'
     ),
 
-    #html.Div(id='stream'),
+    dash_table.DataTable(data=[],
+                        style_data={
+                            'color': 'white',
+                            'backgroundColor': 'black'
+                        },
+                        style_table={'float':'left','width': '1000px'},
+                        id='table'
+                        ),
 
-    #html.H3(id='cross')
 
-    #html.Div(id='output_container', children=[]),
-    #html.Br(),
-
-    #dcc.Graph(id='my_bee_map', figure={}) #add a graph if need be
 
 ])
+
+
 
 # ------------------------------------------------------------------------------
 # Connect Leaflet Map to Dash Components
 @app.callback(
-   Output('stream', 'children'), [Input('streams', 'click_feature')]
+   Output('table', 'data'),
+    [Input('cross', 'click_feature')]
 )
-def stream_click(feature):
+def update_table(feature):
     if feature is not None:
-        return f"The stream is {feature['properties']['segmented_stream_id']}"
-
-@app.callback(
-    Output('geojson', 'hideout'), [Input('dd', 'value')]
-)
-def cross_click(feature):
-    return feature
-
-#app.clientside_callback("function(x){return x;}", Output("crossings", "hideout"), Input("TableValue", "value"))
+        id_index = dict((p['id'],i) for i,p in enumerate(id_list))
+        index = id_index.get(feature['id'], -1)
+        data = [id_list[index]]
+        return data
+    return dash.no_update
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
-    app.run_server()
+    app.run_server(mode='external', port=2000)
 

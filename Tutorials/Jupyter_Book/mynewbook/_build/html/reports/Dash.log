@@ -23,99 +23,132 @@ nbclient.exceptions.CellExecutionError: An error occurred while executing the fo
 #https://dash-leaflet.herokuapp.com/
 #https://github.com/plotly/jupyter-dash/blob/master/notebooks/getting_started.ipynb
 
-app = Dash(__name__)
+app =JD(__name__)
 
 #making dropdown option based on property in data table
 id_list = []
 
+#data  = [{'x': 1, 'y': 2},{'x': 2, 'y': 3}]
+
 features = gjson['features']
 for i in range(len(features)):
-    lati=features[i]['geometry']['coordinates'][1]
-    long=features[i]['geometry']['coordinates'][0]
-    cross_id = str(features[i]['id'])
+    pscis=features[i]['properties']['pscis_status']
+    barr=features[i]['properties']['barrier_status']
+    acc=features[i]['properties']['access_model_ch_co_sk']
+    all=features[i]['properties']['all_spawningrearing_per_barrier']
+    cross_id = str(features[i]['properties']['aggregated_crossings_id'])
 
-    temp = dict(name = cross_id, lat = lati, lon = long)
+    temp = dict(id = cross_id, pscis_status=pscis, barrier_status=barr, access_model_ch_co_sk=acc, all_spawningrearing_per_barrier=all)
 
     id_list = id_list + [temp,]
-
-dd_options = [dict(value=j['name'], label=j['name']) for j in id_list]
-dd_defaults = [o['value'] for o in dd_options]
-
-# print(dd_defaults)
-# print(type(dd_defaults[2]))
-
-# # Generate geojson with a marker for each city and name as tooltip.
-geojson = dlx.dicts_to_geojson([{**c, **dict(tooltip=c['name'])} for c in id_list])
-
-gjson_filter = assign("function(feature, context){return context.props.hideout.includes(feature.name);}")
-
-
 
 # ------------------------------------------------------------------------------
 # App layout
 app.layout = html.Div([
 
-    html.H1("Web Application Dashboard for Fish Passage BC", style={'text-align': 'center'}),
+    html.H1("Web Application Dashboard for Fish Passage BC", style={'text-align': 'left'}),
 
-    dcc.Dropdown(id="dd",
-                 options=dd_options,
-                 value=dd_defaults,
-                 multi=True,
-                 style={'width': "40%"}
-                 ),
-    
-    #Map ...use geobuf for faster option in cumputing
     dl.Map(center=[52.6,-120.5], zoom=8, children=[
         dl.TileLayer(),
         dl.GeoJSON(data=stream, id="streams"),
-        dl.GeoJSON(data=geojson, options=dict(filter=geojson_filter), hideout=dd_defaults, id="geojson", zoomToBounds=True)
+        dl.GeoJSON(data=gjson, zoomToBounds=True, zoomToBoundsOnClick=True, id="cross", cluster=True)
         ]
-        ,style={'width': '800px', 'height': '500px'} #style is key as map will not show up without it
-
+        ,style={'width': '1000px', 'height': '500px'} #style is key as map will not show up without it
+        ,id='map'
     ),
 
-    #html.Div(id='stream'),
+    dash_table.DataTable(data=[],
+                        style_data={
+                            'color': 'white',
+                            'backgroundColor': 'black'
+                        },
+                        style_table={'float':'left','width': '1000px'},
+                        id='table'
+                        ),
 
-    #html.H3(id='cross')
 
-    #html.Div(id='output_container', children=[]),
-    #html.Br(),
-
-    #dcc.Graph(id='my_bee_map', figure={}) #add a graph if need be
 
 ])
+
+
 
 # ------------------------------------------------------------------------------
 # Connect Leaflet Map to Dash Components
 @app.callback(
-   Output('stream', 'children'), [Input('streams', 'click_feature')]
+   Output('table', 'data'),
+    [Input('cross', 'click_feature')]
 )
-def stream_click(feature):
+def update_table(feature):
     if feature is not None:
-        return f"The stream is {feature['properties']['segmented_stream_id']}"
-
-@app.callback(
-    Output('geojson', 'hideout'), [Input('dd', 'value')]
-)
-def cross_click(feature):
-    return feature
-
-#app.clientside_callback("function(x){return x;}", Output("crossings", "hideout"), Input("TableValue", "value"))
+        id_index = dict((p['id'],i) for i,p in enumerate(id_list))
+        index = id_index.get(feature['id'], -1)
+        data = [id_list[index]]
+        return data
+    return dash.no_update
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
-    app.run_server()
+    app.run_server(mode='inline', port=8050)
 ------------------
 
 [1;31m---------------------------------------------------------------------------[0m
-[1;31mNameError[0m                                 Traceback (most recent call last)
-[1;32m~\AppData\Local\Temp\ipykernel_11356\649193150.py[0m in [0;36m<module>[1;34m[0m
-[0;32m     50[0m         [0mdl[0m[1;33m.[0m[0mTileLayer[0m[1;33m([0m[1;33m)[0m[1;33m,[0m[1;33m[0m[1;33m[0m[0m
-[0;32m     51[0m         [0mdl[0m[1;33m.[0m[0mGeoJSON[0m[1;33m([0m[0mdata[0m[1;33m=[0m[0mstream[0m[1;33m,[0m [0mid[0m[1;33m=[0m[1;34m"streams"[0m[1;33m)[0m[1;33m,[0m[1;33m[0m[1;33m[0m[0m
-[1;32m---> 52[1;33m         [0mdl[0m[1;33m.[0m[0mGeoJSON[0m[1;33m([0m[0mdata[0m[1;33m=[0m[0mgeojson[0m[1;33m,[0m [0moptions[0m[1;33m=[0m[0mdict[0m[1;33m([0m[0mfilter[0m[1;33m=[0m[0mgeojson_filter[0m[1;33m)[0m[1;33m,[0m [0mhideout[0m[1;33m=[0m[0mdd_defaults[0m[1;33m,[0m [0mid[0m[1;33m=[0m[1;34m"geojson"[0m[1;33m,[0m [0mzoomToBounds[0m[1;33m=[0m[1;32mTrue[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
-[0m[0;32m     53[0m         ]
-[0;32m     54[0m         [1;33m,[0m[0mstyle[0m[1;33m=[0m[1;33m{[0m[1;34m'width'[0m[1;33m:[0m [1;34m'800px'[0m[1;33m,[0m [1;34m'height'[0m[1;33m:[0m [1;34m'500px'[0m[1;33m}[0m [1;31m#style is key as map will not show up without it[0m[1;33m[0m[1;33m[0m[0m
+[1;31mOSError[0m                                   Traceback (most recent call last)
+[1;32m~\AppData\Local\Temp\ipykernel_5928\3731650236.py[0m in [0;36m<module>[1;34m[0m
+[0;32m     70[0m [1;31m# ------------------------------------------------------------------------------[0m[1;33m[0m[1;33m[0m[1;33m[0m[0m
+[0;32m     71[0m [1;32mif[0m [0m__name__[0m [1;33m==[0m [1;34m'__main__'[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[1;32m---> 72[1;33m     [0mapp[0m[1;33m.[0m[0mrun_server[0m[1;33m([0m[0mmode[0m[1;33m=[0m[1;34m'inline'[0m[1;33m,[0m [0mport[0m[1;33m=[0m[1;36m8050[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m
+[1;32m~\anaconda3.1\envs\test\lib\site-packages\jupyter_dash\jupyter_app.py[0m in [0;36mrun_server[1;34m(self, mode, width, height, inline_exceptions, **kwargs)[0m
+[0;32m    337[0m                 )
+[0;32m    338[0m [1;33m[0m[0m
+[1;32m--> 339[1;33m         [0mwait_for_app[0m[1;33m([0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m    340[0m [1;33m[0m[0m
+[0;32m    341[0m         [1;32mif[0m [0mJupyterDash[0m[1;33m.[0m[0m_in_colab[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
 
-[1;31mNameError[0m: name 'geojson_filter' is not defined
-NameError: name 'geojson_filter' is not defined
+[1;32m~\anaconda3.1\envs\test\lib\site-packages\retrying.py[0m in [0;36mwrapped_f[1;34m(*args, **kw)[0m
+[0;32m     47[0m             [1;33m@[0m[0msix[0m[1;33m.[0m[0mwraps[0m[1;33m([0m[0mf[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0;32m     48[0m             [1;32mdef[0m [0mwrapped_f[0m[1;33m([0m[1;33m*[0m[0margs[0m[1;33m,[0m [1;33m**[0m[0mkw[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[1;32m---> 49[1;33m                 [1;32mreturn[0m [0mRetrying[0m[1;33m([0m[1;33m*[0m[0mdargs[0m[1;33m,[0m [1;33m**[0m[0mdkw[0m[1;33m)[0m[1;33m.[0m[0mcall[0m[1;33m([0m[0mf[0m[1;33m,[0m [1;33m*[0m[0margs[0m[1;33m,[0m [1;33m**[0m[0mkw[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m     50[0m [1;33m[0m[0m
+[0;32m     51[0m             [1;32mreturn[0m [0mwrapped_f[0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\anaconda3.1\envs\test\lib\site-packages\retrying.py[0m in [0;36mcall[1;34m(self, fn, *args, **kwargs)[0m
+[0;32m    210[0m                 [1;32mif[0m [1;32mnot[0m [0mself[0m[1;33m.[0m[0m_wrap_exception[0m [1;32mand[0m [0mattempt[0m[1;33m.[0m[0mhas_exception[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    211[0m                     [1;31m# get() on an attempt with an exception should cause it to be raised, but raise just in case[0m[1;33m[0m[1;33m[0m[1;33m[0m[0m
+[1;32m--> 212[1;33m                     [1;32mraise[0m [0mattempt[0m[1;33m.[0m[0mget[0m[1;33m([0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m    213[0m                 [1;32melse[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    214[0m                     [1;32mraise[0m [0mRetryError[0m[1;33m([0m[0mattempt[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\anaconda3.1\envs\test\lib\site-packages\retrying.py[0m in [0;36mget[1;34m(self, wrap_exception)[0m
+[0;32m    245[0m                 [1;32mraise[0m [0mRetryError[0m[1;33m([0m[0mself[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    246[0m             [1;32melse[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[1;32m--> 247[1;33m                 [0msix[0m[1;33m.[0m[0mreraise[0m[1;33m([0m[0mself[0m[1;33m.[0m[0mvalue[0m[1;33m[[0m[1;36m0[0m[1;33m][0m[1;33m,[0m [0mself[0m[1;33m.[0m[0mvalue[0m[1;33m[[0m[1;36m1[0m[1;33m][0m[1;33m,[0m [0mself[0m[1;33m.[0m[0mvalue[0m[1;33m[[0m[1;36m2[0m[1;33m][0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m    248[0m         [1;32melse[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    249[0m             [1;32mreturn[0m [0mself[0m[1;33m.[0m[0mvalue[0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\anaconda3.1\envs\test\lib\site-packages\six.py[0m in [0;36mreraise[1;34m(tp, value, tb)[0m
+[0;32m    717[0m             [1;32mif[0m [0mvalue[0m[1;33m.[0m[0m__traceback__[0m [1;32mis[0m [1;32mnot[0m [0mtb[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    718[0m                 [1;32mraise[0m [0mvalue[0m[1;33m.[0m[0mwith_traceback[0m[1;33m([0m[0mtb[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[1;32m--> 719[1;33m             [1;32mraise[0m [0mvalue[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m    720[0m         [1;32mfinally[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    721[0m             [0mvalue[0m [1;33m=[0m [1;32mNone[0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\anaconda3.1\envs\test\lib\site-packages\retrying.py[0m in [0;36mcall[1;34m(self, fn, *args, **kwargs)[0m
+[0;32m    198[0m         [1;32mwhile[0m [1;32mTrue[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    199[0m             [1;32mtry[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[1;32m--> 200[1;33m                 [0mattempt[0m [1;33m=[0m [0mAttempt[0m[1;33m([0m[0mfn[0m[1;33m([0m[1;33m*[0m[0margs[0m[1;33m,[0m [1;33m**[0m[0mkwargs[0m[1;33m)[0m[1;33m,[0m [0mattempt_number[0m[1;33m,[0m [1;32mFalse[0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m    201[0m             [1;32mexcept[0m[1;33m:[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    202[0m                 [0mtb[0m [1;33m=[0m [0msys[0m[1;33m.[0m[0mexc_info[0m[1;33m([0m[1;33m)[0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\anaconda3.1\envs\test\lib\site-packages\jupyter_dash\jupyter_app.py[0m in [0;36mwait_for_app[1;34m()[0m
+[0;32m    333[0m                     [1;34m"Address '{url}' already in use.\n"[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    334[0m                     "    Try passing a different port to run_server.".format(
+[1;32m--> 335[1;33m                         [0murl[0m[1;33m=[0m[0murl[0m[1;33m[0m[1;33m[0m[0m
+[0m[0;32m    336[0m                     )
+[0;32m    337[0m                 )
+
+[1;31mOSError[0m: Address 'http://127.0.0.1:8050' already in use.
+    Try passing a different port to run_server.
+OSError: Address 'http://127.0.0.1:8050' already in use.
+    Try passing a different port to run_server.
 
