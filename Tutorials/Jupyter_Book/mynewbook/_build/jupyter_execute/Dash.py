@@ -19,6 +19,7 @@ import json
 from dash_extensions.javascript import assign
 import pandas as pd
 import geopandas as gpd
+import numpy as np
 
 
 # In[2]:
@@ -55,7 +56,8 @@ app =JD(__name__)
 #making dropdown option based on property in data table
 id_list = []
 
-#data  = [{'x': 1, 'y': 2},{'x': 2, 'y': 3}]
+#priority vs intermediate barrier list
+priority = pd.read_csv('tables\priority_barriers.csv', index_col=False)
 
 features = gjson['features']
 for i in range(len(features)):
@@ -75,6 +77,24 @@ app.layout = html.Div([
 
     html.H1("Web Application Dashboard for Fish Passage BC", style={'text-align': 'left'}),
 
+    dcc.Dropdown(
+        options=[
+            {'label': 'Priority Barrier List', 'value': 'priority'},
+            {'label': 'Intermediate Barrier List', 'value': 'intermediate'}
+        ],
+        id='dd',
+        style={'width': '1000px'}
+    ),
+
+    dash_table.DataTable(data=[],
+                        style_data={
+                            'color': 'white',
+                            'backgroundColor': 'black'
+                        },
+                        style_table={'float':'left','width': '1000px'},
+                        id='table2'
+                        ),
+
     dl.Map(center=[52.6,-120.5], zoom=8, children=[
         dl.TileLayer(),
         dl.GeoJSON(data=stream, id="streams"),
@@ -91,7 +111,7 @@ app.layout = html.Div([
                         },
                         style_table={'float':'left','width': '1000px'},
                         id='table'
-                        ),
+                        )
 
 
 
@@ -113,7 +133,26 @@ def update_table(feature):
         return data
     return dash.no_update
 
+@app.callback(
+   Output('table2', 'data'),
+    [Input('dd', 'value')]
+)
+def update_table2(table_value):
+    data = []
+    if table_value == 'priority':
+        for i in range(0, len(priority.iloc[:,1])):
+            id_index = dict((p['id'],j) for j,p in enumerate(id_list))
+            index1 = id_index.get(str(priority.iloc[:,1][i]), -1)
+            data = data + [id_list[index1],]
+    elif table_value == 'intermediate':
+        for i in range(0, len(priority.iloc[:,0])):
+            id_index = dict((p['id'],j) for j,p in enumerate(id_list))
+            index1 = id_index.get(str(priority.iloc[:,0][i]), -1)
+            data = data + [id_list[index1],]
+    
+    return data
+
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
-    app.run_server(mode='external', port=2000)
+    app.run_server(mode='inline')
 
