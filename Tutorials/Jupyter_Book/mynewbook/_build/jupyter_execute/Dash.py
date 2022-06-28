@@ -51,13 +51,16 @@ gjson = json.loads(parse1)
 #https://dash-leaflet.herokuapp.com/
 #https://github.com/plotly/jupyter-dash/blob/master/notebooks/getting_started.ipynb
 
-app =JD(__name__)
+app =Dash(__name__)
 
 #making dropdown option based on property in data table
 id_list = []
 
 #priority vs intermediate barrier list
-priority = pd.read_csv('tables\priority_barriers.csv', index_col=False)
+prior_table = pd.read_csv('tables\priority_barriers.csv', index_col=False)
+
+#seperate GeoJSOn for selected filtering
+
 
 features = gjson['features']
 for i in range(len(features)):
@@ -86,22 +89,35 @@ app.layout = html.Div([
         style={'width': '1000px'}
     ),
 
+    html.Br(),
+
     dash_table.DataTable(data=[],
                         style_data={
                             'color': 'white',
                             'backgroundColor': 'black'
                         },
                         style_table={'float':'left','width': '1000px'},
-                        id='table2'
+                        id='table2',
+                        active_cell= None
                         ),
+    
+    html.Button('Default View', id='home', n_clicks=0),
+    
+    
 
     dl.Map(center=[52.6,-120.5], zoom=8, children=[
-        dl.TileLayer(),
-        dl.GeoJSON(data=stream, id="streams"),
-        dl.GeoJSON(data=gjson, zoomToBounds=True, zoomToBoundsOnClick=True, id="cross", cluster=True)
+        
+        
+        dl.LayersControl(
+        [dl.BaseLayer(dl.TileLayer(url='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                    attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'), name='ESRI Topographic', checked=False),
+                    dl.BaseLayer(dl.TileLayer(), name='Base', checked=True)] +
+        [dl.Overlay(dl.GeoJSON(data=stream, id="streams"), name='Streams',checked=True),
+        dl.Overlay(dl.GeoJSON(data=gjson, zoomToBounds=True, zoomToBoundsOnClick=True, id="cross", cluster=True), name='Crossings',checked=True)]
+        )
         ]
-        ,style={'width': '1000px', 'height': '500px'} #style is key as map will not show up without it
-        ,id='map'
+        ,style={'width': '1000px', 'height': '500px'}, #style is key as map will not show up without it
+        id='map'
     ),
 
     dash_table.DataTable(data=[],
@@ -111,7 +127,9 @@ app.layout = html.Div([
                         },
                         style_table={'float':'left','width': '1000px'},
                         id='table'
-                        )
+                        ),
+
+    html.Div(id='test')
 
 
 
@@ -139,20 +157,50 @@ def update_table(feature):
 )
 def update_table2(table_value):
     data = []
-    if table_value == 'priority':
-        for i in range(0, len(priority.iloc[:,1])):
+    if table_value == 'intermediate':
+        for i in range(0, len(prior_table.iloc[:,1])):
             id_index = dict((p['id'],j) for j,p in enumerate(id_list))
-            index1 = id_index.get(str(priority.iloc[:,1][i]), -1)
+            index1 = id_index.get(str(prior_table.iloc[:,0][i]), -1)
             data = data + [id_list[index1],]
-    elif table_value == 'intermediate':
-        for i in range(0, len(priority.iloc[:,0])):
+    elif table_value == 'priority':
+        for i in range(0, len(prior_table.iloc[:,0])):
             id_index = dict((p['id'],j) for j,p in enumerate(id_list))
-            index1 = id_index.get(str(priority.iloc[:,0][i]), -1)
+            index1 = id_index.get(str(prior_table.iloc[:,1][i]), -1)
             data = data + [id_list[index1],]
     
     return data
 
+@app.callback(
+    Output('cross', 'data'), [Input('table2', 'active_cell'), Input('dd', 'value')]
+)
+def marker(cell, value):
+    if value == 'intermediate':
+        if cell['column_id'] == "id":
+            geojson = json.loads(parse1)
+            features = geojson.pop('features')
+            geojson['features'] = []
+            for i in features:
+                if str(i['properties']['aggregated_crossings_id']) == cell['row_id']:
+                    geojson['features'].append(i)
+                    return geojson
+    elif value == 'priority':
+        if cell['column_id'] == "id":
+            geojson = json.loads(parse1)
+            features = geojson.pop('features')
+            geojson['features'] = []
+            for i in features:
+                if str(i['properties']['aggregated_crossings_id']) == cell['row_id']:
+                    geojson['features'].append(i)
+                    return geojson
+    else:
+        return dash.no_update
+
+# @app.callback(
+#     Output('cross', 'data'), [Input('home', 'n_clicks')]
+# )
+# def update_map(view):
+#     return gjson
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
-    app.run_server(mode='inline')
+    app.run_server()
 
