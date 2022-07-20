@@ -24,7 +24,9 @@ nbclient.exceptions.CellExecutionError: An error occurred while executing the fo
 #https://github.com/plotly/jupyter-dash/blob/master/notebooks/getting_started.ipynb
 
 app =JD(__name__)
-
+cache = Cache()
+cache.init_app(app.server, config={'CACHE_TYPE': 'SimpleCache'})
+timeout = 20
 #making dropdown option based on property in data table
 id_list = []
 
@@ -42,19 +44,92 @@ inter_table = pd.read_csv('tables\inter_barriers.csv', index_col=False)
 #seperate GeoJSOn for selected filtering
 
 
-features = gjson['features']
-for i in range(len(features)):
-    pscis=features[i]['properties']['pscis_status']
-    barr=features[i]['properties']['barrier_status']
-    acc=features[i]['properties']['access_model_ch_co_sk']
-    all=features[i]['properties']['all_spawningrearing_per_barrier']
-    cross_id = str(features[i]['properties']['aggregated_crossings_id'])
+# # features = gjson['features']
+# def get_tabledata(features):
+#     id_list = []
+#     for i in range(len(features)):
+#         pscis=features[i]['properties']['pscis_status']
+#         barr=features[i]['properties']['barrier_status']
+#         acc=features[i]['properties']['access_model_ch_co_sk']
+#         all=features[i]['properties']['all_spawningrearing_per_barrier']
+#         cross_id = str(features[i]['properties']['aggregated_crossings_id'])
+#         lat = features[i]['geometry']['coordinates'][1]
+#         lon = features[i]['geometry']['coordinates'][0]
 
-    temp = dict(id = cross_id, pscis_status=pscis, barrier_status=barr, access_model_ch_co_sk=acc, all_spawningrearing_per_barrier=all)
+#         temp = dict(id = cross_id, pscis_status=pscis, barrier_status=barr, access_model_ch_co_sk=acc, all_spawningrearing_per_barrier=all, lat = lat, lon = lon)
 
-    id_list = id_list + [temp,]
+#         id_list = id_list + [temp,]
+#     return id_list
 
+# # geojson = dlx.dicts_to_geojson([{**c, **dict(tooltip=c['id'])} for c in id_list])
+# # geobuf = dlx.geojson_to_geobuf(geojson)
+
+# #marker cluster group 
+# #----------------------------------------------------------------------------------------------------------------------------------
+
+# def get_data(features):
+#     accessible = []
+#     other = []
+#     for i in range(len(features)):
+#         if features[i]['properties']['access_model_ch_co_sk'] == 'ACCESSIBLE':
+#             accessible.append(
+#                 dl.CircleMarker(
+#                     color='white',
+#                     fillColor = '#32cd32',
+#                     fillOpacity = 1, 
+#                     center = (features[i]['geometry']['coordinates'][1], features[i]['geometry']['coordinates'][0]), 
+#                     children=[
+#                         dl.Tooltip(str(features[i]['properties']['aggregated_crossings_id'])),
+#                         dl.Popup(str(features[i]['properties']['aggregated_crossings_id'])),
+#                     ],
+#                 )
+#             )
+#         else:
+#             other.append(
+#                 dl.CircleMarker(
+#                     color = 'white',
+#                     fillColor = '#965ab3',
+#                     fillOpacity = 1,
+#                     center = (features[i]['geometry']['coordinates'][1], features[i]['geometry']['coordinates'][0]), 
+#                     children=[
+#                         dl.Tooltip(str(features[i]['properties']['aggregated_crossings_id'])),
+#                         dl.Popup()
+#                     ],
+#                 )
+#             )
+
+#     cluster = dl.MarkerClusterGroup(id='markers', children=accessible)
+#     other = dl.MarkerClusterGroup(id='markers1', children=other)
+#     return cluster,other
+
+
+
+ 
+    #-----------------------------------------------------------------------------------------------------------------------------------
+
+# #point to layer 
+# point_to_layer = assign("function(feature, latlng, context){return L.circleMarker(latlng);}")
 # ------------------------------------------------------------------------------
+prior_drop =  dcc.Dropdown(
+                    options=[
+                        {'label': 'Priority Barrier List', 'value': 'priority'},
+                        {'label': 'Intermediate Barrier List', 'value': 'intermediate'}
+                    ],
+                    id='dd',
+                    style={'width': '500px'}
+                )
+
+watershed_drop = dcc.Dropdown(
+                    options=[
+                        {'label': 'HORS', 'value': 'HORS'},
+                        {'label': 'BULK', 'value': 'BULK'},
+                        {'label': 'LNIC', 'value': 'LNIC'},
+                        {'label': 'ELKR', 'value': 'ELKR'}
+                    ],
+                    value = 'HORS',
+                    id='watershed',
+                    style={'width': '500px'}
+                )
 # App layout
 app.layout = html.Div([
 
@@ -62,20 +137,10 @@ app.layout = html.Div([
 
     
 
-    dcc.Dropdown(
-        options=[
-            {'label': 'HORS', 'value': 'HORS'},
-            {'label': 'BULK', 'value': 'BULK'},
-            {'label': 'LNIC', 'value': 'LNIC'},
-            {'label': 'ELKR', 'value': 'ELKR'}
-        ],
-        id='watershed',
-        style={'width': '1000px'}
-    ),
-
-    
-    
-    # html.Button('Default View', id='home', n_clicks=0),
+    dbc.Row([
+        dbc.Col(prior_drop, width = 2),
+        dbc.Col(watershed_drop, width = 2)
+    ]),
     
     
 
@@ -86,22 +151,15 @@ app.layout = html.Div([
         [dl.BaseLayer(dl.TileLayer(url='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
                     attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'), name='ESRI Topographic', checked=False),
                     dl.BaseLayer(dl.TileLayer(), name='Base', checked=True)] +
-        [dl.Overlay(dl.GeoJSON(data=stream, id="streams"), name='Streams',checked=True),
-        dl.Overlay(dl.GeoJSON(data=gjson, zoomToBounds=True, zoomToBoundsOnClick=True, id="cross", cluster=True), name='Crossings',checked=True)]
-        )
+        [ dl.Overlay(children=[], checked=True, id='access', name='Accessible')]+
+        [ dl.Overlay(children=[], checked=True, id='other', name='Other')] +
+        [dl.Overlay(dl.GeoJSON(data=[], id='testM'))] +
+        [dl.Overlay(dl.GeoJSON(data=[], id="streams", zoomToBounds=True), name='Streams',checked=True)])
         ]
-        ,style={'width': '1000px', 'height': '500px'}, #style is key as map will not show up without it
+        ,style={'width': '1500px', 'height': '500px'}, #style is key as map will not show up without it
         id='map'
     ),
 
-    dcc.Dropdown(
-        options=[
-            {'label': 'Priority Barrier List', 'value': 'priority'},
-            {'label': 'Intermediate Barrier List', 'value': 'intermediate'}
-        ],
-        id='dd',
-        style={'width': '1000px'}
-    ),
 
     dash_table.DataTable(data=[],
                         style_data={
@@ -112,129 +170,253 @@ app.layout = html.Div([
                         id='table2',
                         active_cell= None
                         ),
+    
+    html.H2('',id='test')
 
-    dash_table.DataTable(data=[],
-                        style_data={
-                            'color': 'white',
-                            'backgroundColor': 'black'
-                        },
-                        style_table={'float':'left','width': '1000px'},
-                        id='table'
-                        )
-
-
-
-])
+], style={'background-color': 'purple'})
 
 
 
 # ------------------------------------------------------------------------------
 # Connect Leaflet Map to Dash Components
+@cache.memoize()
+
+#api call function
+def apiCall(w):
+    request = 'https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.streams/items.json'
+    query = '?properties=watershed_group_code,segmented_stream_id&filter=watershed_group_code%20=%20%27' + w + '%27' #this query slows things down for some reason
+
+    request1 = 'https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.crossings/items.json'
+    query1 = '?properties=aggregated_crossings_id,pscis_status,barrier_status,access_model_ch_co_sk,all_spawningrearing_per_barrier,all_spawningrearing_km&filter=watershed_group_code%20=%20%27' + w + '%27%20AND%20all_spawningrearing_km%3e0'
+
+    response_API = requests.get(request+query)
+    response_API1 = requests.get(request1+query1)
+
+    parse = response_API.text
+    parse1 = response_API1.text
+
+    return parse, parse1
+
+def get_data(features):
+    accessible = []
+    other = []
+    for i in range(len(features)):
+        if features[i]['properties']['access_model_ch_co_sk'] == 'ACCESSIBLE':
+            accessible.append(
+                dl.CircleMarker(
+                    color='white',
+                    fillColor = '#32cd32',
+                    fillOpacity = 1, 
+                    center = (features[i]['geometry']['coordinates'][1], features[i]['geometry']['coordinates'][0]), 
+                    children=[
+                        dl.Tooltip(str(features[i]['properties']['aggregated_crossings_id'])),
+                        dl.Popup(str(features[i]['properties']['aggregated_crossings_id'])),
+                    ],
+                )
+            )
+        else:
+            other.append(
+                dl.CircleMarker(
+                    color = 'white',
+                    fillColor = '#965ab3',
+                    fillOpacity = 1,
+                    center = (features[i]['geometry']['coordinates'][1], features[i]['geometry']['coordinates'][0]), 
+                    children=[
+                        dl.Tooltip(str(features[i]['properties']['aggregated_crossings_id'])),
+                        dl.Popup()
+                    ],
+                )
+            )
+
+    cluster = dl.MarkerClusterGroup(id='markers', children=accessible)
+    other = dl.MarkerClusterGroup(id='markers1', children=other)
+    return cluster,other
+
+# features = gjson['features']
+def get_tabledata(features):
+    id_list = []
+    for i in range(len(features)):
+        pscis=features[i]['properties']['pscis_status']
+        barr=features[i]['properties']['barrier_status']
+        acc=features[i]['properties']['access_model_ch_co_sk']
+        all=features[i]['properties']['all_spawningrearing_per_barrier']
+        cross_id = str(features[i]['properties']['aggregated_crossings_id'])
+        lat = features[i]['geometry']['coordinates'][1]
+        lon = features[i]['geometry']['coordinates'][0]
+
+        temp = dict(id = cross_id, pscis_status=pscis, barrier_status=barr, access_model_ch_co_sk=acc, all_spawningrearing_per_barrier=all, lat = lat, lon = lon)
+
+        id_list = id_list + [temp,]
+    return id_list
+
+
+
 @app.callback(
-    [Output('cross', 'data'), Output('streams', 'data')], [Input('watershed', 'value')]
+    [Output('access', 'children'), Output('other', 'children'), Output('streams', 'data'), Output('table2','data')], [Input('watershed', 'value'), Input('dd', 'value')]
 )
-def update_map(value):
+def update_map(value, priority):
     
     
     if value == 'BULK':
         parse, parse1 = apiCall('BULK')
         B_gjson = json.loads(parse1)
         B_stream = json.loads(parse)
-        return B_gjson, B_stream
+        features = B_gjson['features']
+        return get_data(features)[0], get_data(features)[1], B_stream, get_tabledata(features)
     elif value == 'LNIC':
         parse, parse1 = apiCall('LNIC')
         B_gjson = json.loads(parse1)
         B_stream = json.loads(parse)
-        return B_gjson, B_stream
+        features = B_gjson['features']
+        return get_data(features)[0], get_data(features)[1], B_stream, get_tabledata(features)
     elif value == 'ELKR':
         parse, parse1 = apiCall('ELKR')
         B_gjson = json.loads(parse1)
         B_stream = json.loads(parse)
-        return B_gjson, B_stream
+        features = B_gjson['features']
+        return get_data(features)[0], get_data(features)[1], B_stream, get_tabledata(features)
     elif value == 'HORS':
         parse, parse1 = apiCall('HORS')
         B_gjson = json.loads(parse1)
         B_stream = json.loads(parse)
-        return B_gjson, B_stream
+        features = B_gjson['features']
+        
+
+        if priority == 'intermediate':
+            data = []
+            for i in range(0, len(inter_table.iloc[:,0])):
+                id_list = get_tabledata(features)
+                id_index = dict((p['id'],j) for j,p in enumerate(id_list))
+                index1 = id_index.get(str(inter_table.iloc[:,0][i]), -1)
+                data = data + [id_list[index1],]
+            return get_data(features)[0], get_data(features)[1], B_stream, data
+        elif priority == 'priority':
+            data=[]
+            for i in range(0, len(prior_table.iloc[:,0])):
+                id_list = get_tabledata(features)
+                id_index = dict((p['id'],j) for j,p in enumerate(id_list))
+                index1 = id_index.get(str(prior_table.iloc[:,0][i]), -1)
+                data = data + [id_list[index1],]
+            return get_data(features)[0], get_data(features)[1], B_stream, data
+        else:
+           return get_data(features)[0], get_data(features)[1], B_stream, get_tabledata(features) 
+        
     
     else: 
-        return dash.no_update, dash.no_update
-
-
-@app.callback(
-   Output('table', 'data'),
-    [Input('cross', 'click_feature')]
-)
-def update_table(feature):
-    if feature is not None:
-        id_index = dict((p['id'],i) for i,p in enumerate(id_list))
-        index = id_index.get(feature['id'], -1)
-        data = [id_list[index]]
-        return data
-    return dash.no_update
+        return dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
 @app.callback(
-   Output('table2', 'data'),
-    [Input('dd', 'value')]
+    Output('test', 'children'), [Input('markers', 'children')]
 )
-def update_table2(table_value):
-    data = []
-    if table_value == 'intermediate':
-        for i in range(0, len(inter_table.iloc[:,0])):
-            id_index = dict((p['id'],j) for j,p in enumerate(id_list))
-            index1 = id_index.get(str(inter_table.iloc[:,0][i]), -1)
-            data = data + [id_list[index1],]
-    elif table_value == 'priority':
-        for i in range(0, len(prior_table.iloc[:,0])):
-            id_index = dict((p['id'],j) for j,p in enumerate(id_list))
-            index1 = id_index.get(str(prior_table.iloc[:,0][i]), -1)
-            data = data + [id_list[index1],]
-    else:
-        data = id_list
-    
-    return data
-
-# @app.callback(
-#     Output('cross', 'data'), [Input('table2', 'active_cell'), Input('dd', 'value')]
-# )
-# def marker(cell, value):
-#     if value == 'intermediate':
-#         if cell['column_id'] == "id":
-#             geojson = json.loads(parse1)
-#             features = geojson.pop('features')
-#             geojson['features'] = []
-#             for i in features:
-#                 if str(i['properties']['aggregated_crossings_id']) == cell['row_id']:
-#                     geojson['features'].append(i)
-#                     return geojson
-#     elif value == 'priority':
-#         if cell['column_id'] == "id":
-#             geojson = json.loads(parse1)
-#             features = geojson.pop('features')
-#             geojson['features'] = []
-#             for i in features:
-#                 if str(i['properties']['aggregated_crossings_id']) == cell['row_id']:
-#                     geojson['features'].append(i)
-#                     return geojson
-#     else:
-#         return dash.no_update
-
-# @app.callback(
-#     Output('cross', 'data'), [Input('home', 'n_clicks')]
-# )
-# def update_map(view):
-#     return gjson
+def test(feature):
+    print(feature[3])
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
-    app.run_server(mode='inline')
+    app.run_server(mode='inline', port = random.choice(range(2000, 10000)), host= "0.0.0.0")
+
 ------------------
 
 [1;31m---------------------------------------------------------------------------[0m
 [1;31mOSError[0m                                   Traceback (most recent call last)
-[1;32m~\AppData\Local\Temp\ipykernel_7840\1033855010.py[0m in [0;36m<module>[1;34m[0m
-[0;32m    208[0m [1;31m# ------------------------------------------------------------------------------[0m[1;33m[0m[1;33m[0m[0m
-[0;32m    209[0m [1;32mif[0m [0m__name__[0m [1;33m==[0m [1;34m'__main__'[0m[1;33m:[0m[1;33m[0m[0m
-[1;32m--> 210[1;33m     [0mapp[0m[1;33m.[0m[0mrun_server[0m[1;33m([0m[0mmode[0m[1;33m=[0m[1;34m'inline'[0m[1;33m)[0m[1;33m[0m[0m
+[1;32m~\Anaconda3\envs\test\lib\site-packages\urllib3\connection.py[0m in [0;36m_new_conn[1;34m(self)[0m
+[0;32m    174[0m             conn = connection.create_connection(
+[1;32m--> 175[1;33m                 [1;33m([0m[0mself[0m[1;33m.[0m[0m_dns_host[0m[1;33m,[0m [0mself[0m[1;33m.[0m[0mport[0m[1;33m)[0m[1;33m,[0m [0mself[0m[1;33m.[0m[0mtimeout[0m[1;33m,[0m [1;33m**[0m[0mextra_kw[0m[1;33m[0m[0m
+[0m[0;32m    176[0m             )
+
+[1;32m~\Anaconda3\envs\test\lib\site-packages\urllib3\util\connection.py[0m in [0;36mcreate_connection[1;34m(address, timeout, source_address, socket_options)[0m
+[0;32m     94[0m     [1;32mif[0m [0merr[0m [1;32mis[0m [1;32mnot[0m [1;32mNone[0m[1;33m:[0m[1;33m[0m[0m
+[1;32m---> 95[1;33m         [1;32mraise[0m [0merr[0m[1;33m[0m[0m
+[0m[0;32m     96[0m [1;33m[0m[0m
+
+[1;32m~\Anaconda3\envs\test\lib\site-packages\urllib3\util\connection.py[0m in [0;36mcreate_connection[1;34m(address, timeout, source_address, socket_options)[0m
+[0;32m     84[0m                 [0msock[0m[1;33m.[0m[0mbind[0m[1;33m([0m[0msource_address[0m[1;33m)[0m[1;33m[0m[0m
+[1;32m---> 85[1;33m             [0msock[0m[1;33m.[0m[0mconnect[0m[1;33m([0m[0msa[0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m     86[0m             [1;32mreturn[0m [0msock[0m[1;33m[0m[0m
+
+[1;31mOSError[0m: [WinError 10049] The requested address is not valid in its context
+
+During handling of the above exception, another exception occurred:
+
+[1;31mNewConnectionError[0m                        Traceback (most recent call last)
+[1;32m~\Anaconda3\envs\test\lib\site-packages\urllib3\connectionpool.py[0m in [0;36murlopen[1;34m(self, method, url, body, headers, retries, redirect, assert_same_host, timeout, pool_timeout, release_conn, chunked, body_pos, **response_kw)[0m
+[0;32m    709[0m                 [0mheaders[0m[1;33m=[0m[0mheaders[0m[1;33m,[0m[1;33m[0m[0m
+[1;32m--> 710[1;33m                 [0mchunked[0m[1;33m=[0m[0mchunked[0m[1;33m,[0m[1;33m[0m[0m
+[0m[0;32m    711[0m             )
+
+[1;32m~\Anaconda3\envs\test\lib\site-packages\urllib3\connectionpool.py[0m in [0;36m_make_request[1;34m(self, conn, method, url, timeout, chunked, **httplib_request_kw)[0m
+[0;32m    397[0m             [1;32melse[0m[1;33m:[0m[1;33m[0m[0m
+[1;32m--> 398[1;33m                 [0mconn[0m[1;33m.[0m[0mrequest[0m[1;33m([0m[0mmethod[0m[1;33m,[0m [0murl[0m[1;33m,[0m [1;33m**[0m[0mhttplib_request_kw[0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m    399[0m [1;33m[0m[0m
+
+[1;32m~\Anaconda3\envs\test\lib\site-packages\urllib3\connection.py[0m in [0;36mrequest[1;34m(self, method, url, body, headers)[0m
+[0;32m    238[0m             [0mheaders[0m[1;33m[[0m[1;34m"User-Agent"[0m[1;33m][0m [1;33m=[0m [0m_get_default_user_agent[0m[1;33m([0m[1;33m)[0m[1;33m[0m[0m
+[1;32m--> 239[1;33m         [0msuper[0m[1;33m([0m[0mHTTPConnection[0m[1;33m,[0m [0mself[0m[1;33m)[0m[1;33m.[0m[0mrequest[0m[1;33m([0m[0mmethod[0m[1;33m,[0m [0murl[0m[1;33m,[0m [0mbody[0m[1;33m=[0m[0mbody[0m[1;33m,[0m [0mheaders[0m[1;33m=[0m[0mheaders[0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m    240[0m [1;33m[0m[0m
+
+[1;32m~\Anaconda3\envs\test\lib\http\client.py[0m in [0;36mrequest[1;34m(self, method, url, body, headers, encode_chunked)[0m
+[0;32m   1228[0m         [1;34m"""Send a complete request to the server."""[0m[1;33m[0m[0m
+[1;32m-> 1229[1;33m         [0mself[0m[1;33m.[0m[0m_send_request[0m[1;33m([0m[0mmethod[0m[1;33m,[0m [0murl[0m[1;33m,[0m [0mbody[0m[1;33m,[0m [0mheaders[0m[1;33m,[0m [0mencode_chunked[0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m   1230[0m [1;33m[0m[0m
+
+[1;32m~\Anaconda3\envs\test\lib\http\client.py[0m in [0;36m_send_request[1;34m(self, method, url, body, headers, encode_chunked)[0m
+[0;32m   1274[0m             [0mbody[0m [1;33m=[0m [0m_encode[0m[1;33m([0m[0mbody[0m[1;33m,[0m [1;34m'body'[0m[1;33m)[0m[1;33m[0m[0m
+[1;32m-> 1275[1;33m         [0mself[0m[1;33m.[0m[0mendheaders[0m[1;33m([0m[0mbody[0m[1;33m,[0m [0mencode_chunked[0m[1;33m=[0m[0mencode_chunked[0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m   1276[0m [1;33m[0m[0m
+
+[1;32m~\Anaconda3\envs\test\lib\http\client.py[0m in [0;36mendheaders[1;34m(self, message_body, encode_chunked)[0m
+[0;32m   1223[0m             [1;32mraise[0m [0mCannotSendHeader[0m[1;33m([0m[1;33m)[0m[1;33m[0m[0m
+[1;32m-> 1224[1;33m         [0mself[0m[1;33m.[0m[0m_send_output[0m[1;33m([0m[0mmessage_body[0m[1;33m,[0m [0mencode_chunked[0m[1;33m=[0m[0mencode_chunked[0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m   1225[0m [1;33m[0m[0m
+
+[1;32m~\Anaconda3\envs\test\lib\http\client.py[0m in [0;36m_send_output[1;34m(self, message_body, encode_chunked)[0m
+[0;32m   1015[0m         [1;32mdel[0m [0mself[0m[1;33m.[0m[0m_buffer[0m[1;33m[[0m[1;33m:[0m[1;33m][0m[1;33m[0m[0m
+[1;32m-> 1016[1;33m         [0mself[0m[1;33m.[0m[0msend[0m[1;33m([0m[0mmsg[0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m   1017[0m [1;33m[0m[0m
+
+[1;32m~\Anaconda3\envs\test\lib\http\client.py[0m in [0;36msend[1;34m(self, data)[0m
+[0;32m    955[0m             [1;32mif[0m [0mself[0m[1;33m.[0m[0mauto_open[0m[1;33m:[0m[1;33m[0m[0m
+[1;32m--> 956[1;33m                 [0mself[0m[1;33m.[0m[0mconnect[0m[1;33m([0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m    957[0m             [1;32melse[0m[1;33m:[0m[1;33m[0m[0m
+
+[1;32m~\Anaconda3\envs\test\lib\site-packages\urllib3\connection.py[0m in [0;36mconnect[1;34m(self)[0m
+[0;32m    204[0m     [1;32mdef[0m [0mconnect[0m[1;33m([0m[0mself[0m[1;33m)[0m[1;33m:[0m[1;33m[0m[0m
+[1;32m--> 205[1;33m         [0mconn[0m [1;33m=[0m [0mself[0m[1;33m.[0m[0m_new_conn[0m[1;33m([0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m    206[0m         [0mself[0m[1;33m.[0m[0m_prepare_conn[0m[1;33m([0m[0mconn[0m[1;33m)[0m[1;33m[0m[0m
+
+[1;32m~\Anaconda3\envs\test\lib\site-packages\urllib3\connection.py[0m in [0;36m_new_conn[1;34m(self)[0m
+[0;32m    186[0m             raise NewConnectionError(
+[1;32m--> 187[1;33m                 [0mself[0m[1;33m,[0m [1;34m"Failed to establish a new connection: %s"[0m [1;33m%[0m [0me[0m[1;33m[0m[0m
+[0m[0;32m    188[0m             )
+
+[1;31mNewConnectionError[0m: <urllib3.connection.HTTPConnection object at 0x00000134A95C84A8>: Failed to establish a new connection: [WinError 10049] The requested address is not valid in its context
+
+During handling of the above exception, another exception occurred:
+
+[1;31mMaxRetryError[0m                             Traceback (most recent call last)
+[1;32m~\Anaconda3\envs\test\lib\site-packages\requests\adapters.py[0m in [0;36msend[1;34m(self, request, stream, timeout, verify, cert, proxies)[0m
+[0;32m    498[0m                     [0mretries[0m[1;33m=[0m[0mself[0m[1;33m.[0m[0mmax_retries[0m[1;33m,[0m[1;33m[0m[0m
+[1;32m--> 499[1;33m                     [0mtimeout[0m[1;33m=[0m[0mtimeout[0m[1;33m,[0m[1;33m[0m[0m
+[0m[0;32m    500[0m                 )
+
+[1;32m~\Anaconda3\envs\test\lib\site-packages\urllib3\connectionpool.py[0m in [0;36murlopen[1;34m(self, method, url, body, headers, retries, redirect, assert_same_host, timeout, pool_timeout, release_conn, chunked, body_pos, **response_kw)[0m
+[0;32m    785[0m             retries = retries.increment(
+[1;32m--> 786[1;33m                 [0mmethod[0m[1;33m,[0m [0murl[0m[1;33m,[0m [0merror[0m[1;33m=[0m[0me[0m[1;33m,[0m [0m_pool[0m[1;33m=[0m[0mself[0m[1;33m,[0m [0m_stacktrace[0m[1;33m=[0m[0msys[0m[1;33m.[0m[0mexc_info[0m[1;33m([0m[1;33m)[0m[1;33m[[0m[1;36m2[0m[1;33m][0m[1;33m[0m[0m
+[0m[0;32m    787[0m             )
+
+[1;32m~\Anaconda3\envs\test\lib\site-packages\urllib3\util\retry.py[0m in [0;36mincrement[1;34m(self, method, url, response, error, _pool, _stacktrace)[0m
+[0;32m    591[0m         [1;32mif[0m [0mnew_retry[0m[1;33m.[0m[0mis_exhausted[0m[1;33m([0m[1;33m)[0m[1;33m:[0m[1;33m[0m[0m
+[1;32m--> 592[1;33m             [1;32mraise[0m [0mMaxRetryError[0m[1;33m([0m[0m_pool[0m[1;33m,[0m [0murl[0m[1;33m,[0m [0merror[0m [1;32mor[0m [0mResponseError[0m[1;33m([0m[0mcause[0m[1;33m)[0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m    593[0m [1;33m[0m[0m
+
+[1;31mMaxRetryError[0m: HTTPConnectionPool(host='0.0.0.0', port=9925): Max retries exceeded with url: /_alive_5929330b-f980-4313-9574-b62bfe07c72a (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000134A95C84A8>: Failed to establish a new connection: [WinError 10049] The requested address is not valid in its context'))
+
+During handling of the above exception, another exception occurred:
+
+[1;31mConnectionError[0m                           Traceback (most recent call last)
+[1;32m~\AppData\Local\Temp\ipykernel_9044\2223735793.py[0m in [0;36m<module>[1;34m[0m
+[0;32m    294[0m [1;31m# ------------------------------------------------------------------------------[0m[1;33m[0m[1;33m[0m[0m
+[0;32m    295[0m [1;32mif[0m [0m__name__[0m [1;33m==[0m [1;34m'__main__'[0m[1;33m:[0m[1;33m[0m[0m
+[1;32m--> 296[1;33m     [0mapp[0m[1;33m.[0m[0mrun_server[0m[1;33m([0m[0mmode[0m[1;33m=[0m[1;34m'inline'[0m[1;33m,[0m [0mport[0m [1;33m=[0m [0mrandom[0m[1;33m.[0m[0mchoice[0m[1;33m([0m[0mrange[0m[1;33m([0m[1;36m2000[0m[1;33m,[0m [1;36m10000[0m[1;33m)[0m[1;33m)[0m[1;33m,[0m [0mhost[0m[1;33m=[0m [1;34m"0.0.0.0"[0m[1;33m)[0m[1;33m[0m[0m
 [0m
 [1;32m~\Anaconda3\envs\test\lib\site-packages\jupyter_dash\jupyter_app.py[0m in [0;36mrun_server[1;34m(self, mode, width, height, inline_exceptions, **kwargs)[0m
 [0;32m    337[0m                 )
@@ -279,14 +461,47 @@ if __name__ == '__main__':
 [0;32m    202[0m                 [0mtb[0m [1;33m=[0m [0msys[0m[1;33m.[0m[0mexc_info[0m[1;33m([0m[1;33m)[0m[1;33m[0m[0m
 
 [1;32m~\Anaconda3\envs\test\lib\site-packages\jupyter_dash\jupyter_app.py[0m in [0;36mwait_for_app[1;34m()[0m
-[0;32m    333[0m                     [1;34m"Address '{url}' already in use.\n"[0m[1;33m[0m[0m
-[0;32m    334[0m                     "    Try passing a different port to run_server.".format(
-[1;32m--> 335[1;33m                         [0murl[0m[1;33m=[0m[0murl[0m[1;33m[0m[0m
-[0m[0;32m    336[0m                     )
-[0;32m    337[0m                 )
+[0;32m    325[0m         )
+[0;32m    326[0m         [1;32mdef[0m [0mwait_for_app[0m[1;33m([0m[1;33m)[0m[1;33m:[0m[1;33m[0m[0m
+[1;32m--> 327[1;33m             [0mres[0m [1;33m=[0m [0mrequests[0m[1;33m.[0m[0mget[0m[1;33m([0m[0malive_url[0m[1;33m)[0m[1;33m.[0m[0mcontent[0m[1;33m.[0m[0mdecode[0m[1;33m([0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m    328[0m             [1;32mif[0m [0mres[0m [1;33m!=[0m [1;34m"Alive"[0m[1;33m:[0m[1;33m[0m[0m
+[0;32m    329[0m                 url = "http://{host}:{port}".format(
 
-[1;31mOSError[0m: Address 'http://127.0.0.1:8050' already in use.
-    Try passing a different port to run_server.
-OSError: Address 'http://127.0.0.1:8050' already in use.
-    Try passing a different port to run_server.
+[1;32m~\Anaconda3\envs\test\lib\site-packages\requests\api.py[0m in [0;36mget[1;34m(url, params, **kwargs)[0m
+[0;32m     71[0m     """
+[0;32m     72[0m [1;33m[0m[0m
+[1;32m---> 73[1;33m     [1;32mreturn[0m [0mrequest[0m[1;33m([0m[1;34m"get"[0m[1;33m,[0m [0murl[0m[1;33m,[0m [0mparams[0m[1;33m=[0m[0mparams[0m[1;33m,[0m [1;33m**[0m[0mkwargs[0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m     74[0m [1;33m[0m[0m
+[0;32m     75[0m [1;33m[0m[0m
+
+[1;32m~\Anaconda3\envs\test\lib\site-packages\requests\api.py[0m in [0;36mrequest[1;34m(method, url, **kwargs)[0m
+[0;32m     57[0m     [1;31m# cases, and look like a memory leak in others.[0m[1;33m[0m[1;33m[0m[0m
+[0;32m     58[0m     [1;32mwith[0m [0msessions[0m[1;33m.[0m[0mSession[0m[1;33m([0m[1;33m)[0m [1;32mas[0m [0msession[0m[1;33m:[0m[1;33m[0m[0m
+[1;32m---> 59[1;33m         [1;32mreturn[0m [0msession[0m[1;33m.[0m[0mrequest[0m[1;33m([0m[0mmethod[0m[1;33m=[0m[0mmethod[0m[1;33m,[0m [0murl[0m[1;33m=[0m[0murl[0m[1;33m,[0m [1;33m**[0m[0mkwargs[0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m     60[0m [1;33m[0m[0m
+[0;32m     61[0m [1;33m[0m[0m
+
+[1;32m~\Anaconda3\envs\test\lib\site-packages\requests\sessions.py[0m in [0;36mrequest[1;34m(self, method, url, params, data, headers, cookies, files, auth, timeout, allow_redirects, proxies, hooks, stream, verify, cert, json)[0m
+[0;32m    585[0m         }
+[0;32m    586[0m         [0msend_kwargs[0m[1;33m.[0m[0mupdate[0m[1;33m([0m[0msettings[0m[1;33m)[0m[1;33m[0m[0m
+[1;32m--> 587[1;33m         [0mresp[0m [1;33m=[0m [0mself[0m[1;33m.[0m[0msend[0m[1;33m([0m[0mprep[0m[1;33m,[0m [1;33m**[0m[0msend_kwargs[0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m    588[0m [1;33m[0m[0m
+[0;32m    589[0m         [1;32mreturn[0m [0mresp[0m[1;33m[0m[0m
+
+[1;32m~\Anaconda3\envs\test\lib\site-packages\requests\sessions.py[0m in [0;36msend[1;34m(self, request, **kwargs)[0m
+[0;32m    699[0m [1;33m[0m[0m
+[0;32m    700[0m         [1;31m# Send the request[0m[1;33m[0m[1;33m[0m[0m
+[1;32m--> 701[1;33m         [0mr[0m [1;33m=[0m [0madapter[0m[1;33m.[0m[0msend[0m[1;33m([0m[0mrequest[0m[1;33m,[0m [1;33m**[0m[0mkwargs[0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m    702[0m [1;33m[0m[0m
+[0;32m    703[0m         [1;31m# Total elapsed time of the request (approximately)[0m[1;33m[0m[1;33m[0m[0m
+
+[1;32m~\Anaconda3\envs\test\lib\site-packages\requests\adapters.py[0m in [0;36msend[1;34m(self, request, stream, timeout, verify, cert, proxies)[0m
+[0;32m    563[0m                 [1;32mraise[0m [0mSSLError[0m[1;33m([0m[0me[0m[1;33m,[0m [0mrequest[0m[1;33m=[0m[0mrequest[0m[1;33m)[0m[1;33m[0m[0m
+[0;32m    564[0m [1;33m[0m[0m
+[1;32m--> 565[1;33m             [1;32mraise[0m [0mConnectionError[0m[1;33m([0m[0me[0m[1;33m,[0m [0mrequest[0m[1;33m=[0m[0mrequest[0m[1;33m)[0m[1;33m[0m[0m
+[0m[0;32m    566[0m [1;33m[0m[0m
+[0;32m    567[0m         [1;32mexcept[0m [0mClosedPoolError[0m [1;32mas[0m [0me[0m[1;33m:[0m[1;33m[0m[0m
+
+[1;31mConnectionError[0m: HTTPConnectionPool(host='0.0.0.0', port=9925): Max retries exceeded with url: /_alive_5929330b-f980-4313-9574-b62bfe07c72a (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000134A95C84A8>: Failed to establish a new connection: [WinError 10049] The requested address is not valid in its context'))
+ConnectionError: HTTPConnectionPool(host='0.0.0.0', port=9925): Max retries exceeded with url: /_alive_5929330b-f980-4313-9574-b62bfe07c72a (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000134A95C84A8>: Failed to establish a new connection: [WinError 10049] The requested address is not valid in its context'))
 
