@@ -1,3 +1,15 @@
 jupyter-book
 matplotlib
 numpy
+dash
+jupyter_dash 
+dash_leaflet 
+dash_leaflet.express 
+requests
+json
+pandas 
+numpy 
+random
+Cache
+os
+dash_bootstrap_components 
