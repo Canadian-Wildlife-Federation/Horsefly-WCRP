@@ -16,7 +16,7 @@ import dash_leaflet as dl
 import dash_leaflet.express as dlx #pip install --upgrade protobuf==3.20.0 --user before importing and if necessarym, restart the kernel
 import requests
 import json
-from dash_extensions.javascript import assign, arrow_function
+from dash_extensions.javascript import assign, arrow_function, Namespace
 import pandas as pd
 #import geopandas as gpd
 import numpy as np
@@ -296,11 +296,14 @@ gjson = json.loads(parse1)
 #https://github.com/plotly/jupyter-dash/blob/master/notebooks/getting_started.ipynb
 
 app =JD(__name__)
+server = app.server
 cache = Cache()
 cache.init_app(app.server, config={'CACHE_TYPE': 'SimpleCache'})
 timeout = 20
 #making dropdown option based on property in data table
 id_list = []
+
+ns = Namespace("myNamespace", "mySubNamespace")
 
 #priority vs intermediate barrier list
 #-------------------------------------------------------------------------------
@@ -422,7 +425,7 @@ app.layout = html.Div([
         dl.LayersControl(
         [dl.BaseLayer(dl.TileLayer(url='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
                     attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'), name='ESRI Topographic', checked=False),
-                    dl.BaseLayer(dl.TileLayer(), name='Base', checked=True), dl.BaseLayer(dl.TileLayer(url='https://tiles.hillcrestgeo.ca/bcfishpass/bcfishpass.streams/{z}/{x}/{y}.pbf'))] +
+                    dl.BaseLayer(dl.TileLayer(), name='Base', checked=True), dl.BaseLayer(dl.Overlay(children = ns("pbf2dash")), name='test')] +
         [ dl.Overlay(children=[], checked=True, id='pass', name='Passable')]+
         [ dl.Overlay(children=[], checked=True, id='pot', name='Potential')]+
         [ dl.Overlay(children=[], checked=True, id='bar', name='Barrier')]+
@@ -682,5 +685,6 @@ def marker(cell, value):
         return dash.no_update, dash.no_update
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
-    app.run_server(mode='inline', port = random.choice(range(2000, 10000)))
+    app.run_server(mode = 'inline',  port = random.choice(range(2000, 10000)))
+    #app.run_server(debug=True, port = random.choice(range(2000, 10000)))
 

@@ -9,6 +9,24 @@
 
 # Table 7. Connectivity status assessment for (a) linear habitat (spawning and rearing) and (b) overwintering habitat in the Horsefly River watershed. The Available Habitat KEA is evaluated by dividing the length of linear habitat that is currently accessible to target species by the total length of all linear habitat in the watershed. The Available Overwintering Habitat KEA is evaluated as the sum of all areal overwintering habitat that is accessible to target species. 
 
+# In[1]:
+
+
+#creating table 7
+import pandas as pd
+import numpy as np
+import matplotlib as mpl
+
+# df = pd.DataFrame([["Anadromous Salmon", "Available Habitat", "percantage of total linear habitat accessible", "<80%", "", "81-90%", ">90%", "Anadromous Salmon", "Available Habitat", "percantage of total linear habitat accessible", "<80%", "", "81-90%", ">90%"]],
+#                   columns = pd.MultiIndex.from_product([['a', 'Indicator Ratings'],['target species', 'KEA', 'Indicator', 'Poor', 'Fair', 'Good', 'Very Good']]))
+
+df = pd.DataFrame({"Barrier Types": pd.DataFrame([["Road-Stream Crossings","Lateral Barriers"],["Road-Stream Crossings","Lateral Barriers"]]),
+                   "Extent": pd.DataFrame([['mew',"High",'mew', "Low", "Medium"],['mew',"High",'mew', "Low", "Medium"]], columns=['mew',"High",'mew', "Low", "Medium"])
+                   })
+
+df.style.hide_index()
+
+
 # ![Table7](Table7.png)
 
 # # Barrier Types
@@ -19,13 +37,161 @@
 # 
 # ![table8](Table8.png)
 
+# In[3]:
+
+
+import requests
+import json
+import pandas
+
+def barrier_extent(barrier_type):
+
+    request = 'https://features.hillcrestgeo.ca/bcfishpass/functions/postgisftw.wcrp_barrier_extent/items.json?watershed_group_code=HORS&barrier_type=' + barrier_type
+
+    response_api = requests.get(request)
+    parse = response_api.text
+    result = json.loads(parse)
+
+    blocked_km = result[0]['all_habitat_blocked_km']
+    blocked_pct = result[0]['all_habitat_blocked_pct']
+
+    return blocked_km, blocked_pct
+
+def barrier_count(barrier_type):
+    request = 'https://features.hillcrestgeo.ca/bcfishpass/functions/postgisftw.wcrp_barrier_count/items.json?watershed_group_code=HORS&barrier_type=' + barrier_type
+
+    response_api = requests.get(request)
+    parse = response_api.text
+    result = json.loads(parse)
+
+    n_passable = result[0]['n_passable']
+    n_barrier = result[0]['n_barrier']
+    n_potential = result[0]['n_potential']
+    n_unknown = result[0]['n_unknown']
+
+    sum_bar = (n_passable, n_barrier, n_potential, n_unknown)
+
+    return n_passable, n_barrier, n_potential, n_unknown, sum(sum_bar)
+
+def barrier_severity(barrier_type):
+
+    request = 'https://features.hillcrestgeo.ca/bcfishpass/functions/postgisftw.wcrp_barrier_severity/items.json?watershed_group_code=HORS&barrier_type=' + barrier_type
+
+    response_api = requests.get(request)
+    parse = response_api.text
+    result = json.loads(parse)
+
+    n_assessed_barrier = result[0]['n_assessed_barrier']
+    n_assess_total = result[0]['n_assess_total']
+    pct_assessed_barrier = result[0]['pct_assessed_barrier']
+
+    return n_assessed_barrier, n_assess_total, pct_assessed_barrier
+
+
+# In[7]:
+
+
+from ipywidgets import *
+import pandas as pd
+
+#condition
+def condition(pct):
+    rating = ""
+    if pct < 20 : rating = "Low"
+    elif (pct >= 20) and (pct < 50) : rating = "Medium"
+    elif (pct >= 50) and (pct < 80) : rating = "High"
+    else : rating = "Very High"
+    return rating
+
+#rating classifier
+def rating(threat, barrier):
+    if threat == "extent":
+        if barrier == "DAM":
+            pct = barrier_extent(barrier)[1]
+            rating = condition(pct)
+        elif barrier == "ROAD":
+            pct = barrier_extent('ROAD, RESOURCE/OTHER')[1] + barrier_extent('ROAD, DEMOGRAPHIC')[1]
+            rating = condition(pct)
+    elif threat == "severity":
+        if barrier == "DAM":
+            pct = barrier_severity(barrier)[2]
+            rating = condition(pct)
+        elif barrier == "ROAD":
+            pct = barrier_severity('ROAD, RESOURCE/OTHER')[2] + barrier_severity('ROAD, DEMOGRAPHIC')[2]
+            rating = condition(pct)
+            
+    return rating
+            
+
+        
+
+
+
+
+df = pd.DataFrame({"Barrier Types":["Road-Stream Crossings","Lateral Barriers","Small Dams(<3m height)","Trail-stream Crossings", "Natural Barriers"],
+                   "Extent":[rating("extent", "ROAD"),"High",rating("extent", "DAM"), "Low", "Medium"],
+                   "Severity":[rating("severity", "ROAD"),"Very High",rating("severity", "DAM"), "Low", "High"],
+                   "Irreversibility":["Medium","High","High", "Medium", "Low"],
+                   "Overall Threat Rating:":["Very High","High","Medium", "Low", "Low"]
+                   })
+
+def highlight(val):
+    red = '#ff0000;'
+    yellow = '#ffff00;'
+    lgreen = '#92d050;'
+    dgreen = '#03853e;'
+
+    if val=="Very High": color = red
+    elif val=="High": color = yellow
+    elif val=="Medium": color = lgreen
+    elif val =="Low": color = dgreen
+    else: color = 'white'
+    return 'background-color: %s' % color
+
+df.style.applymap(highlight).hide_index()
+
+
+# In[5]:
+
+
+import requests
+import json
+import pandas
+from myst_nb import glue
+
+
+
+#glue class for variables to allow embedding in markdown
+glue("dam_km", barrier_extent('DAM')[0])
+glue("dam_pct", round(barrier_extent('DAM')[1]))
+glue("total_barrier", barrier_severity('DAM')[1])
+
+
+
 # ### Small Dams (<3 m height)
 # 
-# There are nine mapped small dams on “potentially accessible” stream segments in the watershed, blocking a total of 8.09 km (~23% of the total blocked habitat) of modelled spawning and rearing habitat for anadromous salmon, resulting in a medium extent. The extent rating of these structures was confirmed by the planning team. There are two known fish-passage structures in the watershed, including on the dam at the outlet of McKinley Lake. The remaining dams likely block passage for anadromous salmon and would require significant resources to remediate. However, due to the limited extent of dams in the watershed, a final pressure rating of Medium was assigned. Four small dams were identified on the priority barrier list (see Appendix C). Three of the dams require further assessment and confirmation of upstream habitat quality, and the dam observed at the outlet of Kwun Lake does not exist. 
+# There are {glue:text}`total_barrier` mapped small dams on “potentially accessible” stream segments in the watershed, blocking a total of {glue:text}`dam_km` km (~{glue:text}`dam_pct`% of the total blocked habitat) of modelled spawning and rearing habitat for anadromous salmon, resulting in a medium extent. The extent rating of these structures was confirmed by the planning team. There are two known fish-passage structures in the watershed, including on the dam at the outlet of McKinley Lake. The remaining dams likely block passage for anadromous salmon and would require significant resources to remediate. However, due to the limited extent of dams in the watershed, a final pressure rating of Medium was assigned. Four small dams were identified on the priority barrier list (see Appendix C). Three of the dams require further assessment and confirmation of upstream habitat quality, and the dam observed at the outlet of Kwun Lake does not exist. 
+
+# In[6]:
+
+
+#glue class for variables to allow embedding in markdown
+glue("resource_km", barrier_extent('ROAD, RESOURCE/OTHER')[0])
+glue("resource_pct", round(barrier_extent('ROAD, RESOURCE/OTHER')[1]))
+glue("demo_km", barrier_extent('ROAD, DEMOGRAPHIC')[0])
+glue("demo_pct", round(barrier_extent('ROAD, DEMOGRAPHIC')[1]))
+glue("resource_sev", round(barrier_severity('ROAD, RESOURCE/OTHER')[2]))
+glue("demo_sev", round(barrier_severity('ROAD, DEMOGRAPHIC')[2]))
+
+sum_road = (barrier_severity('ROAD, RESOURCE/OTHER')[1], barrier_severity('ROAD, DEMOGRAPHIC')[1])
+
+
+glue("sum", sum(sum_road))
+
 
 # ### Road-stream Crossings
 # 
-# Road-stream crossings are the most abundant barrier type in the watershed, with 103 assessed and modelled crossings located on stream segments with modelled habitat. Demographic road crossings (highways, municipal, and paved roads) block 7.31 km of habitat (~21% of the total blocked habitat), with 73% of assessed crossings having been identified as barriers to fish passage. Resource roads block 19.57 km of habitat (~56%), with 60% of assessed crossings having been identified as barriers. The planning team felt that the data was underestimating the severity of road-stream crossing barriers in the watershed, and therefore decided to update the rating from High to Very High. The planning team also felt that an irreversibility rating of Medium was appropriate due to the technical complexity and resources required to remediate road-stream crossings. 
+# Road-stream crossings are the most abundant barrier type in the watershed, with {glue:text}`sum` assessed and modelled crossings located on stream segments with modelled habitat. Demographic road crossings (highways, municipal, and paved roads) block {glue:text}`demo_km` km of habitat (~{glue:text}`demo_pct`% of the total blocked habitat), with {glue:text}`demo_sev`% of assessed crossings having been identified as barriers to fish passage. Resource roads block {glue:text}`resource_km` km of habitat (~{glue:text}`resource_pct`%), with {glue:text}`resource_sev`% of assessed crossings having been identified as barriers. The planning team felt that the data was underestimating the severity of road-stream crossing barriers in the watershed, and therefore decided to update the rating from High to Very High. The planning team also felt that an irreversibility rating of Medium was appropriate due to the technical complexity and resources required to remediate road-stream crossings. 
 
 # ### Trail-stream crossings 
 # 

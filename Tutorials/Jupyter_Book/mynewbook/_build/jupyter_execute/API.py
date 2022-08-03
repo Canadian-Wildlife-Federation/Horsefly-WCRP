@@ -8,6 +8,73 @@
 # In[1]:
 
 
+from urllib import response
+from ipyleaflet import *
+from ipywidgets import HTML
+import requests
+import json
+import pandas
+from pandas import json_normalize
+
+
+#setting the map to center and zoom
+m = Map(center=(52.6,-120.5), zoom=4)
+
+#alternate basemap tile
+dm_layer = basemap_to_tiles(basemaps.CartoDB.DarkMatter)
+m.add_layer(dm_layer)
+
+#caching
+#querying data from pg_featureserv API for bcfishpass
+request = 'https://cabd-web.azurewebsites.net/cabd-api/features/dams?filter=province_territory_code:eq:bc&filter=nhn_watershed_id:eq:08DA003'
+response_api = requests.get(request)
+parse = response_api.text
+dams = json.loads(parse)
+
+# geo = GeoJSON(data = dams,
+#               name = "dams")
+# m.add_layer(geo)
+
+#popup & marker cluster
+markers = ()
+
+#style for marker https://fontawesome.com/v4/icons/
+icon = AwesomeIcon(
+  name='wrench',
+  marker_color='blue',
+  icon_color='blue'
+)
+
+#https://carpentries-incubator.github.io/jupyter_maps/03-vector/index.html
+
+features = dams['features']
+for i in range(len(features)):
+    location=(features[i]['geometry']['coordinates'][1],features[i]['geometry']['coordinates'][0])
+    instructors = (features[i]['properties']['cabd_id'])
+    html = """
+    <p>
+      <h4>Table:        """ + " ".join(instructors) + """</h4>
+    </p>
+    """
+    marker = Marker(icon = icon, location = location)
+
+    # Popup associated to a layer
+    marker.popup = HTML(html)
+    #m.add_layer(marker)
+
+    #marker cluster markers
+    markers = markers + (marker,)
+
+m.add_layer(MarkerCluster(markers = markers, name="DAMS"))
+
+#display(m)
+
+print(type(response_api))
+
+
+# In[2]:
+
+
 from ipyleaflet import *
 from ipywidgets import HTML
 import requests
@@ -95,5 +162,5 @@ m.add_control(control)
 
 
 #displaying map inline
-display(m, metadata={"tags":["hide-input"]})
+display(m)
 

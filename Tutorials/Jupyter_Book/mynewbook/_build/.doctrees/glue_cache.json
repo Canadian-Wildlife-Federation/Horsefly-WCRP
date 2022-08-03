@@ -1,1 +1,124 @@
-{}
+{
+  "EcoAttributes": {
+    "total_barrier": {
+      "data": {
+        "text/plain": "9"
+      },
+      "metadata": {
+        "scrapbook": {
+          "mime_prefix": "",
+          "name": "total_barrier"
+        }
+      },
+      "output_type": "display_data"
+    },
+    "demo_pct": {
+      "data": {
+        "text/plain": "21"
+      },
+      "metadata": {
+        "scrapbook": {
+          "mime_prefix": "",
+          "name": "demo_pct"
+        }
+      },
+      "output_type": "display_data"
+    },
+    "sum": {
+      "data": {
+        "text/plain": "244"
+      },
+      "metadata": {
+        "scrapbook": {
+          "mime_prefix": "",
+          "name": "sum"
+        }
+      },
+      "output_type": "display_data"
+    },
+    "resource_km": {
+      "data": {
+        "text/plain": "19.57"
+      },
+      "metadata": {
+        "scrapbook": {
+          "mime_prefix": "",
+          "name": "resource_km"
+        }
+      },
+      "output_type": "display_data"
+    },
+    "resource_pct": {
+      "data": {
+        "text/plain": "56"
+      },
+      "metadata": {
+        "scrapbook": {
+          "mime_prefix": "",
+          "name": "resource_pct"
+        }
+      },
+      "output_type": "display_data"
+    },
+    "dam_km": {
+      "data": {
+        "text/plain": "8.09"
+      },
+      "metadata": {
+        "scrapbook": {
+          "mime_prefix": "",
+          "name": "dam_km"
+        }
+      },
+      "output_type": "display_data"
+    },
+    "dam_pct": {
+      "data": {
+        "text/plain": "23"
+      },
+      "metadata": {
+        "scrapbook": {
+          "mime_prefix": "",
+          "name": "dam_pct"
+        }
+      },
+      "output_type": "display_data"
+    },
+    "demo_sev": {
+      "data": {
+        "text/plain": "73"
+      },
+      "metadata": {
+        "scrapbook": {
+          "mime_prefix": "",
+          "name": "demo_sev"
+        }
+      },
+      "output_type": "display_data"
+    },
+    "resource_sev": {
+      "data": {
+        "text/plain": "60"
+      },
+      "metadata": {
+        "scrapbook": {
+          "mime_prefix": "",
+          "name": "resource_sev"
+        }
+      },
+      "output_type": "display_data"
+    },
+    "demo_km": {
+      "data": {
+        "text/plain": "7.31"
+      },
+      "metadata": {
+        "scrapbook": {
+          "mime_prefix": "",
+          "name": "demo_km"
+        }
+      },
+      "output_type": "display_data"
+    }
+  }
+}
