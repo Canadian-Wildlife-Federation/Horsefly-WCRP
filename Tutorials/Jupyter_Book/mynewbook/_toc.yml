@@ -11,6 +11,13 @@ chapters:
 - file: Scope
 - file: Target
 - file: EcoAttributes
+- file: Situation
+- file: Goals
+- file: Strategy
+- file: Theory
+- file: progress
+- file: Operation
+- file: Funding
 - file: API
 - file: Dash
 - file: test
