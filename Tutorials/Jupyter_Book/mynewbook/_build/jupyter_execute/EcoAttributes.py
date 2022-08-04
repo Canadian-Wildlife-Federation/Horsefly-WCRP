@@ -3,41 +3,7 @@
 
 # # Key Ecological Attributes and Current Connectivity Status
 
-# The planning team devised two Key Ecological Attributes (KEAs) and associated indicators to assess the current connectivity status of the watershed – Accessible Habitat and Accessible Overwintering Habitat (Table 7). KEAs are the key aspects of anadromous salmon ecology that are being targeted by this WCRP. The connectivity status of Anadromous Salmon was used to establish goals to improve habitat connectivity in the watershed and will be the baseline against which progress is tracked over time. 
-# 
-# The current connectivity status assessment relies on GIS analyses to map known and modelled barriers to fish passage, identify stream reaches that have potential spawning and rearing habitat, estimate the proportion of habitat that is currently accessible to target species, and prioritize barriers for field assessment that would provide the greatest gains in connectivity. To support a flexible prioritization framework to identify priority barriers in the watershed, two assumptions are made: 1) any modelled (i.e., passability status is unknown) or partial barriers are treated as complete barriers to passage and 2) the habitat modelling is binary, it does not assign any habitat quality values. As such, the current connectivity status will be refined over time as more data on habitat and barriers are collected. For more detail on how the connectivity status assessments were conducted, see Appendix B. 
-
-# Table 7. Connectivity status assessment for (a) linear habitat (spawning and rearing) and (b) overwintering habitat in the Horsefly River watershed. The Available Habitat KEA is evaluated by dividing the length of linear habitat that is currently accessible to target species by the total length of all linear habitat in the watershed. The Available Overwintering Habitat KEA is evaluated as the sum of all areal overwintering habitat that is accessible to target species. 
-
 # In[1]:
-
-
-#creating table 7
-import pandas as pd
-import numpy as np
-import matplotlib as mpl
-
-# df = pd.DataFrame([["Anadromous Salmon", "Available Habitat", "percantage of total linear habitat accessible", "<80%", "", "81-90%", ">90%", "Anadromous Salmon", "Available Habitat", "percantage of total linear habitat accessible", "<80%", "", "81-90%", ">90%"]],
-#                   columns = pd.MultiIndex.from_product([['a', 'Indicator Ratings'],['target species', 'KEA', 'Indicator', 'Poor', 'Fair', 'Good', 'Very Good']]))
-
-df = pd.DataFrame({"Barrier Types": pd.DataFrame([["Road-Stream Crossings","Lateral Barriers"],["Road-Stream Crossings","Lateral Barriers"]]),
-                   "Extent": pd.DataFrame([['mew',"High",'mew', "Low", "Medium"],['mew',"High",'mew', "Low", "Medium"]], columns=['mew',"High",'mew', "Low", "Medium"])
-                   })
-
-df.style.hide_index()
-
-
-# ![Table7](Table7.png)
-
-# # Barrier Types
-
-# The following table highlights which barrier types pose the greatest threat to anadromous salmon in the watershed. The results of this assessment were used to inform the subsequent planning steps, as well as to identify knowledge gaps where there is little spatial data to inform the assessment for a specific barrier type. 
-# 
-# Table 8. Barrier Types in the Horsefly River watershed and barrier rating assessment results. For each barrier type listed, "Extent refers to the proportion of anadromous salmon habitat that is being blocked by that barrier type, "Severity" is the proportion of structures for each barrier type that are known to block passage for target species based on field assessments, and "Irreversibility" is the degree to which the effects of a barrier type can be reversed and connectivity restored. The amount of habitat blocked used in this exercise is a representation of total amount of combined spawning and rearing habitat. All ratings in this table have been updated from version 1.0 to version 2.0 of the Horsefly River Watershed Connectivity Remediation Plan based on the most recent field assessments.
-# 
-# ![table8](Table8.png)
-
-# In[3]:
 
 
 import requests
@@ -87,8 +53,114 @@ def barrier_severity(barrier_type):
 
     return n_assessed_barrier, n_assess_total, pct_assessed_barrier
 
+def watershed_connectivity(habitat_type):
 
-# In[7]:
+    request = 'https://features.hillcrestgeo.ca/bcfishpass/functions/postgisftw.wcrp_watershed_connectivity_status/items.json?watershed_group_code=HORS&barrier_type=' + habitat_type
+
+    response_api = requests.get(request)
+    parse = response_api.text
+    result = json.loads(parse)
+
+    connect_stat = result[0]['connectivity_status']
+
+    return str(round(connect_stat))
+
+
+# The planning team devised two Key Ecological Attributes (KEAs) and associated indicators to assess the current connectivity status of the watershed – Accessible Habitat and Accessible Overwintering Habitat (Table 7). KEAs are the key aspects of anadromous salmon ecology that are being targeted by this WCRP. The connectivity status of Anadromous Salmon was used to establish goals to improve habitat connectivity in the watershed and will be the baseline against which progress is tracked over time. 
+# 
+# The current connectivity status assessment relies on GIS analyses to map known and modelled barriers to fish passage, identify stream reaches that have potential spawning and rearing habitat, estimate the proportion of habitat that is currently accessible to target species, and prioritize barriers for field assessment that would provide the greatest gains in connectivity. To support a flexible prioritization framework to identify priority barriers in the watershed, two assumptions are made: 1) any modelled (i.e., passability status is unknown) or partial barriers are treated as complete barriers to passage and 2) the habitat modelling is binary, it does not assign any habitat quality values. As such, the current connectivity status will be refined over time as more data on habitat and barriers are collected. For more detail on how the connectivity status assessments were conducted, see Appendix B. 
+
+# Table 7. Connectivity status assessment for (a) linear habitat (spawning and rearing) and (b) overwintering habitat in the Horsefly River watershed. The Available Habitat KEA is evaluated by dividing the length of linear habitat that is currently accessible to target species by the total length of all linear habitat in the watershed. The Available Overwintering Habitat KEA is evaluated as the sum of all areal overwintering habitat that is accessible to target species. 
+
+# In[2]:
+
+
+#creating table 7
+import pandas as pd
+import numpy as np
+import matplotlib as mpl
+
+df = pd.DataFrame({"Target Species":["Andromous Salmon"],
+                   "KEA":["Available Habitat"],
+                   "Indicator":["% of total linear habitat"],
+                   "Poor":["<80%"],
+                   "Fair":[" "],
+                   "Good":["81-90%"],
+                   "Very Good":[">90%"],
+                   "Current Status":[watershed_connectivity("ALL")],
+                   "Comments": ["Indicator rating definitions are based on the consensus decisions of the planning team, including the decision not to define Fair. The current status is based on the CWF Barrier Prioritization Model output, which is current as of March 2022."]
+                   })
+df1 = pd.DataFrame({"Comments": ["Indicator rating definitions are based on the consensus decisions of the planning team, including the decision not to define “Fair”. The current status is based on the CWF Barrier Prioritization Model output, which is current as of March 2022."]})
+
+def highlighttab7(val):
+    red = '#ff0000;'
+    yellow = '#ffff00;'
+    lgreen = '#92d050;'
+    dgreen = '#03853e;'
+
+    if val=="<80%" : color = red
+    elif val[0:].isdigit() and int(val) < 80 : color = red
+    elif val==" ": color = yellow
+    elif val=="81-90%"  : color = lgreen
+    elif val[0:].isdigit() and (int(val) >= 80 and int(val) < 90) : color = lgreen 
+    elif val ==">90%": color = dgreen
+    elif val[0:].isdigit() and int(val) >= 90 : color = dgreen 
+    else: color = 'white'
+    return 'background-color: %s' % color
+
+df.style.applymap(highlighttab7).hide_index()
+
+
+
+# In[3]:
+
+
+#creating table 7
+import pandas as pd
+import numpy as np
+import matplotlib as mpl
+
+df = pd.DataFrame({"Target Species":["Andromous Salmon"],
+                   "KEA":["Available Overwintering Habitat"],
+                   "Indicator":["Total Area (m2) of overwintering habitat accessible"],
+                   "Poor":["?"],
+                   "Fair":[" ?"],
+                   "Good":["? "],
+                   "Very Good":[" ? "],
+                   "Current Status":[""],
+                   "Comments": ["No baseline data exists on the extent of overwintering habitat in the watershed. A priority action is included in the Operational Plan (strategy 2.3) to develop a habitat layer, and this will be used to inform this connectivity status assessment in the future."]
+                   })
+
+def highlighttab7b(val):
+    red = '#ff0000;'
+    yellow = '#ffff00;'
+    lgreen = '#92d050;'
+    dgreen = '#03853e;'
+
+    if val=="?" : color = red
+    elif val[0:].isdigit() and int(val) < 80 : color = red
+    elif val==" ?": color = yellow
+    elif val=="? "  : color = lgreen
+    elif val[0:].isdigit() and (int(val) >= 80 and int(val) < 90) : color = lgreen 
+    elif val ==" ? ": color = dgreen
+    elif val[0:].isdigit() and int(val) >= 90 : color = dgreen 
+    else: color = 'white'
+    return 'background-color: %s' % color
+
+df.style.applymap(highlighttab7b).hide_index()
+
+
+# ![Table7](Table7.png)
+
+# # Barrier Types
+
+# The following table highlights which barrier types pose the greatest threat to anadromous salmon in the watershed. The results of this assessment were used to inform the subsequent planning steps, as well as to identify knowledge gaps where there is little spatial data to inform the assessment for a specific barrier type. 
+# 
+# Table 8. Barrier Types in the Horsefly River watershed and barrier rating assessment results. For each barrier type listed, "Extent refers to the proportion of anadromous salmon habitat that is being blocked by that barrier type, "Severity" is the proportion of structures for each barrier type that are known to block passage for target species based on field assessments, and "Irreversibility" is the degree to which the effects of a barrier type can be reversed and connectivity restored. The amount of habitat blocked used in this exercise is a representation of total amount of combined spawning and rearing habitat. All ratings in this table have been updated from version 1.0 to version 2.0 of the Horsefly River Watershed Connectivity Remediation Plan based on the most recent field assessments.
+# 
+# ![table8](Table8.png)
+
+# In[4]:
 
 
 from ipywidgets import *
