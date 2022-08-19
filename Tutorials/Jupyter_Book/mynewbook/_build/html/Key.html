@@ -51,8 +51,6 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Project Scope" href="Scope.html" />
@@ -153,6 +151,41 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="Situation.html">
+   Situation Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Goals.html">
+   Goals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Strategy.html">
+   Strategies &amp; Actions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Theory.html">
+   Theories of Change &amp; Objectives
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="progress.html">
+   Progress Tracking Plan
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Operation.html">
+   Operational Plan
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Funding.html">
+   Funding Sources
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="API.html">
    API practice
   </a>
@@ -165,6 +198,16 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="test.html">
    Test for Iframe
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="references.html">
+   References
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="appendix.html">
+   Appendix
   </a>
  </li>
 </ul>
@@ -378,79 +421,69 @@ title="Print to PDF"
   <section class="tex2jax_ignore mathjax_ignore" id="key-actors">
 <h1>Key Actors<a class="headerlink" href="#key-actors" title="Permalink to this headline">#</a></h1>
 <p>Table 2. Additional Key Actors in the Horsefly River watershed. Key Actors are the individuals, groups, and/or organizations, outside of the planning team, with influence and relevant experience in the watershed, whose engagement will be critical for the successful implementation of this WCRP.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
-<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;tables\key_actors.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">hide_index</span><span class="p">()</span>
-
-<span class="n">display</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <div class="output text_html"><style  type="text/css" >
-</style><table id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3" ><thead>    <tr>        <th class="col_heading level0 col0" >Individual or Organization Name</th>        <th class="col_heading level0 col1" >Role and Primary Interest</th>    </tr></thead><tbody>
+</style><table id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9b" ><thead>    <tr>        <th class="col_heading level0 col0" >Individual or Organization Name</th>        <th class="col_heading level0 col1" >Role and Primary Interest</th>    </tr></thead><tbody>
                 <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row0_col0" class="data row0 col0" >Cariboo Mining Association </td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row0_col1" class="data row0 col1" >A mining company that has been operating in central BC since the 1950’s and can help provide data and facilitate remediation work. </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow0_col0" class="data row0 col0" >Cariboo Mining Association </td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow0_col1" class="data row0 col1" >A mining company that has been operating in central BC since the 1950’s and can help provide data and facilitate remediation work. </td>
             </tr>
             <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row1_col0" class="data row1 col0" >Consus Management Ltd.  </td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row1_col1" class="data row1 col1" >Local wildlife consultants in the watershed to consider for future work. </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow1_col0" class="data row1 col0" >Consus Management Ltd.  </td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow1_col1" class="data row1 col1" >Local wildlife consultants in the watershed to consider for future work. </td>
             </tr>
             <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row2_col0" class="data row2 col0" >Dawson Road Maintenance Ltd </td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row2_col1" class="data row2 col1" >A road design and maintenance company at the roadway-watershed interface. </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow2_col0" class="data row2 col0" >Dawson Road Maintenance Ltd </td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow2_col1" class="data row2 col1" >A road design and maintenance company at the roadway-watershed interface. </td>
             </tr>
             <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row3_col0" class="data row3 col0" >DWB Consulting Services Ltd.  </td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row3_col1" class="data row3 col1" >Local wildlife consultants in the watershed to consider for future work. </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow3_col0" class="data row3 col0" >DWB Consulting Services Ltd.  </td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow3_col1" class="data row3 col1" >Local wildlife consultants in the watershed to consider for future work. </td>
             </tr>
             <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row4_col0" class="data row4 col0" >Freshwater Fisheries Society of British Columbia </td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row4_col1" class="data row4 col1" >This group can provide project assistance with non-anadromous species.  </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow4_col0" class="data row4 col0" >Freshwater Fisheries Society of British Columbia </td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow4_col1" class="data row4 col1" >This group can provide project assistance with non-anadromous species.  </td>
             </tr>
             <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row5_col0" class="data row5 col0" >Larry Davis  </td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row5_col1" class="data row5 col1" >A biologist and local wildlife consultant in the watershed. </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow5_col0" class="data row5 col0" >Larry Davis  </td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow5_col1" class="data row5 col1" >A biologist and local wildlife consultant in the watershed. </td>
             </tr>
             <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row6_col0" class="data row6 col0" >Local ranchers </td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row6_col1" class="data row6 col1" >These individuals can facilitate construction as well as consent/facilitate complimentary works on private property to improve fish habitat upstream and downstream. </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow6_col0" class="data row6 col0" >Local ranchers </td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow6_col1" class="data row6 col1" >These individuals can facilitate construction as well as consent/facilitate complimentary works on private property to improve fish habitat upstream and downstream. </td>
             </tr>
             <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row7_col0" class="data row7 col0" >Ministry of Forests, Lands and Natural Resource Operations (FLNRO)</td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row7_col1" class="data row7 col1" >FLNRO can assist with providing local knowledge, data, expertise and can facilitate remediation work. </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow7_col0" class="data row7 col0" >Ministry of Forests, Lands and Natural Resource Operations (FLNRO)</td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow7_col1" class="data row7 col1" >FLNRO can assist with providing local knowledge, data, expertise and can facilitate remediation work. </td>
             </tr>
             <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row8_col0" class="data row8 col0" >Ministry of Transportation and Infrastructure (MOTI)</td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row8_col1" class="data row8 col1" >MOTI may own barriers and can play a role in improving and replacing barriers at highway crossings. </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow8_col0" class="data row8 col0" >Ministry of Transportation and Infrastructure (MOTI)</td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow8_col1" class="data row8 col1" >MOTI may own barriers and can play a role in improving and replacing barriers at highway crossings. </td>
             </tr>
             <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row9_col0" class="data row9 col0" >Property owners along river and tributaries </td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row9_col1" class="data row9 col1" >These individuals can facilitate construction as well as consent/facilitate complimentary works on private property to improve fish habitat upstream and downstream. </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow9_col0" class="data row9 col0" >Property owners along river and tributaries </td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow9_col1" class="data row9 col1" >These individuals can facilitate construction as well as consent/facilitate complimentary works on private property to improve fish habitat upstream and downstream. </td>
             </tr>
             <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row10_col0" class="data row10 col0" >Quesnel River Research Centre </td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row10_col1" class="data row10 col1" >This group can help with field assessments and project implementation. </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow10_col0" class="data row10 col0" >Quesnel River Research Centre </td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow10_col1" class="data row10 col1" >This group can help with field assessments and project implementation. </td>
             </tr>
             <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row11_col0" class="data row11 col0" >Steve Hocquard </td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row11_col1" class="data row11 col1" >A local consultant (Steve Hocquard Consulting) that provided valuable review of barrier and habitat data to inform the spatial models used in this plan, and can help with field assessments and project implementation. </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow11_col0" class="data row11 col0" >Steve Hocquard </td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow11_col1" class="data row11 col1" >A local consultant (Steve Hocquard Consulting) that provided valuable review of barrier and habitat data to inform the spatial models used in this plan, and can help with field assessments and project implementation. </td>
             </tr>
             <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row12_col0" class="data row12 col0" >Tolko Industries Ltd.  </td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row12_col1" class="data row12 col1" >A privately owned Canadian forest products company that maintains forest service road-stream crossings in the Horsefly River watershed. </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow12_col0" class="data row12 col0" >Tolko Industries Ltd.  </td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow12_col1" class="data row12 col1" >A privately owned Canadian forest products company that maintains forest service road-stream crossings in the Horsefly River watershed. </td>
             </tr>
             <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row13_col0" class="data row13 col0" >Upper Fraser Fisheries Conservation Alliance </td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row13_col1" class="data row13 col1" >This group can be contacted for advice and assistance. </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow13_col0" class="data row13 col0" >Upper Fraser Fisheries Conservation Alliance </td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow13_col1" class="data row13 col1" >This group can be contacted for advice and assistance. </td>
             </tr>
             <tr>
-                                <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row14_col0" class="data row14 col0" >West Fraser </td>
-                        <td id="T_ec58c7fa_1404_11ed_8ae6_d4548bb590b3row14_col1" class="data row14 col1" >A integrated forestry and diversified wood products company that maintains forest service road-stream crossings in the Horsefly River watershed. </td>
+                                <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow14_col0" class="data row14 col0" >West Fraser </td>
+                        <td id="T_225c12a2_1fdb_11ed_87f2_b445066bfd9brow14_col1" class="data row14 col1" >A integrated forestry and diversified wood products company that maintains forest service road-stream crossings in the Horsefly River watershed. </td>
             </tr>
     </tbody></table></div></div>
 </div>
