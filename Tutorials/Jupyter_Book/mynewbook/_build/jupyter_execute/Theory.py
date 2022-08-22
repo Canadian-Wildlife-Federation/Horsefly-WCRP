@@ -44,15 +44,10 @@
 # In[1]:
 
 
-#creating table 11
+from IPython.display import display
 import pandas as pd
-import numpy as np
 
-df = pd.DataFrame({"Objective #": [1,2,3],
-                   "Objective": ["By 2040, 16 road-stream crossing barriers will be remediated in the Horsefly River watershed ",
-                            "By 2023, a minimum of 1 lateral barrier will be remediated in the Horsefly River watershed ",
-                            "By 2040, 4 dams will be remediated in the Horsefly River watershed "]
-                    })
+data = pd.read_csv('tables\Table11.csv', index_col=False).style.hide_index()
 
-df.style.hide_index()
+display(data)
 

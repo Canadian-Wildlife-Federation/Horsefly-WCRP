@@ -153,19 +153,19 @@ app.layout = html.Div([
 
 
     dash_table.DataTable(
-                        columns=[
-                            {'name': 'Crossing ID', 'id': 'id', 'type': 'numeric'},
-                            {'name': 'PSCIS status', 'id': 'pscis_status', 'type': 'text'},
-                            {'name': 'Barrier Status', 'id': 'barrier_status', 'type': 'text'},
-                            {'name': 'Acess Model', 'id': 'access_model_ch_co_sk', 'type': 'text'},
-                            {'name': 'All habitat', 'id': 'all_spawningrearing_per_barrier', 'type': 'numeric'},
-                            {'name': 'Latitude', 'id': 'lat', 'type': 'numeric'},
-                            {'name': 'Longitude', 'id': 'lon', 'type': 'numeric'}
-                        ],
+                        # columns=[
+                        #     {'name': 'Crossing ID', 'id': 'id', 'type': 'numeric'},
+                        #     {'name': 'PSCIS status', 'id': 'pscis_status', 'type': 'text'},
+                        #     {'name': 'Barrier Status', 'id': 'barrier_status', 'type': 'text'},
+                        #     {'name': 'Acess Model', 'id': 'access_model_ch_co_sk', 'type': 'text'},
+                        #     {'name': 'All habitat', 'id': 'all_spawningrearing_per_barrier', 'type': 'numeric'},
+                        #     {'name': 'Latitude', 'id': 'lat', 'type': 'numeric'},
+                        #     {'name': 'Longitude', 'id': 'lon', 'type': 'numeric'}
+                        # ],
                         data=[],
-                        sort_action="native",
-                        sort_mode="multi",
-                        filter_action="native",
+                        # sort_action="native",
+                        # sort_mode="multi",
+                        # filter_action="native",
                         style_data={
                             'color': 'white',
                             'backgroundColor': 'black'
@@ -332,6 +332,7 @@ def update_map(value, priority):
                 id_index = dict((p['id'],j) for j,p in enumerate(id_list))
                 index1 = id_index.get(str(prior_table.iloc[:,0][i]), -1)
                 data = data + [id_list[index1],]
+            #data = prior_table.to_dict(orient='records')
             return get_data(features)[0], get_data(features)[1], get_data(features)[2], get_data(features)[3], B_stream, data
         else:
            return get_data(features)[0], get_data(features)[1], get_data(features)[2], get_data(features)[3], B_stream, get_tabledata(features) 
@@ -409,4 +410,25 @@ def marker(cell, value):
 if __name__ == '__main__':
     app.run_server(mode = 'inline',  port = random.choice(range(2000, 10000)))
     #app.run_server(debug=True, port = random.choice(range(2000, 10000)))
+
+
+# In[4]:
+
+
+parse, parse1 = apiCall('HORS')
+B_gjson = json.loads(parse1)
+B_stream = json.loads(parse)
+features = B_gjson['features']
+
+data=[]
+
+for i in range(0, len(prior_table.iloc[:,0])):
+    #id_list = get_tabledata(features)
+    id_list = prior_table.to_dict(orient='records')
+    id_index = dict((p['aggregated_crossings_id'],j) for j,p in enumerate(id_list))
+    index1 = id_index.get(str(prior_table.iloc[:,0][i]), -1)
+    data = data + [id_list[index1],]
+    print(i)
+
+id_list
 
