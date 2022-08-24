@@ -18,5 +18,5 @@ data = pd.read_csv('tables\Table13.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
-display(data)
+data.style.hide_index().set_properties(**{'text-align': 'left'})
 

@@ -9,7 +9,7 @@
 from IPython.display import display
 import pandas as pd
 
-data = pd.read_csv('tables\Table12.csv', index_col=False).style.hide_index()
+data = pd.read_csv('tables\Table12.csv', index_col=False)
 
-display(data)
+data.style.hide_index().set_properties(**{'text-align': 'left'})
 

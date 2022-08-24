@@ -75,6 +75,9 @@ stream = json.loads(parse)
 #https://dash-leaflet.herokuapp.com/
 #https://github.com/plotly/jupyter-dash/blob/master/notebooks/getting_started.ipynb
 
+from sre_constants import IN
+
+
 app =JD(__name__)
 server = app.server
 cache = Cache()
@@ -172,7 +175,7 @@ app.layout = html.Div([
                         },
                         style_table={'float':'left','width': '1000px'},
                         id='table2',
-                        #active_cell= None
+                        active_cell= None
                         ),
     
     html.H2(id='test')
@@ -242,8 +245,8 @@ def get_data(features):
                     fillOpacity = 1, 
                     center = (features[i]['geometry']['coordinates'][1], features[i]['geometry']['coordinates'][0]), 
                     children=[
-                        dl.Tooltip(str(features[i]['properties']['aggregated_crossings_id'])),
-                        dl.Popup(str(features[i]['properties']['aggregated_crossings_id'])),
+                        # dl.Tooltip(str(features[i]['properties']['aggregated_crossings_id'])),
+                        # dl.Popup(str(features[i]['properties']['aggregated_crossings_id'])),
                     ],
                 )
             )
@@ -263,7 +266,7 @@ def get_data(features):
 
     pass_cluster = dl.MarkerClusterGroup(id='markers', children=Passable)
     pot_cluster = dl.MarkerClusterGroup(id='markers', children=potential)
-    bar_cluster = dl.MarkerClusterGroup(id='markers', children=barrier)
+    bar_cluster = dl.MarkerClusterGroup(id='barriers', children=barrier)
     other_cluster = dl.MarkerClusterGroup(id='markers1', children=other)
     return pass_cluster, pot_cluster, bar_cluster, other_cluster
 
@@ -399,36 +402,25 @@ def marker(cell, value):
     else:
         return dash.no_update, dash.no_update
 
-# @app.callback(
-#     Output('table2', 'active_cell'), [Input('pass', 'click_lat_lng')]
-# )
-# def click_marker(*args):
-#     marker_id = dash.callback_context.triggered[0]['prop_id'].split(".")[0]
-#     print(marker_id)
-#     return cell[marker_id]
+@app.callback(
+    [Output('table2', 'active_cell'), Output('test', 'children')], [Input('table2', 'active_cell'), Input('watershed', 'value'), Input('map', 'click_lat_lng')]
+)
+
+def click_marker(cell, value, click):
+    if value == 'HORS':
+        parse1 = apiCall(value)[1]
+        B_gjson = json.loads(parse1)
+        features = B_gjson['features']
+        id_list = get_tabledata(features)
+        for i in id_list:
+            if (-0.01 <= (click[0] - i['lat']) >= 0.01) and (-0.01 <= (click[0] - i['lon']) >= 0.01):
+                return cell, (click[0] - i['lat'])
+            else: return dash.no_update, dash.no_update
+
+
+        
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
     app.run_server(mode = 'inline',  port = random.choice(range(2000, 10000)))
     #app.run_server(debug=True, port = random.choice(range(2000, 10000)))
-
-
-# In[4]:
-
-
-parse, parse1 = apiCall('HORS')
-B_gjson = json.loads(parse1)
-B_stream = json.loads(parse)
-features = B_gjson['features']
-
-data=[]
-
-for i in range(0, len(prior_table.iloc[:,0])):
-    #id_list = get_tabledata(features)
-    id_list = prior_table.to_dict(orient='records')
-    id_index = dict((p['aggregated_crossings_id'],j) for j,p in enumerate(id_list))
-    index1 = id_index.get(str(prior_table.iloc[:,0][i]), -1)
-    data = data + [id_list[index1],]
-    print(i)
-
-id_list
 
