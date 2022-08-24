@@ -3,7 +3,7 @@
 
 # # Appendix
 
-# # Appendix A: Modelled Anadromous Salmon Habitat Maps
+# ## Appendix A: Modelled Anadromous Salmon Habitat Maps
 # 
 # High-resolution PDF maps of the Horsefly River watershed and model results can be accessed [here](https://github.com/smnorris/bcfishpass/tree/main/wcrp/pdfs). The watershed is divided into multiple maps sheets to allow for detailed examination of modelled spawning and rearing habitat, multiple barrier types, and priority barriers identified through this planning process. The locations of WCRP priority barriers and associated map sheet numbers are shown below. In each individual map sheet, priority barriers are symbolized using the following notation:   .
 
@@ -16,7 +16,7 @@
 # Horsefly River watershed overview map identifying the portions of the watershed covered by each map sheet (grey squares) and the prioritized barriers on the intermediate barrier list (orange points; see Appendix C).
 # ```
 
-# # Appendix B: Connectivity Status Assessment Methods
+# ## Appendix B: Connectivity Status Assessment Methods
 # 
 # The connectivity status assessment for anadromous salmonids in the Horsefly River watershed builds on existing connectivity modelling work undertaken by the BC Fish Passage Technical Working Group, resulting in a flexible, customizable open-source spatial model called "bcfishpass". The model spatially locates known and modelled barriers to fish passage, identifies potential spawning and rearing habitat for target species, and estimates the amount of habitat that is currently accessible to target species. The model uses an adapted version of the Intrinsic Potential (IP) fish habitat modelling framework (see Sheer et al. 2009 for an overview of the IP framework). The habitat model uses two geomorphic characteristics of the stream network — channel gradient and mean annual discharge — to identify potential spawning habitat and rearing habitat for each target species. The habitat model does not attempt to definitively map each habitat type nor estimate habitat quality, but rather identifies stream segments that have high potential to support spawning or rearing habitat for each species based on the geomorphic characteristics of the segment. For more details on the connectivity and habitat model structure and parameters, please see Mazany-Wright et al. 2021a. The variables and thresholds used to model potential spawning and rearing habitat for each target species are summarized in Table 15. The quantity of modelled habitat for each species was aggregated for each habitat type and represents a linear measure of potential habitat. To recognize the rearing value provided by features represented by polygons for certain species (e.g., wetlands for Coho Salmon and lakes for Sockeye Salmon) a multiplier of 1.5x the length of the stream segments flowing through the polygons was applied.
 # 
@@ -34,10 +34,10 @@ data = pd.read_csv('tables\Table15.csv', index_col=False)
 data = data.replace(np.nan, '', regex=True)
 
 
-display(data.style.hide_index())
+data.style.hide_index().set_properties(**{'text-align': 'left'})
 
 
-# # Appendix C: Horsefly River Watershed Barrier Prioritization Summary
+# ## Appendix C: Horsefly River Watershed Barrier Prioritization Summary
 # 
 # The primary conservation outcome of the WCRP will be the remediation of barriers to connectivity in the Horsefly River watershed. To achieve Goal 1 in this plan, it is necessary to prioritize and identify a suite of barriers that, if remediated, will provide access to a minimum of 11.7 km of spawning or rearing habitat (Table 16):
 # 
@@ -137,7 +137,7 @@ df.style.hide_index()
 data = pd.read_csv('tables\Table17.csv', index_col=False)
 data = data.replace(np.nan, '', regex=True)
 
-display(data.style.hide_index())
+data.style.hide_index().set_properties(**{'text-align': 'left'})
 
 
 # Table 18. Updated intermediate barrier list resulting from the second barrier prioritization analysis in the Horsefly River watershed. After assessing the potential barriers on the first iteration of the intermediate list (2021 field season) and either identifying them as remediation priorities (see Table 18) or eliminating them from consideration (e.g., because they passed fish or did hot have suitable habitat upstream), the remaining potential barriers in the watershed were re-prioritized. The barriers on this list were prioritized to exceed the connectivity goals of the plan. Barriers highlighted in the same colour represent sets of barriers that have been prioritized as a group. In the Barrier Status column, P = potential barrier and B = confirmed barrier. All barrier assessment data is compiled from the BC Provincial Stream Crossing Inventory System.
@@ -149,7 +149,7 @@ data = pd.read_csv('tables\Table18.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
-display(data.style.hide_index())
+data.style.hide_index().set_properties(**{'text-align': 'left'})
 
 
 # Table 19. The Horsefly River watershed priority barrier list, which includes barriers that have undergone field assessment, been reviewed by the planning team, and selected to pursue for proactive remediation.
@@ -158,6 +158,8 @@ display(data.style.hide_index())
 
 
 data = pd.read_csv('tables\priority_barriers.csv', index_col=False)
+
+#pd.options.display.max_columns=10
 
 data = data.replace(np.nan, '', regex=True)
 

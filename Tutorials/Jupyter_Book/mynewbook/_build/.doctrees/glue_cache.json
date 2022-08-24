@@ -1,41 +1,5 @@
 {
   "EcoAttributes": {
-    "dam_km": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "dam_km",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "8.09"
-      }
-    },
-    "demo_sev": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "demo_sev",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "73"
-      }
-    },
-    "resource_km": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "resource_km",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "19.57"
-      }
-    },
     "total_barrier": {
       "output_type": "display_data",
       "metadata": {
@@ -60,16 +24,16 @@
         "text/plain": "56"
       }
     },
-    "resource_sev": {
+    "demo_km": {
       "output_type": "display_data",
       "metadata": {
         "scrapbook": {
-          "name": "resource_sev",
+          "name": "demo_km",
           "mime_prefix": ""
         }
       },
       "data": {
-        "text/plain": "60"
+        "text/plain": "7.31"
       }
     },
     "sum": {
@@ -84,16 +48,40 @@
         "text/plain": "244"
       }
     },
-    "demo_km": {
+    "resource_km": {
       "output_type": "display_data",
       "metadata": {
         "scrapbook": {
-          "name": "demo_km",
+          "name": "resource_km",
           "mime_prefix": ""
         }
       },
       "data": {
-        "text/plain": "7.31"
+        "text/plain": "19.57"
+      }
+    },
+    "dam_km": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "dam_km",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "8.09"
+      }
+    },
+    "dam_pct": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "dam_pct",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "23"
       }
     },
     "demo_pct": {
@@ -108,16 +96,28 @@
         "text/plain": "21"
       }
     },
-    "dam_pct": {
+    "resource_sev": {
       "output_type": "display_data",
       "metadata": {
         "scrapbook": {
-          "name": "dam_pct",
+          "name": "resource_sev",
           "mime_prefix": ""
         }
       },
       "data": {
-        "text/plain": "23"
+        "text/plain": "60"
+      }
+    },
+    "demo_sev": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "demo_sev",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "73"
       }
     }
   }

@@ -17,5 +17,5 @@ df = pd.DataFrame({"Goal #": [1,2],
                             "By 2024, the total area of overwintering habitat accessible to Anadromous Salmon will increase by 1,500 m2 within the Horsefly River watershed. "]
                     })
 
-df.style.hide_index()
+df.style.hide_index().set_properties(**{'text-align': 'left'})
 

@@ -87,10 +87,9 @@ df = pd.DataFrame({"Target Species":["Andromous Salmon"],
                    "Fair":[" "],
                    "Good":["81-90%"],
                    "Very Good":[">90%"],
-                   "Current Status":[watershed_connectivity("ALL")],
-                   "Comments": ["Indicator rating definitions are based on the consensus decisions of the planning team, including the decision not to define Fair. The current status is based on the CWF Barrier Prioritization Model output, which is current as of March 2022."]
+                   "Current Status":[watershed_connectivity("ALL")]
                    })
-df1 = pd.DataFrame({"Comments": ["Indicator rating definitions are based on the consensus decisions of the planning team, including the decision not to define “Fair”. The current status is based on the CWF Barrier Prioritization Model output, which is current as of March 2022."]})
+
 
 def highlighttab7(val):
     red = '#ff0000;'
@@ -112,6 +111,8 @@ df.style.applymap(highlighttab7).hide_index()
 
 
 
+# **Comments**: Indicator rating definitions are based on the consensus decisions of the planning team, including the decision not to define Fair. The current status is based on the CWF Barrier Prioritization Model output, which is current as of March 2022.
+
 # In[3]:
 
 
@@ -127,8 +128,7 @@ df = pd.DataFrame({"Target Species":["Andromous Salmon"],
                    "Fair":[" ?"],
                    "Good":["? "],
                    "Very Good":[" ? "],
-                   "Current Status":[""],
-                   "Comments": ["No baseline data exists on the extent of overwintering habitat in the watershed. A priority action is included in the Operational Plan (strategy 2.3) to develop a habitat layer, and this will be used to inform this connectivity status assessment in the future."]
+                   "Current Status":[""]
                    })
 
 def highlighttab7b(val):
@@ -150,7 +150,7 @@ def highlighttab7b(val):
 df.style.applymap(highlighttab7b).hide_index()
 
 
-# ![Table7](Table7.png)
+# **Comments:** No baseline data exists on the extent of overwintering habitat in the watershed. A priority action is included in the Operational Plan (strategy 2.3) to develop a habitat layer, and this will be used to inform this connectivity status assessment in the future.
 
 # # Barrier Types
 
@@ -158,7 +158,6 @@ df.style.applymap(highlighttab7b).hide_index()
 # 
 # Table 8. Barrier Types in the Horsefly River watershed and barrier rating assessment results. For each barrier type listed, "Extent refers to the proportion of anadromous salmon habitat that is being blocked by that barrier type, "Severity" is the proportion of structures for each barrier type that are known to block passage for target species based on field assessments, and "Irreversibility" is the degree to which the effects of a barrier type can be reversed and connectivity restored. The amount of habitat blocked used in this exercise is a representation of total amount of combined spawning and rearing habitat. All ratings in this table have been updated from version 1.0 to version 2.0 of the Horsefly River Watershed Connectivity Remediation Plan based on the most recent field assessments.
 # 
-# ![table8](Table8.png)
 
 # In[4]:
 
