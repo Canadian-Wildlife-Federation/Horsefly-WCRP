@@ -80,14 +80,13 @@ import pandas as pd
 import numpy as np
 import matplotlib as mpl
 
-df = pd.DataFrame({"Target Species":["Andromous Salmon"],
-                   "KEA":["Available Habitat"],
-                   "Indicator":["% of total linear habitat"],
-                   "Poor":["<80%"],
-                   "Fair":[" "],
-                   "Good":["81-90%"],
-                   "Very Good":[">90%"],
-                   "Current Status":[watershed_connectivity("ALL")]
+df = pd.DataFrame({"Target Species":["Andromous Salmon"," "],
+                   "KEA":["Available Habitat"," "],
+                   "Indicator":["% of total linear habitat","Current Status:"],
+                   "Poor":["<80%"," "],
+                   "Fair":["  "," "],
+                   "Good":["81-90%"," "],
+                   "Very Good":[">90%", watershed_connectivity("ALL")]
                    })
 
 
@@ -99,11 +98,12 @@ def highlighttab7(val):
 
     if val=="<80%" : color = red
     elif val[0:].isdigit() and int(val) < 80 : color = red
-    elif val==" ": color = yellow
+    elif val=="  ": color = yellow
     elif val=="81-90%"  : color = lgreen
     elif val[0:].isdigit() and (int(val) >= 80 and int(val) < 90) : color = lgreen 
     elif val ==">90%": color = dgreen
     elif val[0:].isdigit() and int(val) >= 90 : color = dgreen 
+    elif val == "Current Status:" : return "font-weight: bold"
     else: color = 'white'
     return 'background-color: %s' % color
 
@@ -168,9 +168,9 @@ import pandas as pd
 #condition
 def condition(pct):
     rating = ""
-    if pct < 20 : rating = "Low"
-    elif (pct >= 20) and (pct < 50) : rating = "Medium"
-    elif (pct >= 50) and (pct < 80) : rating = "High"
+    if pct < 30 : rating = "Low"
+    elif (pct >= 30) and (pct < 71) : rating = "Medium"
+    elif (pct >= 71) and (pct < 90) : rating = "High"
     else : rating = "Very High"
     return rating
 

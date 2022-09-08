@@ -14,9 +14,15 @@ from IPython.display import display
 import pandas as pd
 import numpy as np
 
+def df_operation(val):
+    return "background-color: black; color: white"
+
+
 data = pd.read_csv('tables\Table13.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
-data.style.hide_index().set_properties(**{'text-align': 'left'})
+rows = pd.IndexSlice[[0,10,16,23,26,29,30,31], :]
+
+data.style.applymap(df_operation, subset=rows).hide_index().set_properties(**{'text-align': 'left'})
 

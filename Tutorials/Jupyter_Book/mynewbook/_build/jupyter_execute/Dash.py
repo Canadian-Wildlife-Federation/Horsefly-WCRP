@@ -93,6 +93,26 @@ ns = Namespace("myNamespace", "mySubNamespace")
 prior_table = pd.read_csv('tables\priority_barriers.csv', index_col=False)
 inter_table = pd.read_csv('tables\inter_barriers.csv', index_col=False)
 
+def priority(row):
+    request = 'https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.crossings/items.json?watershed_group_code=HORS&aggregated_crossings_id=' + str(row['aggregated_crossings_id'])
+    response_api = requests.get(request)
+    parse = response_api.text
+    result = json.loads(parse)
+    features = result['features']
+    hab_gain=0
+    cost_benefit=0
+    for i in range(len(features)):
+        if features[i]['properties']['aggregated_crossings_id'] == row['aggregated_crossings_id']:
+            hab_gain = features[i]['properties']['all_spawningrearing_belowupstrbarriers_km']
+    
+    if hab_gain != 0: cost_benefit = row['estimated_cost']/hab_gain
+    
+    return hab_gain,cost_benefit
+
+prior_table['hab_gain'] = prior_table.apply(lambda row: priority(row)[0], axis=1)
+prior_table['cost_benefit_ratio'] = prior_table.apply(lambda row: priority(row)[1], axis=1)
+
+
 #seperate GeoJSOn for selected filtering
 
  
@@ -154,6 +174,8 @@ app.layout = html.Div([
         zoom=8 
     ),
 
+    html.Br(),
+
 
     dash_table.DataTable(
                         # columns=[
@@ -178,9 +200,11 @@ app.layout = html.Div([
                         active_cell= None
                         ),
     
+    html.Br(),
+    
     html.H2(id='test')
 
-], style={'background-color': 'purple'})
+], style={'background-color': '#00828d'})
 
 
 
@@ -240,13 +264,14 @@ def get_data(features):
         elif features[i]['properties']['barrier_status'] == 'BARRIER':
             barrier.append(
                 dl.CircleMarker(
+                    id="marker",
                     color='white',
                     fillColor = '#d52a2a',
                     fillOpacity = 1, 
                     center = (features[i]['geometry']['coordinates'][1], features[i]['geometry']['coordinates'][0]), 
                     children=[
-                        # dl.Tooltip(str(features[i]['properties']['aggregated_crossings_id'])),
-                        # dl.Popup(str(features[i]['properties']['aggregated_crossings_id'])),
+                        dl.Tooltip(str(features[i]['properties']['aggregated_crossings_id']), id="tooltip"),
+                        dl.Popup(str(features[i]['properties']['aggregated_crossings_id'])),
                     ],
                 )
             )
@@ -283,6 +308,18 @@ def get_tabledata(features):
         lon = features[i]['geometry']['coordinates'][0]
 
         temp = dict(id = cross_id, pscis_status=pscis, barrier_status=barr, access_model_ch_co_sk=acc, all_spawningrearing_per_barrier=all, lat = lat, lon = lon)
+
+        id_list = id_list + [temp,]
+    return id_list
+
+def get_latlon(features):
+    id_list = []
+    for i in range(len(features)):
+        cross_id = str(features[i]['properties']['aggregated_crossings_id'])
+        lat = features[i]['geometry']['coordinates'][1]
+        lon = features[i]['geometry']['coordinates'][0]
+
+        temp = dict(id = cross_id,lat = lat, lon = lon)
 
         id_list = id_list + [temp,]
     return id_list
@@ -331,11 +368,13 @@ def update_map(value, priority):
         elif priority == 'priority':
             data=[]
             for i in range(0, len(prior_table.iloc[:,0])):
-                id_list = get_tabledata(features)
+                id_list = get_latlon(features)
                 id_index = dict((p['id'],j) for j,p in enumerate(id_list))
                 index1 = id_index.get(str(prior_table.iloc[:,0][i]), -1)
                 data = data + [id_list[index1],]
-            #data = prior_table.to_dict(orient='records')
+            data = pd.DataFrame(data)
+            new = pd.concat([prior_table,data], axis=1, join="inner")#.drop_duplicates()#.reset_index(drop=True)
+            data = new.set_index('aggregated_crossings_id', drop=False).to_dict(orient="records")#.drop('id',axis=1)
             return get_data(features)[0], get_data(features)[1], get_data(features)[2], get_data(features)[3], B_stream, data
         else:
            return get_data(features)[0], get_data(features)[1], get_data(features)[2], get_data(features)[3], B_stream, get_tabledata(features) 
@@ -349,7 +388,7 @@ def update_map(value, priority):
 )
 def marker(cell, value):
     if value == 'HORS':
-        if cell['column_id'] == "id":
+        if cell['column_id'] == "id" or cell['column_id'] == "aggregated_crossings_id":
             parse1 = apiCall(value)[1]
             B_gjson = json.loads(parse1)
             features = B_gjson['features']
@@ -402,20 +441,29 @@ def marker(cell, value):
     else:
         return dash.no_update, dash.no_update
 
-@app.callback(
-    [Output('table2', 'active_cell'), Output('test', 'children')], [Input('table2', 'active_cell'), Input('watershed', 'value'), Input('map', 'click_lat_lng')]
-)
+# @app.callback(
+#     [Output('table2', 'active_cell'), Output('test', 'children')], [Input('table2', 'active_cell'), Input('watershed', 'value'), Input('map', 'click_lat_lng')]
+# )
 
-def click_marker(cell, value, click):
-    if value == 'HORS':
-        parse1 = apiCall(value)[1]
-        B_gjson = json.loads(parse1)
-        features = B_gjson['features']
-        id_list = get_tabledata(features)
-        for i in id_list:
-            if (-0.01 <= (click[0] - i['lat']) >= 0.01) and (-0.01 <= (click[0] - i['lon']) >= 0.01):
-                return cell, (click[0] - i['lat'])
-            else: return dash.no_update, dash.no_update
+# def click_marker(cell, value, click):
+#     if value == 'HORS':
+#         parse1 = apiCall(value)[1]
+#         B_gjson = json.loads(parse1)
+#         features = B_gjson['features']
+#         id_list = get_tabledata(features)
+#         for i in id_list:
+#             if ((-0.001 <= (click[0] - i['lat'])) and ((click[0] - i['lat'])<= 0.001)) and ((-0.001 <= (click[0] - i['lon'])) and ((click[0] - i['lon'])<= 0.001)):
+#                 return cell, (i['lat'])
+#             else: return dash.no_update, dash.no_update
+
+#app.clientside_callback("functions(x){return x;}", Output("test", "children"), Input(marker, "n_clicks"))
+
+@app.callback(
+    Output("test", "children"),[Input("barriers", "children")]
+)
+def click_marker(marker_id):
+    #print(marker_id[0])
+    return "KJFDHGLIDUGHIKGJC: {}".format(marker_id[0])
 
 
         

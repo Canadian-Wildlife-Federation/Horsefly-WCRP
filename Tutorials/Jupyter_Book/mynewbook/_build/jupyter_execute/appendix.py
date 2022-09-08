@@ -163,7 +163,7 @@ data = pd.read_csv('tables\priority_barriers.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
-display(data.style.hide_index())
+data.style.hide_index().set_properties(**{'text-align': 'left'})
 
 
 # Out of the 20 barriers on the intermediate list, 16 require further field assessment before selection as a final barrier to pursue for remediation:
@@ -174,11 +174,17 @@ display(data.style.hide_index())
 # In[6]:
 
 
+def df_style(val):
+    return "font-weight: bold"
+
+
 data = pd.read_csv('tables\Table20.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
-display(data.style.hide_index())
+last_row = pd.IndexSlice[data.index[data.index == 2], :]
+
+data.style.applymap(df_style, subset=last_row).hide_index()
 
 
 # There are currently 14 barriers on the priority barrier list, which will be pursued for proactive remediation to achieve the connectivity goals in this plan:
@@ -194,5 +200,7 @@ data = pd.read_csv('tables\Table21.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
-display(data.style.hide_index())
+last_row = pd.IndexSlice[data.index[data.index == 3], :]
+
+data.style.applymap(df_style, subset=last_row).hide_index()
 
