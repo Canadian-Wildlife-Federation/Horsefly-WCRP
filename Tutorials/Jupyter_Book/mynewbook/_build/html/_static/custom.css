@@ -1,3 +1,12 @@
+table {
+    display: block;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    margin: 0 auto;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
 p {
     text-align: justify;
     color: black;
@@ -18,4 +27,10 @@ h3 {
 thead {
     background-color: #008270;
     color: white;
+}
+
+@media print {
+    .bd-toc {
+        visibility: hidden;
+    }
 }
