@@ -151,7 +151,7 @@ app.layout = html.Div([
     dbc.Row([
         dbc.Col(prior_drop, width = 2),
         dbc.Col(watershed_drop, width = 2)
-    ], style={'width':'1500px'}),
+    ], id="dropdown"),
     
     
 
@@ -178,24 +178,23 @@ app.layout = html.Div([
 
 
     dash_table.DataTable(
-                        # columns=[
-                        #     {'name': 'Crossing ID', 'id': 'id', 'type': 'numeric'},
-                        #     {'name': 'PSCIS status', 'id': 'pscis_status', 'type': 'text'},
-                        #     {'name': 'Barrier Status', 'id': 'barrier_status', 'type': 'text'},
-                        #     {'name': 'Acess Model', 'id': 'access_model_ch_co_sk', 'type': 'text'},
-                        #     {'name': 'All habitat', 'id': 'all_spawningrearing_per_barrier', 'type': 'numeric'},
-                        #     {'name': 'Latitude', 'id': 'lat', 'type': 'numeric'},
-                        #     {'name': 'Longitude', 'id': 'lon', 'type': 'numeric'}
-                        # ],
+                        columns=[
+                            {'name': 'Crossing ID', 'id': 'id', 'type': 'numeric'},
+                            {'name': 'PSCIS status', 'id': 'pscis_status', 'type': 'text'},
+                            {'name': 'Barrier Status', 'id': 'barrier_status', 'type': 'text'},
+                            {'name': 'Acess Model', 'id': 'access_model_ch_co_sk', 'type': 'text'},
+                            {'name': 'All habitat', 'id': 'all_spawningrearing_per_barrier', 'type': 'numeric'},
+                            {'name': 'Latitude', 'id': 'lat', 'type': 'numeric'},
+                            {'name': 'Longitude', 'id': 'lon', 'type': 'numeric'}
+                        ],
                         data=[],
-                        # sort_action="native",
-                        # sort_mode="multi",
-                        # filter_action="native",
+                        sort_action="native",
+                        sort_mode="multi",
+                        filter_action="native",
                         style_data={
                             'color': 'white',
                             'backgroundColor': 'black'
                         },
-                        style_table={'float':'left','width': '1000px'},
                         id='table2',
                         active_cell= None
                         ),
@@ -204,7 +203,7 @@ app.layout = html.Div([
     
     html.H2(id='test')
 
-], style={'background-color': '#00828d'})
+], id = 'app')
 
 
 
@@ -219,6 +218,37 @@ def apiCall(w):
 
     request1 = 'https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.crossings/items.json'
     query1 = '?properties=aggregated_crossings_id,pscis_status,barrier_status,access_model_ch_co_sk,all_spawningrearing_per_barrier,all_spawningrearing_km&filter=watershed_group_code%20=%20%27' + w + '%27%20AND%20all_spawningrearing_km%3e0'
+
+    response_API = requests.get(request+query)
+    response_API1 = requests.get(request1+query1)
+
+    parse = response_API.text
+    parse1 = response_API1.text
+
+    return parse, parse1
+
+def apiCall_prior(w,l):
+
+    list1 = "("
+    if l == 'intermediate':
+        for i in inter_table['intermediate'].values:
+            if i == (inter_table['intermediate'].iat[-1]):
+                list1 = list1 + str(i) + ")"
+            else:
+                list1 = list1 + str(i) + ","
+    elif l == 'priority':
+        for i in prior_table['aggregated_crossings_id'].values:
+            if i == (prior_table['aggregated_crossings_id'].iat[-1]):
+                list1 = list1 + str(i) + ")"
+            else:
+                list1 = list1 + str(i) + ","
+
+
+    request = 'https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.streams/items.json'
+    query = '?properties=watershed_group_code,segmented_stream_id&filter=watershed_group_code%20=%20%27' + w + '%27' #this query slows things down for some reason
+
+    request1 = 'https://features.hillcrestgeo.ca/bcfishpass/collections/bcfishpass.crossings/items.json'
+    query1 = '?properties=aggregated_crossings_id,pscis_status,barrier_status,access_model_ch_co_sk,all_spawningrearing_per_barrier,all_spawningrearing_km&filter=watershed_group_code%20=%20%27' + w + '%27%20AND%20all_spawningrearing_km%3e0%20AND%20aggregated_crossings_id%20IN%20' + list1
 
     response_API = requests.get(request+query)
     response_API1 = requests.get(request1+query1)
@@ -330,6 +360,8 @@ def get_latlon(features):
     [Output('pass', 'children'), Output('pot', 'children'), Output('bar', 'children'), Output('other', 'children'), Output('streams', 'data'), Output('table2','data')], [Input('watershed', 'value'), Input('dd', 'value')]
 )
 def update_map(value, priority):
+
+    
     
     
     if value == 'BULK':
@@ -355,9 +387,14 @@ def update_map(value, priority):
         B_gjson = json.loads(parse1)
         B_stream = json.loads(parse)
         features = B_gjson['features']
+
         
 
         if priority == 'intermediate':
+            parse, parse1 = apiCall_prior('HORS',priority)
+            B_gjson = json.loads(parse1)
+            B_stream = json.loads(parse)
+            features = B_gjson['features']
             data = []
             for i in range(0, len(inter_table.iloc[:,0])):
                 id_list = get_tabledata(features)
@@ -366,6 +403,10 @@ def update_map(value, priority):
                 data = data + [id_list[index1],]
             return get_data(features)[0], get_data(features)[1], get_data(features)[2], get_data(features)[3], B_stream, data
         elif priority == 'priority':
+            parse, parse1 = apiCall_prior('HORS',priority)
+            B_gjson = json.loads(parse1)
+            B_stream = json.loads(parse)
+            features = B_gjson['features']
             data=[]
             for i in range(0, len(prior_table.iloc[:,0])):
                 id_list = get_latlon(features)
@@ -375,13 +416,18 @@ def update_map(value, priority):
             data = pd.DataFrame(data)
             new = pd.concat([prior_table,data], axis=1, join="inner")#.drop_duplicates()#.reset_index(drop=True)
             data = new.set_index('aggregated_crossings_id', drop=False).to_dict(orient="records")#.drop('id',axis=1)
+
             return get_data(features)[0], get_data(features)[1], get_data(features)[2], get_data(features)[3], B_stream, data
+            
         else:
            return get_data(features)[0], get_data(features)[1], get_data(features)[2], get_data(features)[3], B_stream, get_tabledata(features) 
+    
         
     
     else: 
         return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+    
+    
     
 @app.callback(
     [Output('map', 'center'), Output('map', 'zoom')], [Input('table2', 'active_cell'), Input('watershed', 'value')]
@@ -458,12 +504,78 @@ def marker(cell, value):
 
 #app.clientside_callback("functions(x){return x;}", Output("test", "children"), Input(marker, "n_clicks"))
 
+# @app.callback(
+#     Output("test", "children"),[Input("barriers", "children")]
+# )
+# def click_marker(marker_id):
+#     #print(marker_id[0])
+#     return "KJFDHGLIDUGHIKGJC: {}".format(marker_id[0])
+
+# @app.callback(
+#     [Output('pass', 'children'), Output('pot', 'children'), Output('bar', 'children'), Output('other', 'children'), Output('streams', 'data'), Output('table2','data')], [Input('table2','derived_virtual_data'),Input('watershed', 'value'), Input('dd', 'value')]
+# )
+# def filter_trigger(rows, value, priority):
+
+#     parse, parse1 = apiCall('HORS')
+#     B_gjson = json.loads(parse1)
+#     B_stream = json.loads(parse)
+#     features = B_gjson['features']
+
+#     if rows is not None:
+
+#         dff = pd.DataFrame(rows) 
+        
+#         data = []
+#         for i in range(0, len(dff.iloc[:,0])):
+#             id_list = get_tabledata(features)
+#             id_index = dict((p['id'],j) for j,p in enumerate(id_list))
+#             index1 = id_index.get(str(dff.iloc[:,0][i]), -1)
+#             data = data + [id_list[index1],]
+#         return get_data(features)[0], get_data(features)[1], get_data(features)[2], get_data(features)[3], B_stream, data
+
+    # else:
+
+    #     return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+
 @app.callback(
-    Output("test", "children"),[Input("barriers", "children")]
+    Output('table2', 'columns'), [Input('dd', 'value')]
 )
-def click_marker(marker_id):
-    #print(marker_id[0])
-    return "KJFDHGLIDUGHIKGJC: {}".format(marker_id[0])
+def priority_filter(value):
+    if value == 'priority':
+        columns=[
+                    {'name': 'Crossing ID', 'id': 'aggregated_crossings_id', 'type': 'numeric'},
+                    {'name': 'Stream Name', 'id': 'stream_name', 'type': 'text'},
+                    {'name': 'Road Name', 'id': 'road_name', 'type': 'text'},
+                    {'name': 'Owner', 'id': 'owner', 'type': 'text'},
+                    {'name': 'Proposed Fix', 'id': 'proposed_fix', 'type': 'text'},
+                    {'name': 'Estimated Cost', 'id': 'estimated_cost', 'type': 'text'},
+                    {'name': 'Upstream Habitat Quality', 'id': 'upstr_hab_quality', 'type': 'text'},
+                    {'name': 'Barrier Type', 'id': 'barrier_type', 'type': 'text'},
+                    {'name': 'Habitat Gain', 'id': 'hab_gain', 'type': 'numeric'},
+                    {'name': 'Cost Benefit Ratio', 'id': 'cost_benefit_ratio', 'type': 'numeric'},
+                    {'name': 'Upstream Habitat Quality', 'id': 'upstr_hab_quality', 'type': 'text'},
+                    {'name': 'Priority', 'id': 'priority', 'type': 'text'},
+                    {'name': 'Next Steps', 'id': 'next_steps', 'type': 'text'},
+                    {'name': 'Reasoning', 'id': 'reason', 'type': 'text'},
+                    {'name': 'Notes', 'id': 'notes', 'type': 'text'}
+                    # {'name': 'Latitude', 'id': 'lat', 'type': 'numeric'},
+                    # {'name': 'Longitude', 'id': 'lon', 'type': 'numeric'}
+                ]
+        return columns
+    else:
+        columns=[
+                    {'name': 'Crossing ID', 'id': 'id', 'type': 'numeric'},
+                    {'name': 'PSCIS status', 'id': 'pscis_status', 'type': 'text'},
+                    {'name': 'Barrier Status', 'id': 'barrier_status', 'type': 'text'},
+                    {'name': 'Acess Model', 'id': 'access_model_ch_co_sk', 'type': 'text'},
+                    {'name': 'All habitat', 'id': 'all_spawningrearing_per_barrier', 'type': 'numeric'},
+                    {'name': 'Latitude', 'id': 'lat', 'type': 'numeric'},
+                    {'name': 'Longitude', 'id': 'lon', 'type': 'numeric'}
+                ]
+        return columns
+
+        
+
 
 
         
