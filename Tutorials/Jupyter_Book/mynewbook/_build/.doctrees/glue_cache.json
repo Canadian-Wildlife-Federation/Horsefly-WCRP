@@ -1,5 +1,17 @@
 {
   "EcoAttributes": {
+    "demo_pct": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "demo_pct",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "21"
+      }
+    },
     "resource_pct": {
       "output_type": "display_data",
       "metadata": {
@@ -10,18 +22,6 @@
       },
       "data": {
         "text/plain": "56"
-      }
-    },
-    "resource_km": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "resource_km",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "19.57"
       }
     },
     "sum": {
@@ -48,16 +48,16 @@
         "text/plain": "8.09"
       }
     },
-    "demo_sev": {
+    "demo_km": {
       "output_type": "display_data",
       "metadata": {
         "scrapbook": {
-          "name": "demo_sev",
+          "name": "demo_km",
           "mime_prefix": ""
         }
       },
       "data": {
-        "text/plain": "73"
+        "text/plain": "7.31"
       }
     },
     "total_barrier": {
@@ -72,28 +72,28 @@
         "text/plain": "9"
       }
     },
-    "dam_pct": {
+    "demo_sev": {
       "output_type": "display_data",
       "metadata": {
         "scrapbook": {
-          "name": "dam_pct",
+          "name": "demo_sev",
           "mime_prefix": ""
         }
       },
       "data": {
-        "text/plain": "23"
+        "text/plain": "73"
       }
     },
-    "demo_km": {
+    "resource_km": {
       "output_type": "display_data",
       "metadata": {
         "scrapbook": {
-          "name": "demo_km",
+          "name": "resource_km",
           "mime_prefix": ""
         }
       },
       "data": {
-        "text/plain": "7.31"
+        "text/plain": "19.57"
       }
     },
     "resource_sev": {
@@ -108,16 +108,16 @@
         "text/plain": "60"
       }
     },
-    "demo_pct": {
+    "dam_pct": {
       "output_type": "display_data",
       "metadata": {
         "scrapbook": {
-          "name": "demo_pct",
+          "name": "dam_pct",
           "mime_prefix": ""
         }
       },
       "data": {
-        "text/plain": "21"
+        "text/plain": "23"
       }
     }
   }
