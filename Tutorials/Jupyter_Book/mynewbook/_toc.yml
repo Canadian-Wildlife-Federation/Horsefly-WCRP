@@ -15,9 +15,6 @@ chapters:
 - file: progress
 - file: Operation
 - file: Funding
-- file: API
-- file: Dash
-- file: test
 - file: references
 - file: AppendixA 
 - file: AppendixB

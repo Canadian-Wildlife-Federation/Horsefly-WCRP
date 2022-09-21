@@ -1,17 +1,5 @@
 {
   "EcoAttributes": {
-    "demo_pct": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "demo_pct",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "21"
-      }
-    },
     "resource_pct": {
       "output_type": "display_data",
       "metadata": {
@@ -22,18 +10,6 @@
       },
       "data": {
         "text/plain": "56"
-      }
-    },
-    "sum": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "sum",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "244"
       }
     },
     "dam_km": {
@@ -48,16 +24,16 @@
         "text/plain": "8.09"
       }
     },
-    "demo_km": {
+    "demo_sev": {
       "output_type": "display_data",
       "metadata": {
         "scrapbook": {
-          "name": "demo_km",
+          "name": "demo_sev",
           "mime_prefix": ""
         }
       },
       "data": {
-        "text/plain": "7.31"
+        "text/plain": "73"
       }
     },
     "total_barrier": {
@@ -72,16 +48,28 @@
         "text/plain": "9"
       }
     },
-    "demo_sev": {
+    "demo_pct": {
       "output_type": "display_data",
       "metadata": {
         "scrapbook": {
-          "name": "demo_sev",
+          "name": "demo_pct",
           "mime_prefix": ""
         }
       },
       "data": {
-        "text/plain": "73"
+        "text/plain": "21"
+      }
+    },
+    "demo_km": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "demo_km",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "7.31"
       }
     },
     "resource_km": {
@@ -96,16 +84,16 @@
         "text/plain": "19.57"
       }
     },
-    "resource_sev": {
+    "sum": {
       "output_type": "display_data",
       "metadata": {
         "scrapbook": {
-          "name": "resource_sev",
+          "name": "sum",
           "mime_prefix": ""
         }
       },
       "data": {
-        "text/plain": "60"
+        "text/plain": "244"
       }
     },
     "dam_pct": {
@@ -118,6 +106,18 @@
       },
       "data": {
         "text/plain": "23"
+      }
+    },
+    "resource_sev": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "resource_sev",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "60"
       }
     }
   }

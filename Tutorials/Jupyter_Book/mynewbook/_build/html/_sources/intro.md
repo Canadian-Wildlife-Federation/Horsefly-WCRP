@@ -30,7 +30,7 @@ We recognize the incredible fish passage and connectivity work that has occurred
 
 The Canadian Wildlife Federation recognizes that the lands and waters that form the basis of this plan are the traditional unceded territory of the Northern Secwepemc people. We are grateful for the opportunity to learn from the stewards of this land and work together to benefit Pacific Salmon. A special thank you to Nishitha Singi for sharing the traditional Secwepemctsín names used in this plan. 
 
-# Table of Contents
+<!-- # Table of Contents
 
 ```{tableofcontents}
-```
+``` -->

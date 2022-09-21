@@ -21,7 +21,15 @@
 from IPython.display import display, HTML
 import pandas as pd
 
-data = pd.read_csv('tables\chinook.csv', index_col=False).style.hide_index()
+data = pd.read_csv('tables\Chinook1.csv', index_col=False).style.hide_index()
+
+display(data)
+
+
+# In[2]:
+
+
+data = pd.read_csv('tables\Chinook2.csv', index_col=False).style.hide_index()
 
 display(data)
 
@@ -33,7 +41,7 @@ display(data)
 # Table 5. Coho Salmon population assessments in the Horsefly River watershed. Conservation Unit assessments were undertaken by the [Pacific Salmon Foundation](https://www.salmonexplorer.ca/#!/fraser/chinook/middle-fraser-river-spring-5-2) ([2020](https://salmonwatersheds.ca/libraryfiles/lib_459.pdf)). Designated Unit assessments were undertaken by [COSEWIC](https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/cosewic-assessments-status-reports/chinook-salmon-2018.html) (2016).
 # 
 
-# In[2]:
+# In[3]:
 
 
 data = pd.read_csv('tables\coho1.csv', index_col=False).style.hide_index()
@@ -41,7 +49,7 @@ data = pd.read_csv('tables\coho1.csv', index_col=False).style.hide_index()
 display(data)
 
 
-# In[3]:
+# In[4]:
 
 
 data = pd.read_csv('tables\coho2.csv', index_col=False).style.hide_index()
@@ -55,7 +63,7 @@ display(data)
 # 
 # Table 6. Sockeye Salmon population assessments in the Horsefly River watershed. Conservation Unit assessments were undertaken by the [Pacific Salmon Foundation](https://www.salmonexplorer.ca/#!/fraser/chinook/middle-fraser-river-spring-5-2) ([2020](https://salmonwatersheds.ca/libraryfiles/lib_459.pdf)). Designated Unit assessments were undertaken by [COSEWIC](https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/cosewic-assessments-status-reports/chinook-salmon-2018.html) (2017).
 
-# In[4]:
+# In[5]:
 
 
 data = pd.read_csv('tables\Sockeye1.csv', index_col=False).style.hide_index()
@@ -63,7 +71,7 @@ data = pd.read_csv('tables\Sockeye1.csv', index_col=False).style.hide_index()
 display(data)
 
 
-# In[5]:
+# In[6]:
 
 
 data = pd.read_csv('tables\Sockeye2.csv', index_col=False).style.hide_index()
