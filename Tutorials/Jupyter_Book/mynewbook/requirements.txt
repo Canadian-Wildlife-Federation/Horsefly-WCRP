@@ -1,12 +1,9 @@
 jupyter-book
 matplotlib
 numpy
-
 requests
-json
 pandas 
 numpy 
 random
-
 os
 
