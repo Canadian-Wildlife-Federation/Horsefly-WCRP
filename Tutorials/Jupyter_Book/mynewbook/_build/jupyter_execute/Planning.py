@@ -10,6 +10,10 @@
 
 from IPython.display import display, HTML
 import pandas as pd
+import warnings
+
+warnings.filterwarnings('ignore')
+
 
 data = pd.read_csv('tables\planning_team.csv', index_col=False).style.hide_index()
 

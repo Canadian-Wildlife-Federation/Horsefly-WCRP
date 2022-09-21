@@ -1,17 +1,40 @@
-#app {
-    background-color: #00828d;
+body {
+    background-color:whitesmoke;
+    margin: 0;
+    padding: 0;
+  }
+
+#title {
+    text-align: center;
 }
 
+/*#app {
+    background-color: #00828d;
+    height: auto;
+    width: auto;
+}*/
+
 #dropdown {
-    width:1500px
+    width:33%;
+    display: inline-block;
+}
+#extradropdown {
+    width:33%;
+    display: inline-block;
+}
+
+#extradropdown2 {
+    width:33%;
+    display: inline-block;
 }
 
 #map {
-    width: 1500px;
-    height: 500px;
+    width: 100%;
+    height: 100%;
+    display: flex;
 }
 
 #table2 {
-    float:left;
+    display: flex;
     width: 1000px;
 }
