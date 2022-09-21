@@ -4,6 +4,4 @@ numpy
 requests
 pandas 
 numpy 
-random
-os
 
