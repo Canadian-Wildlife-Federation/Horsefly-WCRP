@@ -26,7 +26,7 @@
 from IPython.display import display
 import pandas as pd
 
-data = pd.read_csv('tables\species_names.csv', index_col=False).style.hide_index()
+data = pd.read_csv('.\\tables\species_names.csv', index_col=False).style.hide_index()
 
 display(data)
 
