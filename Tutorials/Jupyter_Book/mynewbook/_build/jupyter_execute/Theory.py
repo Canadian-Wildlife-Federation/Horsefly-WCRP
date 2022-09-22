@@ -44,7 +44,6 @@
 # In[1]:
 
 
-from IPython.display import display
 import pandas as pd
 
 data = pd.read_csv('tables\Table11.csv', index_col=False)
