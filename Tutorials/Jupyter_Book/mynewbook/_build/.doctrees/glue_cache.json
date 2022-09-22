@@ -1,27 +1,15 @@
 {
   "EcoAttributes": {
-    "resource_km": {
+    "resource_pct": {
       "output_type": "display_data",
       "metadata": {
         "scrapbook": {
-          "name": "resource_km",
+          "name": "resource_pct",
           "mime_prefix": ""
         }
       },
       "data": {
-        "text/plain": "19.57"
-      }
-    },
-    "demo_sev": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "demo_sev",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "73"
+        "text/plain": "56"
       }
     },
     "demo_pct": {
@@ -34,6 +22,30 @@
       },
       "data": {
         "text/plain": "21"
+      }
+    },
+    "resource_km": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "resource_km",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "19.57"
+      }
+    },
+    "resource_sev": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "resource_sev",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "60"
       }
     },
     "sum": {
@@ -58,30 +70,6 @@
       },
       "data": {
         "text/plain": "23"
-      }
-    },
-    "resource_sev": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "resource_sev",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "60"
-      }
-    },
-    "resource_pct": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "resource_pct",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "56"
       }
     },
     "total_barrier": {
@@ -118,6 +106,18 @@
       },
       "data": {
         "text/plain": "7.31"
+      }
+    },
+    "demo_sev": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "demo_sev",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "73"
       }
     }
   }

@@ -8,7 +8,6 @@
 # In[1]:
 
 
-from IPython.display import display, HTML
 import pandas as pd
 import warnings
 
@@ -17,7 +16,7 @@ warnings.filterwarnings('ignore')
 
 data = pd.read_csv('tables\planning_team.csv', index_col=False).style.hide_index()
 
-display(data)
+data
 
 
 # # Key Actors
@@ -27,7 +26,6 @@ display(data)
 # In[2]:
 
 
-from IPython.display import display
 import pandas as pd
 
 data = pd.read_csv('tables\key_actors.csv', index_col=False)

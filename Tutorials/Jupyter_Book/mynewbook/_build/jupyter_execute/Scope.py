@@ -23,12 +23,11 @@
 # In[1]:
 
 
-from IPython.display import display
 import pandas as pd
 
-data = pd.read_csv('.\\tables\species_names.csv', index_col=False).style.hide_index()
+data = pd.read_csv('tables\species_names.csv', index_col=False).style.hide_index()
 
-display(data)
+data
 
 
 # The Horsefly River watershed comprises parts of Secwepemcúl’ecw, the traditional territory of the Northern Secwepemc te Qelmucw (NStQ), represented by the Northern Shuswap Tribal Council and four member communities or autonomous nations:
