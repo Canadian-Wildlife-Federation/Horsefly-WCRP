@@ -132,6 +132,8 @@ data = data.replace(np.nan, '', regex=True)
 data.style.hide_index().set_properties(**{'text-align': 'left'})
 
 
+# <iframe src="https://hors.herokuapp.com/" height="750" width="100%" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay" data-external="1"></iframe>
+
 # Out of the 20 barriers on the intermediate list, 16 require further field assessment before selection as a final barrier to pursue for remediation:
 # 
 # Table 20. Field assessment requirements for the intermediate barrier list in the Horsefly River watershed. The cost per barrier values are estimates based on previously completed field work. The habitat confirmation count is based on the assumption that the 12 barriers requiring barrier assessments will also require a subsequent confirmation. In the case that some barriers are identified as unsuitable candidates for habitat confirmations, the total cost will be reduced.

@@ -275,3 +275,245 @@ glue("sum", sum(sum_road))
 # ### Natural Barriers 
 # 
 # Natural barriers to fish passage can include debris flows, log jams, sediment deposits, etc., but natural features that have always restricted fish passage (e.g., waterfalls) are not considered under this barrier type. Natural barriers are difficult to include in a spatial prioritization framework due to their transient nature. The planning team identified known natural barriers that occur throughout the watershed, such as beaver dams and log jams. Generally, these natural barriers are only severe impediments to fish passage during low-flow years, but reduced baseflows have become more common in recent years. Based on this, the planning team felt that natural barriers will be severe most years where they exist, but are mostly reversible, resulting in an overall pressure rating of Low. 
+
+# # Situation Analysis 
+# 
+# The following situation model was developed by the WCRP planning team to “map” the project context and brainstorm potential actions for implementation. Green text is used to identify actions that were selected for implementation (see Strategies & Actions), and red text is used to identify actions that the project team has decided to exclude from the current iteration of the plan, as they were either outside of the project scope, or were deemed to be ineffective by the planning team. 
+# ```{figure} figure3.png
+# ---
+# height: 400px
+# width: 1000px
+# name: directive-fig
+# ---
+# Situation analysis developed by the planning team to identify factors that contribute to fragmentation (orange boxes), biophysical results (brown boxes), and potential strategies/actions to improve connectivity (yellow hexagons) for target species in the Horsefly River watershed.
+# ```
+
+# # Goals
+# 
+# Table 9. Goals to improve (1) spawning and rearing and (2) overwintering habitat connectivity for target species in the Horsefly River watershed over the lifespan of the WCRP (2021-2040). The goals were established through discussions with the planning team and represent the resulting desired state of connectivity in the watershed. The goals are subject to change as more information and data are collected over the course of the plan timeline (e.g., the current connectivity status is updated based on barrier field assessments). 
+# 
+
+# In[7]:
+
+
+#creating table 7
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({"Goal #": [1,2],
+                   "Goal": ["By 2040, the percent (%) of total linear habitat accessible to anadromous salmon will increase from 94% to 96% within the Horsefly River watershed (i.e., reconnect at least 11.7 km of habitat).",
+                            "By 2024, the total area of overwintering habitat accessible to Anadromous Salmon will increase by 1,500 m2 within the Horsefly River watershed. "]
+                    })
+
+df.style.hide_index().set_properties(**{'text-align': 'left'})
+
+
+# # Strategies & Actions
+# 
+# Table 10. Effectiveness evaluation of identified conservation strategies and associated actions to improve connectivity for target species in the Horsefly River watershed. The planning team identified five broad strategies to implement through this WCRP, 1) crossing remediation, 2) lateral barrier remediation, 3) dam remediation, 4) barrier prevention, and 5) communication and education. Individual actions were qualitatively evaluated based on the anticipated effect each action will have on realizing on-the-ground gains in connectivity. Effectiveness ratings are based on a combination of "Feasibility and "Impact", Feasibility is defined as the degree to which the project team can implement the action within realistic constraints (financial, time, ethical, etc.) and Impact is the degree to which the action is likely to contribute to achieving one or more of the goals established in this plan.
+# 
+# ## Strategy 1: Crossing Remediation
+# 
+
+# In[8]:
+
+
+import numpy as np
+from IPython.display import display
+import pandas as pd
+
+data = pd.read_csv('tables\Strategy1.csv', index_col=False)
+
+def fix_table(val):
+    return str(val)
+
+def highlighttab7(val):
+    red = '#ff0000;'
+    yellow = '#ffff00;'
+    lgreen = '#92d050;'
+    dgreen = '#03853e;'
+
+    if val=="Medium" or val=="Need more information": color = yellow
+    elif val=="Very high" or val=="Very effective" : color = lgreen
+    elif val =="High" or val=="Effective": color = dgreen
+    else: color = 'white'
+    return 'background-color: %s' % color
+
+data = data.replace(np.nan, '', regex=True)
+
+data = data.applymap(fix_table)
+
+data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+
+
+# 
+# ## Strategy 2: Lateral Barrier Remediation	
+# 
+
+# In[9]:
+
+
+data = pd.read_csv('tables\Strategy2.csv', escapechar='\n', index_col=False)
+
+data = data.replace(np.nan, '', regex=True)
+
+data = data.applymap(fix_table)
+
+data = data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+
+display(data)
+
+
+# ## Strategy 3: Dam Remediation
+# 
+
+# In[10]:
+
+
+data = pd.read_csv('tables\Strategy3.csv', index_col=False)
+
+data = data.replace(np.nan, '', regex=True)
+
+data = data.applymap(fix_table)
+
+data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+
+
+# ## Strategy 4: Barrier Prevention
+# 
+
+# In[11]:
+
+
+import pandas as pd
+
+data = pd.read_csv('tables\Strategy4.csv', index_col=False)
+
+
+
+
+data = data.applymap(fix_table)
+
+data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+
+#display(data)
+
+
+# ## Strategy 5: Communication and Education
+# 
+
+# In[12]:
+
+
+data = pd.read_csv('tables\Strategy5.csv', index_col=False)
+
+data = data.replace(np.nan, '', regex=True)
+
+data = data.applymap(fix_table)
+
+data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+
+
+# # Theories of Change & Objectives
+# 
+# Theories of Change are explicit assumptions around how the identified actions will achieve gains in connectivity and contribute towards reaching the goals of the plan. To develop Theories of Change, the planning team developed explicit assumptions for each strategy which helped to clarify the rationale used for undertaking actions and provided an opportunity for feedback on invalid assumptions or missing opportunities. The Theories of Change are results oriented and clearly define the expected outcome. The following theory of change models were developed by the WCRP planning team to “map” the causal (“if-then”) progression of assumptions of how the actions within a strategy work together to achieve project goals. 
+# ```{figure} figure4.png
+# ---
+# height: 400px
+# width: 1000px
+# name: fig4
+# ---
+# Theory of change developed by the planning team for the actions identified under Strategy 1: Crossing Remediation in the Horsefly River watershed.
+# ```
+# ```{figure} figure5.png
+# ---
+# height: 400px
+# width: 1000px
+# name: fig5
+# ---
+# Theory of change developed by the planning team for the actions identified under Strategy 2: Lateral Barrier Remediation in the Horsefly River watershed.
+# ```
+# ```{figure} figure6.png
+# ---
+# height: 400px
+# width: 1000px
+# name: fig6
+# ---
+# Theory of change developed by the planning team for the actions identified under Strategy 3: Dam Remediation in the Horsefly River watershed.
+# ```
+# ```{figure} figure7.png
+# ---
+# height: 400px
+# width: 1000px
+# name: fig7
+# ---
+# Theory of change developed by the planning team for the actions identified under Strategy 4: Barrier Prevention in the Horsefly River watershed.
+# ```
+# 
+
+# In[13]:
+
+
+import pandas as pd
+
+data = pd.read_csv('tables\Table11.csv', index_col=False)
+
+data.style.hide_index().set_properties(**{'text-align': 'left'})
+
+
+# # Progress Tracking Plan
+# 
+
+# In[14]:
+
+
+from IPython.display import display
+import pandas as pd
+
+data = pd.read_csv('tables\Table12.csv', index_col=False)
+
+data.style.hide_index().set_properties(**{'text-align': 'left'})
+
+
+# # Operational Plan
+# 
+# The operational plan represents a preliminary exercise undertaken by the planning team to identify the potential leads, potential participants, and estimated cost for the implementation of each action in the Horsefly River watershed. The table below summarizes individuals, groups, or organizations that the planning team felt could lead or participate in the implementation of the plan and should be interpreted as the first step in on-going planning and engagement to develop more detailed and sophisticated action plans for each entry in the table. The individuals, groups, and organizations listed under the "Lead(s)" or "Potential Participants" columns are those that provisionally expressed interest in participating in one of those roles or were suggested by the planning team for further engagement (denoted in bold), for those that are not members of the planning team. The leads, participants, and estimated costs in the operational plan are not binding nor an official commitment of resources, but rather provide a roadmap for future coordination and engagement to work towards implementation of the WCRP. 
+# 
+# Table 13. Operational plan to support the implementation of strategies and actions to improve connectivity for target species in the Horsefly River watershed.
+# 
+
+# In[15]:
+
+
+from IPython.display import display
+import pandas as pd
+import numpy as np
+
+def df_operation(val):
+    return "background-color: black; color: white"
+
+
+data = pd.read_csv('tables\Table13.csv', index_col=False)
+
+data = data.replace(np.nan, '', regex=True)
+
+rows = pd.IndexSlice[[0,10,16,23,26,29,30,31], :]
+
+data.style.applymap(df_operation, subset=rows).hide_index().set_properties(**{'text-align': 'left'})
+
+
+# # Funding Sources
+# 
+# Table 14. Potential funding sources for plan implementation in the Horsefly River watershed. The Canadian Wildlife Federation and the planning team can coordinate proposal submission through these sources. 
+# 
+
+# In[16]:
+
+
+from IPython.display import display
+import pandas as pd
+
+data = pd.read_csv('tables\Table14.csv', index_col=False)
+
+data.style.hide_index().set_properties(**{'text-align': 'left'})
+

@@ -4,17 +4,9 @@
 format: jb-book
 root: intro
 chapters:
-- file: ConnectivityPlan
+#- file: ConnectivityPlan
 - file: Planning
-- file: Scope
-- file: Target
 - file: EcoAttributes
-- file: Situation
-- file: Strategy
-- file: Theory
-- file: progress
-- file: Operation
-- file: Funding
 - file: references
 - file: AppendixA 
 - file: AppendixB
