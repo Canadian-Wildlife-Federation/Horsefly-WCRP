@@ -1,5 +1,101 @@
 {
   "EcoAttributes": {
+    "total_barrier": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "total_barrier",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "9"
+      }
+    },
+    "demo_sev": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "demo_sev",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "73"
+      }
+    },
+    "resource_km": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "resource_km",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "19.57"
+      }
+    },
+    "demo_km": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "demo_km",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "7.31"
+      }
+    },
+    "resource_sev": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "resource_sev",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "60"
+      }
+    },
+    "dam_pct": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "dam_pct",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "23"
+      }
+    },
+    "sum": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "sum",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "244"
+      }
+    },
+    "resource_pct": {
+      "output_type": "display_data",
+      "metadata": {
+        "scrapbook": {
+          "name": "resource_pct",
+          "mime_prefix": ""
+        }
+      },
+      "data": {
+        "text/plain": "56"
+      }
+    },
     "demo_pct": {
       "output_type": "display_data",
       "metadata": {
@@ -22,102 +118,6 @@
       },
       "data": {
         "text/plain": "8.09"
-      }
-    },
-    "demo_km": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "demo_km",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "7.31"
-      }
-    },
-    "demo_sev": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "demo_sev",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "73"
-      }
-    },
-    "resource_pct": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "resource_pct",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "56"
-      }
-    },
-    "resource_sev": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "resource_sev",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "60"
-      }
-    },
-    "resource_km": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "resource_km",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "19.57"
-      }
-    },
-    "sum": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "sum",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "244"
-      }
-    },
-    "dam_pct": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "dam_pct",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "23"
-      }
-    },
-    "total_barrier": {
-      "output_type": "display_data",
-      "metadata": {
-        "scrapbook": {
-          "name": "total_barrier",
-          "mime_prefix": ""
-        }
-      },
-      "data": {
-        "text/plain": "9"
       }
     }
   }

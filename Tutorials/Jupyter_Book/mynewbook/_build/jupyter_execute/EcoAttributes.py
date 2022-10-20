@@ -121,14 +121,13 @@ import pandas as pd
 import numpy as np
 import matplotlib as mpl
 
-df = pd.DataFrame({"Target Species":["Andromous Salmon"],
-                   "KEA":["Available Overwintering Habitat"],
-                   "Indicator":["Total Area (m2) of overwintering habitat accessible"],
-                   "Poor":["?"],
-                   "Fair":[" ?"],
-                   "Good":["? "],
-                   "Very Good":[" ? "],
-                   "Current Status":[""]
+df = pd.DataFrame({"Target Species":["Andromous Salmon",""],
+                   "KEA":["Available Overwintering Habitat",""],
+                   "Indicator":["Total Area (m2) of overwintering habitat accessible","Current Status:"],
+                   "Poor":["?",""],
+                   "Fair":[" ?",""],
+                   "Good":["? ",""],
+                   "Very Good":[" ? ",""]
                    })
 
 def highlighttab7b(val):
@@ -144,6 +143,7 @@ def highlighttab7b(val):
     elif val[0:].isdigit() and (int(val) >= 80 and int(val) < 90) : color = lgreen 
     elif val ==" ? ": color = dgreen
     elif val[0:].isdigit() and int(val) >= 90 : color = dgreen 
+    elif val == "Current Status:" : return "font-weight: bold"
     else: color = 'white'
     return 'background-color: %s' % color
 

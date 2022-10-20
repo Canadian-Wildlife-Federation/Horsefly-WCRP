@@ -132,6 +132,8 @@ data = data.replace(np.nan, '', regex=True)
 data.style.hide_index().set_properties(**{'text-align': 'left'})
 
 
+# # WCRP Dashboard for the Horsefly Watershed
+
 # <iframe src="https://hors.herokuapp.com/" height="750" width="100%" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay" data-external="1"></iframe>
 
 # Out of the 20 barriers on the intermediate list, 16 require further field assessment before selection as a final barrier to pursue for remediation:
