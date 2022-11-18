@@ -29,7 +29,7 @@ from IPython.display import display, HTML
 import pandas as pd
 import numpy as np
 
-data = pd.read_csv('tables\Table15.csv', index_col=False)
+data = pd.read_csv('Table15.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 

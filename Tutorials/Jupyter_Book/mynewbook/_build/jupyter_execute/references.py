@@ -3,6 +3,10 @@
 
 # # References
 # 
+# ```{bibliography} ./references.bib
+# :all:
+# ```
+# 
 # Agrawal, A., R. S. Schick, E. P. Bjorkstedt, R. G. Szerlong, M. N. Goslin, B. C. Spence, T. H. Williams, and K. M. Burnett. 2005. Predicting the potential for historical Coho, Chinook, and Steelhead habitat in northern California. National Oceanic and Atmospheric Administration, NOAA-TM-NMFS-SWFSC-379. 
 # 
 # Bjornn, T. C., and D. W. Reiser. 1991. Habitat requirements of salmonids in streams. In Influences of Forest and Rangeland Management on Salmonid Fishes and their Habitats. American Fisheries Society Special Publication 19: 83-138. 

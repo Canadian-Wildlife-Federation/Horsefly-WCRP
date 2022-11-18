@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: Horsefly River Draft
+title: Horsefly River WCRP
 author: Canadian Wildlife Federation
 logo: logo.png
 
@@ -36,3 +36,8 @@ html:
 sphinx:
   html_static_path: _static
   html_css_files: _static/custom.css
+  config:
+    bibtex_reference_style: author_year
+
+
+  

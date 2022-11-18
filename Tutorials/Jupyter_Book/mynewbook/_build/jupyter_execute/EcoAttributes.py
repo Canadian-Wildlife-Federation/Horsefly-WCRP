@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Key Ecological Attributes and Current Connectivity Status
+# # Connectivity Status Assessment and Action Plan
 
 # In[1]:
 
@@ -79,6 +79,9 @@ def watershed_connectivity(habitat_type):
 import pandas as pd
 import numpy as np
 import matplotlib as mpl
+import warnings
+
+warnings.filterwarnings('ignore')
 
 df = pd.DataFrame({"Target Species":["Andromous Salmon"," "],
                    "KEA":["Available Habitat"," "],
@@ -120,6 +123,9 @@ df.style.applymap(highlighttab7).hide_index()
 import pandas as pd
 import numpy as np
 import matplotlib as mpl
+import warnings
+
+warnings.filterwarnings('ignore')
 
 df = pd.DataFrame({"Target Species":["Andromous Salmon",""],
                    "KEA":["Available Overwintering Habitat",""],
@@ -164,6 +170,9 @@ df.style.applymap(highlighttab7b).hide_index()
 
 from ipywidgets import *
 import pandas as pd
+import warnings
+
+warnings.filterwarnings('ignore')
 
 #condition
 def condition(pct):
@@ -204,7 +213,7 @@ df = pd.DataFrame({"Barrier Types":["Road-Stream Crossings","Lateral Barriers","
                    "Severity":[rating("severity", "ROAD"),"Very High",rating("severity", "DAM"), "Low", "High"],
                    "Irreversibility":["Medium","High","High", "Medium", "Low"],
                    "Overall Threat Rating:":["Very High","High","Medium", "Low", "Low"]
-                   })
+                   }).style.set_properties(subset=["Overall Threat Rating:"], **{'font-weight': 'bold'})
 
 def highlight(val):
     red = '#ff0000;'
@@ -219,7 +228,11 @@ def highlight(val):
     else: color = 'white'
     return 'background-color: %s' % color
 
-df.style.applymap(highlight).hide_index()
+#df = df.style.set_properties(subset=["Overall Threat Rating"], **{'font-weight': 'bold'})
+
+df.applymap(highlight).hide_index()
+
+
 
 
 # In[5]:
@@ -285,7 +298,7 @@ glue("sum", sum(sum_road))
 # width: 1000px
 # name: directive-fig
 # ---
-# Situation analysis developed by the planning team to identify factors that contribute to fragmentation (orange boxes), biophysical results (brown boxes), and potential strategies/actions to improve connectivity (yellow hexagons) for target species in the Horsefly River watershed.
+# *Situation analysis developed by the planning team to identify factors that contribute to fragmentation (orange boxes), biophysical results (brown boxes), and potential strategies/actions to improve connectivity (yellow hexagons) for target species in the Horsefly River watershed.*
 # ```
 
 # # Goals
@@ -297,6 +310,9 @@ glue("sum", sum(sum_road))
 
 
 #creating table 7
+import warnings
+
+warnings.filterwarnings('ignore')
 import pandas as pd
 import numpy as np
 
@@ -322,7 +338,7 @@ import numpy as np
 from IPython.display import display
 import pandas as pd
 
-data = pd.read_csv('tables\Strategy1.csv', index_col=False)
+data = pd.read_csv('Strategy1.csv', index_col=False)
 
 def fix_table(val):
     return str(val)
@@ -353,7 +369,7 @@ data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 
 # In[9]:
 
 
-data = pd.read_csv('tables\Strategy2.csv', escapechar='\n', index_col=False)
+data = pd.read_csv('Strategy2.csv', escapechar='\n', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
@@ -370,7 +386,7 @@ display(data)
 # In[10]:
 
 
-data = pd.read_csv('tables\Strategy3.csv', index_col=False)
+data = pd.read_csv('Strategy3.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
@@ -387,7 +403,7 @@ data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 
 
 import pandas as pd
 
-data = pd.read_csv('tables\Strategy4.csv', index_col=False)
+data = pd.read_csv('Strategy4.csv', index_col=False)
 
 
 
@@ -405,7 +421,7 @@ data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 
 # In[12]:
 
 
-data = pd.read_csv('tables\Strategy5.csv', index_col=False)
+data = pd.read_csv('Strategy5.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
@@ -423,7 +439,7 @@ data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 
 # width: 1000px
 # name: fig4
 # ---
-# Theory of change developed by the planning team for the actions identified under Strategy 1: Crossing Remediation in the Horsefly River watershed.
+# *Theory of change developed by the planning team for the actions identified under Strategy 1: Crossing Remediation in the Horsefly River watershed.*
 # ```
 # ```{figure} figure5.png
 # ---
@@ -431,7 +447,7 @@ data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 
 # width: 1000px
 # name: fig5
 # ---
-# Theory of change developed by the planning team for the actions identified under Strategy 2: Lateral Barrier Remediation in the Horsefly River watershed.
+# *Theory of change developed by the planning team for the actions identified under Strategy 2: Lateral Barrier Remediation in the Horsefly River watershed.*
 # ```
 # ```{figure} figure6.png
 # ---
@@ -439,7 +455,7 @@ data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 
 # width: 1000px
 # name: fig6
 # ---
-# Theory of change developed by the planning team for the actions identified under Strategy 3: Dam Remediation in the Horsefly River watershed.
+# *Theory of change developed by the planning team for the actions identified under Strategy 3: Dam Remediation in the Horsefly River watershed.*
 # ```
 # ```{figure} figure7.png
 # ---
@@ -447,7 +463,7 @@ data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 
 # width: 1000px
 # name: fig7
 # ---
-# Theory of change developed by the planning team for the actions identified under Strategy 4: Barrier Prevention in the Horsefly River watershed.
+# *Theory of change developed by the planning team for the actions identified under Strategy 4: Barrier Prevention in the Horsefly River watershed.*
 # ```
 # 
 
@@ -456,7 +472,7 @@ data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 
 
 import pandas as pd
 
-data = pd.read_csv('tables\Table11.csv', index_col=False)
+data = pd.read_csv('Table11.csv', index_col=False)
 
 data.style.hide_index().set_properties(**{'text-align': 'left'})
 
@@ -470,7 +486,7 @@ data.style.hide_index().set_properties(**{'text-align': 'left'})
 from IPython.display import display
 import pandas as pd
 
-data = pd.read_csv('tables\Table12.csv', index_col=False)
+data = pd.read_csv('Table12.csv', index_col=False)
 
 data.style.hide_index().set_properties(**{'text-align': 'left'})
 
@@ -493,7 +509,7 @@ def df_operation(val):
     return "background-color: black; color: white"
 
 
-data = pd.read_csv('tables\Table13.csv', index_col=False)
+data = pd.read_csv('Table13.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
@@ -513,7 +529,7 @@ data.style.applymap(df_operation, subset=rows).hide_index().set_properties(**{'t
 from IPython.display import display
 import pandas as pd
 
-data = pd.read_csv('tables\Table14.csv', index_col=False)
+data = pd.read_csv('Table14.csv', index_col=False)
 
 data.style.hide_index().set_properties(**{'text-align': 'left'})
 

@@ -17,7 +17,7 @@ h1 {
 }
 
 h2 {
-    color: #008270;
+    color: black;
 }
 
 h3 {
@@ -27,6 +27,7 @@ h3 {
 thead {
     background-color: #008270;
     color: white;
+    text-align: left;
 }
 
 @media print {

@@ -77,6 +77,9 @@ def watershed_connectivity(habitat_type):
 import pandas as pd
 import numpy as np
 import matplotlib as mpl
+import warnings
+
+warnings.filterwarnings('ignore')
 
 total = 526.95 #total km in HORS
 access = round(total * (int(watershed_connectivity("ALL"))/100),2)
@@ -100,7 +103,7 @@ df.style.hide_index()
 # In[2]:
 
 
-data = pd.read_csv('tables\Table17.csv', index_col=False)
+data = pd.read_csv('Table17.csv', index_col=False)
 data = data.replace(np.nan, '', regex=True)
 
 data.style.hide_index().set_properties(**{'text-align': 'left'})
@@ -111,7 +114,7 @@ data.style.hide_index().set_properties(**{'text-align': 'left'})
 # In[3]:
 
 
-data = pd.read_csv('tables\Table18.csv', index_col=False)
+data = pd.read_csv('table18.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
@@ -123,7 +126,7 @@ data.style.hide_index().set_properties(**{'text-align': 'left'})
 # In[4]:
 
 
-data = pd.read_csv('tables\priority_barriers.csv', index_col=False)
+data = pd.read_csv('priority_barriers.csv', index_col=False)
 
 #pd.options.display.max_columns=10
 
@@ -131,10 +134,6 @@ data = data.replace(np.nan, '', regex=True)
 
 data.style.hide_index().set_properties(**{'text-align': 'left'})
 
-
-# # WCRP Dashboard for the Horsefly Watershed
-
-# <iframe src="https://hors.herokuapp.com/" height="750" width="100%" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay" data-external="1"></iframe>
 
 # Out of the 20 barriers on the intermediate list, 16 require further field assessment before selection as a final barrier to pursue for remediation:
 # 
@@ -148,7 +147,7 @@ def df_style(val):
     return "font-weight: bold"
 
 
-data = pd.read_csv('tables\Table20.csv', index_col=False)
+data = pd.read_csv('Table20.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
@@ -166,7 +165,7 @@ data.style.applymap(df_style, subset=last_row).hide_index()
 # In[6]:
 
 
-data = pd.read_csv('tables\Table21.csv', index_col=False)
+data = pd.read_csv('Table21.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
