@@ -24,6 +24,11 @@ h3 {
     color: black;
 }
 
+.gluetext {
+    font-weight: normal;
+}
+
+
 thead {
     background-color: #008270;
     color: white;

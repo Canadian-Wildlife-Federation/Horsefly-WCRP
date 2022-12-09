@@ -1,7 +1,27 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# In[1]:
+
+
+from docx import Document
+from myst_nb import glue
+from IPython.display import display, Markdown, display_markdown
+from functions import head2txt
+
+document = Document('MASTER_Horsefly_WCRP.docx')
+
+
+par1 = head2txt(document,'Acknowledgements', 3)[0]
+par2 = head2txt(document,'Acknowledgements', 3)[1]
+
+
+display(Markdown(par2))
+
+
 # # Plan Purpose, Apporach and Scope
+# 
+# 
 # 
 # The following Watershed Connectivity Remediation Plan (WCRP) represents the culmination of a one-year collaborative planning effort, including field assessments, the overall aim of which is to build collaborative partnerships within the Horsefly River watershed to improve connectivity for anadromous salmon and the livelihoods that they support, including the continued sustenance, cultural, and ceremonial needs of the Northern Secwépemc people. This 20-year plan was developed to identify priority actions that the Horsefly River WCRP planning team (see {numref}`table1` for a list of team members) will undertake between 2021-2040 to conserve and restore fish passage in the watershed, through crossing remediation, lateral barrier remediation, dam remediation, and barrier prevention strategies.  
 # 
@@ -15,7 +35,7 @@
 
 # # Planning Team
 
-# In[1]:
+# In[2]:
 
 
 import pandas as pd
@@ -35,6 +55,7 @@ data.set_table_styles(
 
 glue("Table1", data)
 
+
 #newerror
 
 
@@ -48,7 +69,7 @@ glue("Table1", data)
 # 
 # 
 
-# In[2]:
+# In[3]:
 
 
 import pandas as pd
@@ -74,7 +95,7 @@ glue("Table2", data)
 
 # # Project Scope
 # 
-# Connectivity is a critical component of freshwater ecosystems that encompasses a variety of factors related to ecosystem structure and function, such as the ability of aquatic organisms to disperse and/or migrate, the transportation of energy and matter (e.g., nutrient cycling and sediment flows), and temperature regulation ({cite}`Seliger2018-be`). Though each of these factors are important when considering the health of a watershed, for the purposes of this WCRP the term "connectivity" is defined as the degree to which aquatic organisms can disperse and/or migrate freely through freshwater systems. Within this context, connectivity is primarily constrained by physical barriers, including anthropogenic infrastructure such as dams, weirs, and stream crossings, and natural features such as waterfalls and debris flows. This plan is intended to focus on the direct remediation and prevention of localized, physical barriers instead of the broad land-use patterns that are causing chronic connectivity issues in the watershed. The planning team decided that the primary focus of this WCRP is addressing barriers to both longitudinal connectivity (i.e., along the upstream-downstream plane) and lateral connectivity (i.e., connectivity between the mainstem and adjacent riparian wetlands and floodplains) due to the importance of maintaining fish passage to spawning, rearing, and overwintering habitat in the watershed. 
+# Connectivity is a critical component of freshwater ecosystems that encompasses a variety of factors related to ecosystem structure and function, such as the ability of aquatic organisms to disperse and/or migrate, the transportation of energy and matter (e.g., nutrient cycling and sediment flows), and temperature regulation {cite}`Seliger2018-be`. Though each of these factors are important when considering the health of a watershed, for the purposes of this WCRP the term "connectivity" is defined as the degree to which aquatic organisms can disperse and/or migrate freely through freshwater systems. Within this context, connectivity is primarily constrained by physical barriers, including anthropogenic infrastructure such as dams, weirs, and stream crossings, and natural features such as waterfalls and debris flows. This plan is intended to focus on the direct remediation and prevention of localized, physical barriers instead of the broad land-use patterns that are causing chronic connectivity issues in the watershed. The planning team decided that the primary focus of this WCRP is addressing barriers to both longitudinal connectivity (i.e., along the upstream-downstream plane) and lateral connectivity (i.e., connectivity between the mainstem and adjacent riparian wetlands and floodplains) due to the importance of maintaining fish passage to spawning, rearing, and overwintering habitat in the watershed. 
 # 
 #  
 
@@ -87,9 +108,9 @@ glue("Table2", data)
 # *The primary geographic scope — the Horsefly River watershed — located in the Fraser River system.*
 # ```
 
-# The primary geographic scope of this WCRP is the Horsefly River watershed, located in the upper Fraser River drainage basin in central British Columbia ({numref}`fig1`). The scope constitutes the Horsefly River "watershed group" as defined by the [British Columbia Freshwater Atlas](https://catalogue.data.gov.bc.ca/dataset/freshwater-atlas-watershed-groups) (FWA). A consistent spatial framework was necessary to undertake a watershed selection process at the provincial scale to identify target watersheds to improve connectivity for salmon. The Horsefly River watershed was identified by the BC Fish Passage Restoration Initiative as one of four target watersheds for WCRP development ({cite}`Mazany-Wright2021-do`). The Horsefly River watershed has a drainage area of 276,603 ha, spanning from the Quesnel Highlands in the southeast to the confluence with Quesnel Lake in the northwest. Culturally and economically important populations of Chinook Salmon, Coho Salmon, and Sockeye Salmon are all found in the watershed, which historically supported Indigenous sustenance and trading economies ({numref}`table3`; {cite}`WLFN2021-kb`, {cite}`XFN2021-kb`). 
+# The primary geographic scope of this WCRP is the Horsefly River watershed, located in the upper Fraser River drainage basin in central British Columbia ({numref}`fig1`). The scope constitutes the Horsefly River "watershed group" as defined by the [British Columbia Freshwater Atlas](https://catalogue.data.gov.bc.ca/dataset/freshwater-atlas-watershed-groups) (FWA). A consistent spatial framework was necessary to undertake a watershed selection process at the provincial scale to identify target watersheds to improve connectivity for salmon. The Horsefly River watershed was identified by the BC Fish Passage Restoration Initiative as one of four target watersheds for WCRP development {cite}`Mazany-Wright2021-do`. The Horsefly River watershed has a drainage area of 276,603 ha, spanning from the Quesnel Highlands in the southeast to the confluence with Quesnel Lake in the northwest. Culturally and economically important populations of Chinook Salmon, Coho Salmon, and Sockeye Salmon are all found in the watershed, which historically supported Indigenous sustenance and trading economies ({numref}`table3`; {cite}`WLFN2021-kb`, {cite}`XFN2021-kb`). 
 
-# In[3]:
+# In[4]:
 
 
 import pandas as pd
@@ -123,7 +144,7 @@ glue("Table3", data)
 # 
 # - Tsq’ēsceń (Canim Lake First Nation)
 # 
-# The geographic scope of this WCRP was further refined by identifying “potentially accessible” stream segments, which are defined as streams that target species should be able to access in the absence of anthropogenic barriers ({numref}`fig2`). Potentially accessible stream segments were spatially delineated using fish species observation and distribution data, as well as data on "exclusionary points". These include waterfalls greater than 5 m in height, gradient barriers based on species-specific swimming abilities, and watershed exclusion areas, which are portions of the watershed where barrier remediation efforts should not occur. These maps were explored by the planning team to incorporate additional local knowledge, ensure accuracy, and finalize the constraints on potentially accessible stream segments. The planning team identified certain tributaries to the mainstem Horsefly River as "watershed exclusion areas", which were excluded from further consideration under this plan, due to intermittent or insufficient flows to support restoring connectivity for the target species. The geographic scope was further refined based on several confirmed impassable waterfalls and modelled gradient barriers. Specifically, there are two impassable waterfalls that severely limit potentially accessible habitat: one on the mainstem Horsefly River approximately 4 km upstream of the confluence with McKinley Creek, and the second on Moffat Creek approximately 5 km upstream from where it flows into the Horsefly River. All stream segments not identified as potentially accessible were removed from the scope for further consideration. The "constrained geographic scope" formed the foundation for all subsequent analyses and planning steps, including mapping and modelling useable habitat types, quantifying the current connectivity status, goal setting, and action planning ({cite}`Mazany-Wright2021-rz`). 
+# The geographic scope of this WCRP was further refined by identifying “potentially accessible” stream segments, which are defined as streams that target species should be able to access in the absence of anthropogenic barriers ({numref}`fig2`). Potentially accessible stream segments were spatially delineated using fish species observation and distribution data, as well as data on "exclusionary points". These include waterfalls greater than 5 m in height, gradient barriers based on species-specific swimming abilities, and watershed exclusion areas, which are portions of the watershed where barrier remediation efforts should not occur. These maps were explored by the planning team to incorporate additional local knowledge, ensure accuracy, and finalize the constraints on potentially accessible stream segments. The planning team identified certain tributaries to the mainstem Horsefly River as "watershed exclusion areas", which were excluded from further consideration under this plan, due to intermittent or insufficient flows to support restoring connectivity for the target species. The geographic scope was further refined based on several confirmed impassable waterfalls and modelled gradient barriers. Specifically, there are two impassable waterfalls that severely limit potentially accessible habitat: one on the mainstem Horsefly River approximately 4 km upstream of the confluence with McKinley Creek, and the second on Moffat Creek approximately 5 km upstream from where it flows into the Horsefly River. All stream segments not identified as potentially accessible were removed from the scope for further consideration. The "constrained geographic scope" formed the foundation for all subsequent analyses and planning steps, including mapping and modelling useable habitat types, quantifying the current connectivity status, goal setting, and action planning {cite}`Mazany-Wright2021-rz`. 
 
 # ```{figure} figure2.png
 # ---
@@ -143,7 +164,7 @@ glue("Table3", data)
 # ### Chinook Salmon | Kekèsu | Oncorhynchus tshawytscha 
 # 
 
-# In[4]:
+# In[5]:
 
 
 from IPython.display import display, HTML
@@ -160,7 +181,7 @@ data.set_table_styles(
 [dict(selector = 'th', props=[('text-align', 'left')])])
 
 
-# In[5]:
+# In[6]:
 
 
 from IPython.display import display, HTML
@@ -186,13 +207,10 @@ glue("Table4", data1)
 # *Chinook Salmon population assessments in the Horsefly River watershed. Conservation Unit assessments were undertaken by the [Pacific Salmon Foundation](https://www.salmonexplorer.ca/#!/fraser/chinook/middle-fraser-river-spring-5-2) ([2020](https://salmonwatersheds.ca/libraryfiles/lib_459.pdf)). Designated Unit assessments were undertaken by [COSEWIC](https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/cosewic-assessments-status-reports/chinook-salmon-2018.html) (2018).*
 # ```
 
-# Chinook Salmon are the first to return each year, usually in early August (DFO 1991), and have the most limited distribution within the watershed. Known spawning occurs in parts of the Horsefly River mainstem above the confluence with the Little Horsefly River and throughout McKinley Creek as far as Elbow Lake (DFO 1991, S. Hocquard, pers. comm.). Important rearing systems include Patenaude Creek, Kroener Creek, Black Creek, Woodjam Creek, Deerhorn Creek, and Wilmot Creek (S. Hocquard, pers. comm.).
+# Chinook Salmon are the first to return each year, usually in early August {cite}`DFO1991-tl`, and have the most limited distribution within the watershed. Known spawning occurs in parts of the Horsefly River mainstem above the confluence with the Little Horsefly River and throughout McKinley Creek as far as Elbow Lake ({cite}`DFO1991-tl`, S. Hocquard, pers. comm.). Important rearing systems include Patenaude Creek, Kroener Creek, Black Creek, Woodjam Creek, Deerhorn Creek, and Wilmot Creek (S. Hocquard, pers. comm.).
 # ### Coho Salmon | Sxeyqs | Oncorhynchus kisutch
-# 
-# Table 5. Coho Salmon population assessments in the Horsefly River watershed. Conservation Unit assessments were undertaken by the [Pacific Salmon Foundation](https://www.salmonexplorer.ca/#!/fraser/chinook/middle-fraser-river-spring-5-2) ([2020](https://salmonwatersheds.ca/libraryfiles/lib_459.pdf)). Designated Unit assessments were undertaken by [COSEWIC](https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/cosewic-assessments-status-reports/chinook-salmon-2018.html) (2016).
-# 
 
-# In[6]:
+# In[7]:
 
 
 import warnings
@@ -205,7 +223,13 @@ data = data.style.hide_index().set_properties(**{'text-align': 'left'})
 data.set_table_styles(
 [dict(selector = 'th', props=[('text-align', 'left')])])
 
-glue("Table5", data)
+
+# In[8]:
+
+
+import warnings
+
+warnings.filterwarnings('ignore')
 
 data = pd.read_csv('coho2.csv', index_col=False)
 data = data.style.hide_index().set_properties(**{'text-align': 'left'})
@@ -217,14 +241,21 @@ glue("Table5", data)
 
 
 # 
-# Coho Salmon are the most widely distributed of the three focal species in the watershed, with the ability to migrate into smaller, upper tributary systems (DFO 1991). Spawning occurs in the Little Horsefly River between Gruhs Lake and Horsefly Lake, McKinley Creek below McKinley Lake, Woodjam Creek, Patenaude Creek, Tisdall Creek, and Black Creek. Rearing fry and juveniles have been observed in the Little Horsefly River, Patenaude Creek, and McKinley Creek up to Bosk Lake (DFO 1991, S. Hocquard pers. comm.).
+# 
+# ```{glue:figure} Table5
+# :name: "table5"
+# 
+# *Coho Salmon population assessments in the Horsefly River watershed. Conservation Unit assessments were undertaken by the [Pacific Salmon Foundation](https://www.salmonexplorer.ca/#!/fraser/chinook/middle-fraser-river-spring-5-2) ([2020](https://salmonwatersheds.ca/libraryfiles/lib_459.pdf)). Designated Unit assessments were undertaken by [COSEWIC](https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/cosewic-assessments-status-reports/chinook-salmon-2018.html) (2016).*
+# ```
+
+# 
+# Coho Salmon are the most widely distributed of the three focal species in the watershed, with the ability to migrate into smaller, upper tributary systems {cite}`DFO1991-tl`. Spawning occurs in the Little Horsefly River between Gruhs Lake and Horsefly Lake, McKinley Creek below McKinley Lake, Woodjam Creek, Patenaude Creek, Tisdall Creek, and Black Creek. Rearing fry and juveniles have been observed in the Little Horsefly River, Patenaude Creek, and McKinley Creek up to Bosk Lake ({cite}`DFO1991-tl`, S. Hocquard pers. comm.).
 # 
 # ### Sockeye Salmon | Sqlelten7ùwi | Oncorhynchus nerka
 # 
-# Table 6. Sockeye Salmon population assessments in the Horsefly River watershed. Conservation Unit assessments were undertaken by the [Pacific Salmon Foundation](https://www.salmonexplorer.ca/#!/fraser/chinook/middle-fraser-river-spring-5-2) ([2020](https://salmonwatersheds.ca/libraryfiles/lib_459.pdf)). Designated Unit assessments were undertaken by [COSEWIC](https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/cosewic-assessments-status-reports/chinook-salmon-2018.html) (2017).
 # 
 
-# In[7]:
+# In[9]:
 
 
 import warnings
@@ -237,7 +268,14 @@ data = data.style.hide_index().set_properties(**{'text-align': 'left'})
 data.set_table_styles(
 [dict(selector = 'th', props=[('text-align', 'left')])])
 
-glue("Table6", data)
+
+# In[10]:
+
+
+import warnings
+
+warnings.filterwarnings('ignore')
+
 
 data = pd.read_csv('Sockeye2.csv', index_col=False)
 data = data.style.hide_index().set_properties(**{'text-align': 'left'})
@@ -248,4 +286,12 @@ data.set_table_styles(
 glue("Table6", data)
 
 
-# Sockeye Salmon {cite}`holdgraf_rapid_2016` have historically {cite}`holdgraf_rapid_2016` been the most abundant of the three focal species in the watershed, though the population has seen significant declines in recent years (DFO 1991, S. Hocquard pers. comm.). Sockeye Salmon spawning is known to occur throughout the Horsefly River (up to the impassable falls), in the Little Horsefly River between Gruhs Lake and Horsefly Lake, Moffat Creek (up to the impassible falls), and McKinley Creek up to Elbow Lake (PSF 2018, DFO 1991, S. Hocquard pers. comm.). Additionally, a spawning channel aimed at enhancing the Sockeye Salmon population was constructed by Fisheries and Oceans Canada in 1989 (DFO 1991). Currently, there are no Sockeye Salmon rearing in the Horsefly River watershed – all emergent fry migrate down to Quesnel Lake.
+# 
+# 
+# ```{glue:figure} Table6
+# :name: "table6"
+# 
+# *Sockeye Salmon population assessments in the Horsefly River watershed. Conservation Unit assessments were undertaken by the [Pacific Salmon Foundation](https://www.salmonexplorer.ca/#!/fraser/chinook/middle-fraser-river-spring-5-2) ([2020](https://salmonwatersheds.ca/libraryfiles/lib_459.pdf)). Designated Unit assessments were undertaken by [COSEWIC](https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/cosewic-assessments-status-reports/chinook-salmon-2018.html) (2017).*
+# ```
+
+# Sockeye Salmon have historically been the most abundant of the three focal species in the watershed, though the population has seen significant declines in recent years ({cite}`DFO1991-tl`, S. Hocquard pers. comm.). Sockeye Salmon spawning is known to occur throughout the Horsefly River (up to the impassable falls), in the Little Horsefly River between Gruhs Lake and Horsefly Lake, Moffat Creek (up to the impassible falls), and McKinley Creek up to Elbow Lake ({cite}`PSF2020-tl`, {cite}`DFO1991-tl`, S. Hocquard pers. comm.). Additionally, a spawning channel aimed at enhancing the Sockeye Salmon population was constructed by Fisheries and Oceans Canada in 1989 {cite}`DFO1991-tl`. Currently, there are no Sockeye Salmon rearing in the Horsefly River watershed – all emergent fry migrate down to Quesnel Lake.

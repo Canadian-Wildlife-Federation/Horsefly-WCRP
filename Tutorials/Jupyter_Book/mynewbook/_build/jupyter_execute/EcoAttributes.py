@@ -66,11 +66,9 @@ def watershed_connectivity(habitat_type):
     return str(round(connect_stat))
 
 
-# The planning team devised two Key Ecological Attributes (KEAs) and associated indicators to assess the current connectivity status of the watershed – Accessible Habitat and Accessible Overwintering Habitat (Table 7). KEAs are the key aspects of anadromous salmon ecology that are being targeted by this WCRP. The connectivity status of Anadromous Salmon was used to establish goals to improve habitat connectivity in the watershed and will be the baseline against which progress is tracked over time. 
+# The planning team devised two Key Ecological Attributes (KEAs) and associated indicators to assess the current connectivity status of the watershed – Accessible Habitat and Accessible Overwintering Habitat ({numref}`table7`). KEAs are the key aspects of anadromous salmon ecology that are being targeted by this WCRP. The connectivity status of Anadromous Salmon was used to establish goals to improve habitat connectivity in the watershed and will be the baseline against which progress is tracked over time. 
 # 
 # The current connectivity status assessment relies on GIS analyses to map known and modelled barriers to fish passage, identify stream reaches that have potential spawning and rearing habitat, estimate the proportion of habitat that is currently accessible to target species, and prioritize barriers for field assessment that would provide the greatest gains in connectivity. To support a flexible prioritization framework to identify priority barriers in the watershed, two assumptions are made: 1) any modelled (i.e., passability status is unknown) or partial barriers are treated as complete barriers to passage and 2) the habitat modelling is binary, it does not assign any habitat quality values. As such, the current connectivity status will be refined over time as more data on habitat and barriers are collected. For more detail on how the connectivity status assessments were conducted, see Appendix B. 
-
-# Table 7. Connectivity status assessment for (a) linear habitat (spawning and rearing) and (b) overwintering habitat in the Horsefly River watershed. The Available Habitat KEA is evaluated by dividing the length of linear habitat that is currently accessible to target species by the total length of all linear habitat in the watershed. The Available Overwintering Habitat KEA is evaluated as the sum of all areal overwintering habitat that is accessible to target species. 
 
 # In[2]:
 
@@ -124,6 +122,7 @@ import pandas as pd
 import numpy as np
 import matplotlib as mpl
 import warnings
+from myst_nb import glue
 
 warnings.filterwarnings('ignore')
 
@@ -153,16 +152,25 @@ def highlighttab7b(val):
     else: color = 'white'
     return 'background-color: %s' % color
 
-df.style.applymap(highlighttab7b).hide_index()
+data = df.style.applymap(highlighttab7b).hide_index()
+
+data.set_table_styles(
+[dict(selector = 'th', props=[('text-align', 'left')])])
+
+glue("Table7", data)
 
 
 # **Comments:** No baseline data exists on the extent of overwintering habitat in the watershed. A priority action is included in the Operational Plan (strategy 2.3) to develop a habitat layer, and this will be used to inform this connectivity status assessment in the future.
 
+# ```{glue:figure} Table7
+# :name: "table7"
+# 
+# *Connectivity status assessment for (a) linear habitat (spawning and rearing) and (b) overwintering habitat in the Horsefly River watershed. The Available Habitat KEA is evaluated by dividing the length of linear habitat that is currently accessible to target species by the total length of all linear habitat in the watershed. The Available Overwintering Habitat KEA is evaluated as the sum of all areal overwintering habitat that is accessible to target species.*
+# ```
+
 # # Barrier Types
 
 # The following table highlights which barrier types pose the greatest threat to anadromous salmon in the watershed. The results of this assessment were used to inform the subsequent planning steps, as well as to identify knowledge gaps where there is little spatial data to inform the assessment for a specific barrier type. 
-# 
-# Table 8. Barrier Types in the Horsefly River watershed and barrier rating assessment results. For each barrier type listed, "Extent refers to the proportion of anadromous salmon habitat that is being blocked by that barrier type, "Severity" is the proportion of structures for each barrier type that are known to block passage for target species based on field assessments, and "Irreversibility" is the degree to which the effects of a barrier type can be reversed and connectivity restored. The amount of habitat blocked used in this exercise is a representation of total amount of combined spawning and rearing habitat. All ratings in this table have been updated from version 1.0 to version 2.0 of the Horsefly River Watershed Connectivity Remediation Plan based on the most recent field assessments.
 # 
 
 # In[4]:
@@ -230,10 +238,21 @@ def highlight(val):
 
 #df = df.style.set_properties(subset=["Overall Threat Rating"], **{'font-weight': 'bold'})
 
-df.applymap(highlight).hide_index()
+data = df.applymap(highlight).hide_index()
+
+data.set_table_styles(
+[dict(selector = 'th', props=[('text-align', 'left')])])
+
+glue("Table8", data)
 
 
 
+
+# ```{glue:figure} Table8
+# :name: "table8"
+# 
+# *Barrier Types in the Horsefly River watershed and barrier rating assessment results. For each barrier type listed, "Extent refers to the proportion of anadromous salmon habitat that is being blocked by that barrier type, "Severity" is the proportion of structures for each barrier type that are known to block passage for target species based on field assessments, and "Irreversibility" is the degree to which the effects of a barrier type can be reversed and connectivity restored. The amount of habitat blocked used in this exercise is a representation of total amount of combined spawning and rearing habitat. All ratings in this table have been updated from version 1.0 to version 2.0 of the Horsefly River Watershed Connectivity Remediation Plan based on the most recent field assessments.*
+# ```
 
 # In[5]:
 
@@ -254,7 +273,7 @@ glue("total_barrier", barrier_severity('DAM')[1])
 
 # ### Small Dams (<3 m height)
 # 
-# There are {glue:text}`total_barrier` mapped small dams on “potentially accessible” stream segments in the watershed, blocking a total of {glue:text}`dam_km` km (~{glue:text}`dam_pct`% of the total blocked habitat) of modelled spawning and rearing habitat for anadromous salmon, resulting in a medium extent. The extent rating of these structures was confirmed by the planning team. There are two known fish-passage structures in the watershed, including on the dam at the outlet of McKinley Lake. The remaining dams likely block passage for anadromous salmon and would require significant resources to remediate. However, due to the limited extent of dams in the watershed, a final pressure rating of Medium was assigned. Four small dams were identified on the priority barrier list (see Appendix C). Three of the dams require further assessment and confirmation of upstream habitat quality, and the dam observed at the outlet of Kwun Lake does not exist. 
+# There are {glue:text}`total_barrier` mapped small dams on “potentially accessible” stream segments in the watershed, blocking a total of {glue:text}`dam_km` km (~{glue:text}`dam_pct`% of the total blocked habitat) of modelled spawning and rearing habitat for anadromous salmon, resulting in a medium extent. The extent rating of these structures was confirmed by the planning team. There are two known fish-passage structures in the watershed, including on the dam at the outlet of McKinley Lake. The remaining dams likely block passage for anadromous salmon and would require significant resources to remediate. However, due to the limited extent of dams in the watershed, a final pressure rating of Medium was assigned. Four small dams were identified on the priority barrier list (see Appendix B). Three of the dams require further assessment and confirmation of upstream habitat quality, and the dam observed at the outlet of Kwun Lake does not exist. 
 
 # In[6]:
 
@@ -303,8 +322,6 @@ glue("sum", sum(sum_road))
 
 # # Goals
 # 
-# Table 9. Goals to improve (1) spawning and rearing and (2) overwintering habitat connectivity for target species in the Horsefly River watershed over the lifespan of the WCRP (2021-2040). The goals were established through discussions with the planning team and represent the resulting desired state of connectivity in the watershed. The goals are subject to change as more information and data are collected over the course of the plan timeline (e.g., the current connectivity status is updated based on barrier field assessments). 
-# 
 
 # In[7]:
 
@@ -321,12 +338,23 @@ df = pd.DataFrame({"Goal #": [1,2],
                             "By 2024, the total area of overwintering habitat accessible to Anadromous Salmon will increase by 1,500 m2 within the Horsefly River watershed. "]
                     })
 
-df.style.hide_index().set_properties(**{'text-align': 'left'})
+data = df.style.hide_index().set_properties(**{'text-align': 'left'})
 
+data.set_table_styles(
+[dict(selector = 'th', props=[('text-align', 'left')])])
+
+glue("Table9", data)
+
+
+# ```{glue:figure} Table9
+# :name: "table9"
+# 
+# *Goals to improve (1) spawning and rearing and (2) overwintering habitat connectivity for target species in the Horsefly River watershed over the lifespan of the WCRP (2021-2040). The goals were established through discussions with the planning team and represent the resulting desired state of connectivity in the watershed. The goals are subject to change as more information and data are collected over the course of the plan timeline (e.g., the current connectivity status is updated based on barrier field assessments).*
+# ```
 
 # # Strategies & Actions
 # 
-# Table 10. Effectiveness evaluation of identified conservation strategies and associated actions to improve connectivity for target species in the Horsefly River watershed. The planning team identified five broad strategies to implement through this WCRP, 1) crossing remediation, 2) lateral barrier remediation, 3) dam remediation, 4) barrier prevention, and 5) communication and education. Individual actions were qualitatively evaluated based on the anticipated effect each action will have on realizing on-the-ground gains in connectivity. Effectiveness ratings are based on a combination of "Feasibility and "Impact", Feasibility is defined as the degree to which the project team can implement the action within realistic constraints (financial, time, ethical, etc.) and Impact is the degree to which the action is likely to contribute to achieving one or more of the goals established in this plan.
+# Effectiveness evaluation of identified conservation strategies and associated actions to improve connectivity for target species in the Horsefly River watershed. The planning team identified five broad strategies to implement through this WCRP, 1) crossing remediation, 2) lateral barrier remediation, 3) dam remediation, 4) barrier prevention, and 5) communication and education. Individual actions were qualitatively evaluated based on the anticipated effect each action will have on realizing on-the-ground gains in connectivity. Effectiveness ratings are based on a combination of "Feasibility and "Impact", Feasibility is defined as the degree to which the project team can implement the action within realistic constraints (financial, time, ethical, etc.) and Impact is the degree to which the action is likely to contribute to achieving one or more of the goals established in this plan.
 # 
 # ## Strategy 1: Crossing Remediation
 # 
@@ -338,8 +366,8 @@ import numpy as np
 from IPython.display import display
 import pandas as pd
 
-data = pd.read_csv('Strategy1.csv', index_col=False)
-
+data = pd.read_csv('strategy1_test.csv', index_col=False, skip_blank_lines=False )
+ 
 def fix_table(val):
     return str(val)
 
@@ -359,7 +387,11 @@ data = data.replace(np.nan, '', regex=True)
 
 data = data.applymap(fix_table)
 
-data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+data = data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+data = data.set_table_styles(
+[dict(selector = 'th', props=[('text-align', 'left')])])
+
+display(data)
 
 
 # 
@@ -377,7 +409,8 @@ data = data.applymap(fix_table)
 
 data = data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
 
-display(data)
+data.set_table_styles(
+[dict(selector = 'th', props=[('text-align', 'left')])])
 
 
 # ## Strategy 3: Dam Remediation
@@ -392,7 +425,10 @@ data = data.replace(np.nan, '', regex=True)
 
 data = data.applymap(fix_table)
 
-data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+data = data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+
+data.set_table_styles(
+[dict(selector = 'th', props=[('text-align', 'left')])])
 
 
 # ## Strategy 4: Barrier Prevention
@@ -410,9 +446,10 @@ data = pd.read_csv('Strategy4.csv', index_col=False)
 
 data = data.applymap(fix_table)
 
-data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+data = data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
 
-#display(data)
+data.set_table_styles(
+[dict(selector = 'th', props=[('text-align', 'left')])])
 
 
 # ## Strategy 5: Communication and Education
@@ -427,7 +464,10 @@ data = data.replace(np.nan, '', regex=True)
 
 data = data.applymap(fix_table)
 
-data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+data = data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+
+data.set_table_styles(
+[dict(selector = 'th', props=[('text-align', 'left')])])
 
 
 # # Theories of Change & Objectives
@@ -467,38 +507,13 @@ data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 
 # ```
 # 
 
-# In[13]:
-
-
-import pandas as pd
-
-data = pd.read_csv('Table11.csv', index_col=False)
-
-data.style.hide_index().set_properties(**{'text-align': 'left'})
-
-
-# # Progress Tracking Plan
-# 
-
-# In[14]:
-
-
-from IPython.display import display
-import pandas as pd
-
-data = pd.read_csv('Table12.csv', index_col=False)
-
-data.style.hide_index().set_properties(**{'text-align': 'left'})
-
-
 # # Operational Plan
 # 
 # The operational plan represents a preliminary exercise undertaken by the planning team to identify the potential leads, potential participants, and estimated cost for the implementation of each action in the Horsefly River watershed. The table below summarizes individuals, groups, or organizations that the planning team felt could lead or participate in the implementation of the plan and should be interpreted as the first step in on-going planning and engagement to develop more detailed and sophisticated action plans for each entry in the table. The individuals, groups, and organizations listed under the "Lead(s)" or "Potential Participants" columns are those that provisionally expressed interest in participating in one of those roles or were suggested by the planning team for further engagement (denoted in bold), for those that are not members of the planning team. The leads, participants, and estimated costs in the operational plan are not binding nor an official commitment of resources, but rather provide a roadmap for future coordination and engagement to work towards implementation of the WCRP. 
 # 
-# Table 13. Operational plan to support the implementation of strategies and actions to improve connectivity for target species in the Horsefly River watershed.
 # 
 
-# In[15]:
+# In[13]:
 
 
 from IPython.display import display
@@ -515,15 +530,16 @@ data = data.replace(np.nan, '', regex=True)
 
 rows = pd.IndexSlice[[0,10,16,23,26,29,30,31], :]
 
-data.style.applymap(df_operation, subset=rows).hide_index().set_properties(**{'text-align': 'left'})
+data = data.style.applymap(df_operation, subset=rows).hide_index().set_properties(**{'text-align': 'left'})
+data.set_table_styles(
+[dict(selector = 'th', props=[('text-align', 'left')])])
+
+glue("Table13", data)
 
 
 # # Funding Sources
-# 
-# Table 14. Potential funding sources for plan implementation in the Horsefly River watershed. The Canadian Wildlife Federation and the planning team can coordinate proposal submission through these sources. 
-# 
 
-# In[16]:
+# In[14]:
 
 
 from IPython.display import display
@@ -531,5 +547,10 @@ import pandas as pd
 
 data = pd.read_csv('Table14.csv', index_col=False)
 
-data.style.hide_index().set_properties(**{'text-align': 'left'})
+data = data.style.hide_index().set_properties(**{'text-align': 'left'})
+
+data.set_table_styles(
+[dict(selector = 'th', props=[('text-align', 'left')])])
+
+glue("Table14", data)
 
