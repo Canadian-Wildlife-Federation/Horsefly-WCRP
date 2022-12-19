@@ -366,7 +366,7 @@ import numpy as np
 from IPython.display import display
 import pandas as pd
 
-data = pd.read_csv('strategy1_test.csv', index_col=False, skip_blank_lines=False )
+data = pd.read_csv('Strategy1.csv', index_col=False, skip_blank_lines=False )
  
 def fix_table(val):
     return str(val)

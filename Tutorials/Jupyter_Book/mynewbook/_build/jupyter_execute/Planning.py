@@ -1,24 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
-from docx import Document
-from myst_nb import glue
-from IPython.display import display, Markdown, display_markdown
-from functions import head2txt
-
-document = Document('MASTER_Horsefly_WCRP.docx')
-
-
-par1 = head2txt(document,'Acknowledgements', 3)[0]
-par2 = head2txt(document,'Acknowledgements', 3)[1]
-
-
-display(Markdown(par2))
-
-
 # # Plan Purpose, Apporach and Scope
 # 
 # 
@@ -35,7 +17,7 @@ display(Markdown(par2))
 
 # # Planning Team
 
-# In[2]:
+# In[1]:
 
 
 import pandas as pd
@@ -69,7 +51,7 @@ glue("Table1", data)
 # 
 # 
 
-# In[3]:
+# In[2]:
 
 
 import pandas as pd
@@ -108,9 +90,9 @@ glue("Table2", data)
 # *The primary geographic scope — the Horsefly River watershed — located in the Fraser River system.*
 # ```
 
-# The primary geographic scope of this WCRP is the Horsefly River watershed, located in the upper Fraser River drainage basin in central British Columbia ({numref}`fig1`). The scope constitutes the Horsefly River "watershed group" as defined by the [British Columbia Freshwater Atlas](https://catalogue.data.gov.bc.ca/dataset/freshwater-atlas-watershed-groups) (FWA). A consistent spatial framework was necessary to undertake a watershed selection process at the provincial scale to identify target watersheds to improve connectivity for salmon. The Horsefly River watershed was identified by the BC Fish Passage Restoration Initiative as one of four target watersheds for WCRP development {cite}`Mazany-Wright2021-do`. The Horsefly River watershed has a drainage area of 276,603 ha, spanning from the Quesnel Highlands in the southeast to the confluence with Quesnel Lake in the northwest. Culturally and economically important populations of Chinook Salmon, Coho Salmon, and Sockeye Salmon are all found in the watershed, which historically supported Indigenous sustenance and trading economies ({numref}`table3`; {cite}`WLFN2021-kb`, {cite}`XFN2021-kb`). 
+# The primary geographic scope of this WCRP is the Horsefly River watershed, located in the upper Fraser River drainage basin in central British Columbia ({numref}`fig1`). The scope constitutes the Horsefly River "watershed group" as defined by the [British Columbia Freshwater Atlas](https://catalogue.data.gov.bc.ca/dataset/freshwater-atlas-watershed-groups) (FWA). A consistent spatial framework was necessary to undertake a watershed selection process at the provincial scale to identify target watersheds to improve connectivity for salmon. The Horsefly River watershed was identified by the BC Fish Passage Restoration Initiative as one of four target watersheds for WCRP development {cite}`Mazany-Wright2021-do`. The Horsefly River watershed has a drainage area of 276,603 ha, spanning from the Quesnel Highlands in the southeast to the confluence with Quesnel Lake in the northwest. Culturally and economically important populations of Chinook Salmon, Coho Salmon, and Sockeye Salmon are all found in the watershed, which historically supported Indigenous sustenance and trading economies ({numref}`table3`; {cite}`WLFN2021Patterns`, {cite}`XFN2021History`). 
 
-# In[4]:
+# In[3]:
 
 
 import pandas as pd
@@ -158,13 +140,13 @@ glue("Table3", data)
 # # Target species
 # Target species represent the ecologically and culturally important species for which habitat connectivity is being conserved and/or restored in the watershed. In the Horsefly River watershed, the planning team selected Anadromous Salmon as the target species group, which comprises Chinook Salmon, Coho Salmon, and Sockeye Salmon. The selection of these target species was driven primarily by the targets species of the primary fund supporting this planning work. 
 # ### Anadromous Salmonids
-# Anadromous salmon are cultural and ecological keystone species that contribute to productive ecosystems by contributing marine-derived nutrients to the watershed and forming an important food source for other species. Salmon species are sacred to the NStQ, having sustained life, trading economies, and culture since time immemorial ({cite}`WLFN2021-kb`, {cite}`XFN2021-kb`, N. Singi pers. comm.). The stewardship of the resources and fisheries in their traditional territories are imbued in the spirit of the NStQ through a symbiotic relationship based on respect – the NStQ never take more salmon than is needed and there is no waste. The entirety of the salmon is used - smoked and dried to sustain the NStQ through the winter months, the roe harvested for consumption, salmon oil rendered to be stored and traded, and the skin used to store the oil ({cite}`Wilson1998-kb`, {cite}`XFN2021-kb`, N. Singi pers. comm.). The salmon runs begin to return to the Horsefly River watershed in early August, and the NStQ traditionally celebrate and feast at this time. The harvest of the salmon strengthens the cultural connection to the land and the waters, providing an important food source for communities and the opportunity to pass knowledge and ceremony to future generations through fishing and fish processing ({cite}`WLFN2021-kb`, {cite}`XFN2021-kb`). 
+# Anadromous salmon are cultural and ecological keystone species that contribute to productive ecosystems by contributing marine-derived nutrients to the watershed and forming an important food source for other species. Salmon species are sacred to the NStQ, having sustained life, trading economies, and culture since time immemorial ({cite}`WLFN2021Patterns`, {cite}`XFN2021History`, N. Singi pers. comm.). The stewardship of the resources and fisheries in their traditional territories are imbued in the spirit of the NStQ through a symbiotic relationship based on respect – the NStQ never take more salmon than is needed and there is no waste. The entirety of the salmon is used - smoked and dried to sustain the NStQ through the winter months, the roe harvested for consumption, salmon oil rendered to be stored and traded, and the skin used to store the oil ({cite}`Wilson1998-kb`, {cite}`XFN2021History`, N. Singi pers. comm.). The salmon runs begin to return to the Horsefly River watershed in early August, and the NStQ traditionally celebrate and feast at this time. The harvest of the salmon strengthens the cultural connection to the land and the waters, providing an important food source for communities and the opportunity to pass knowledge and ceremony to future generations through fishing and fish processing ({cite}`WLFN2021Patterns`, {cite}`XFN2021History`). 
 # 
 # Anadromous salmon populations in the Horsefly River watershed have declined significantly in the past few decades, with the populations of all three focal species being listed as Threatened or Endangered by the Committee On the Status of Endangered Wildlife In Canada (COSEWIC). This has been exacerbated by the Big Bar landslide on the Fraser River in 2019, leading the four NStQ communities to voluntarily close the salmon fishery from 2019-2022. The stewardship of their waters continues through the work of the NStQ member communities and the Northern Shuswap Tribal Council. See Appendix A for maps of modelled anadromous salmon habitat in the Horsefly River Watershed. 
 # ### Chinook Salmon | Kekèsu | Oncorhynchus tshawytscha 
 # 
 
-# In[5]:
+# In[4]:
 
 
 from IPython.display import display, HTML
@@ -181,7 +163,7 @@ data.set_table_styles(
 [dict(selector = 'th', props=[('text-align', 'left')])])
 
 
-# In[6]:
+# In[5]:
 
 
 from IPython.display import display, HTML
@@ -210,7 +192,7 @@ glue("Table4", data1)
 # Chinook Salmon are the first to return each year, usually in early August {cite}`DFO1991-tl`, and have the most limited distribution within the watershed. Known spawning occurs in parts of the Horsefly River mainstem above the confluence with the Little Horsefly River and throughout McKinley Creek as far as Elbow Lake ({cite}`DFO1991-tl`, S. Hocquard, pers. comm.). Important rearing systems include Patenaude Creek, Kroener Creek, Black Creek, Woodjam Creek, Deerhorn Creek, and Wilmot Creek (S. Hocquard, pers. comm.).
 # ### Coho Salmon | Sxeyqs | Oncorhynchus kisutch
 
-# In[7]:
+# In[6]:
 
 
 import warnings
@@ -224,7 +206,7 @@ data.set_table_styles(
 [dict(selector = 'th', props=[('text-align', 'left')])])
 
 
-# In[8]:
+# In[7]:
 
 
 import warnings
@@ -255,7 +237,7 @@ glue("Table5", data)
 # 
 # 
 
-# In[9]:
+# In[8]:
 
 
 import warnings
@@ -269,7 +251,7 @@ data.set_table_styles(
 [dict(selector = 'th', props=[('text-align', 'left')])])
 
 
-# In[10]:
+# In[9]:
 
 
 import warnings
