@@ -3,12 +3,12 @@
 
 # # Appendix A
 
-# ```{include} /AppendixA-md.md
+# ```{include} /content/AppendixA-md.md
 # :start-after: "# Appendix A"
 # :end-before: "## Connectivity Status Assessment Methods"
 # ```
 
-# ```{figure} figure8.png
+# ```{figure} figures/figure8.png
 # ---
 # height: 400px
 # width: 1000px
@@ -19,7 +19,7 @@
 
 # ## Connectivity Status Assessment Methods
 # 
-# ```{include} /AppendixA-md.md
+# ```{include} /content/AppendixA-md.md
 # :start-after: "## Connectivity Status Assessment Methods"
 # ```
 
@@ -34,7 +34,7 @@ from myst_nb import glue
 
 warnings.filterwarnings('ignore')
 
-data = pd.read_csv('Table15.csv', index_col=False)
+data = pd.read_csv('tables/Table15.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# ```{include} /planning-md.md
+# ```{include} /content/planning-md.md
 # :end-before: "# Key Actors"
 # ```
 
@@ -16,7 +16,7 @@ from myst_nb import glue
 warnings.filterwarnings('ignore')
 
 
-data = pd.read_csv('planning_team.csv', index_col=False)
+data = pd.read_csv('tables/planning_team.csv', index_col=False)
 
 data = data.style.hide_index().set_properties(**{'text-align': 'left'})
 
@@ -43,7 +43,7 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-data = pd.read_csv('key_actors_c.csv', index_col=False)
+data = pd.read_csv('tables/key_actors_c.csv', index_col=False)
 
 data = data.style.hide_index().set_properties(**{'text-align': 'left'})
 
@@ -61,12 +61,12 @@ glue("Table2", data)
 # *Additional Key Actors in the Horsefly River watershed. Key Actors are the individuals, groups, and/or organizations, outside of the planning team, with influence and relevant experience in the watershed, whose engagement will be critical for the successful implementation of this WCRP.* 
 # ```
 
-# ```{include} /planning-md.md
+# ```{include} /content/planning-md.md
 # :start-after: "# Key Actors"
 # :end-before: "The primary geographic scope of this WCRP"
 # ```
 
-# ```{figure} figure1.png
+# ```{figure} figures/figure1.png
 # ---
 # height: 400px
 # width: 1000px
@@ -88,7 +88,7 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-data = pd.read_csv('species_names.csv', index_col=False)
+data = pd.read_csv('tables/species_names.csv', index_col=False)
 
 data = data.style.hide_index().set_properties(**{'text-align': 'left'})
 
@@ -104,12 +104,12 @@ glue("Table3", data)
 # *Target fish species in the Horsefly River watershed. The Secwepemctsín and Western common and scientific species names are provided.*
 # ```
 
-# ```{include} /planning-md.md
+# ```{include} /content/planning-md.md
 # :start-after: "{cite}`XFN2021History`)."
 # :end-before: "# Target species"
 # ```
 
-# ```{figure} figure2.png
+# ```{figure} figures/figure2.png
 # ---
 # height: 400px
 # width: 1000px
@@ -132,7 +132,7 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-data = pd.read_csv('Chinook1.csv', index_col=False)
+data = pd.read_csv('tables/Chinook1.csv', index_col=False)
 
 data = data.style.hide_index().set_properties(**{'text-align': 'left'})
 
@@ -149,7 +149,7 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-data1 = pd.read_csv('Chinook2.csv', index_col=False)
+data1 = pd.read_csv('tables/Chinook2.csv', index_col=False)
 
 data1 = data1.style.hide_index().set_properties(**{'text-align': 'left'})
 
@@ -166,7 +166,7 @@ glue("Table4", data1)
 # *Chinook Salmon population assessments in the Horsefly River watershed. Conservation Unit assessments were undertaken by the [Pacific Salmon Foundation](https://www.salmonexplorer.ca/#!/fraser/chinook/middle-fraser-river-spring-5-2) ([2020](https://salmonwatersheds.ca/libraryfiles/lib_459.pdf)). Designated Unit assessments were undertaken by [COSEWIC](https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/cosewic-assessments-status-reports/chinook-salmon-2018.html) (2018).*
 # ```
 
-# ```{include} /planning-md.md
+# ```{include} /content/planning-md.md
 # :start-after: "### Chinook Salmon | Kekèsu | Oncorhynchus tshawytscha "
 # :end-before: "Coho Salmon are the most widely"
 # ```
@@ -178,7 +178,7 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-data = pd.read_csv('coho1.csv', index_col=False)
+data = pd.read_csv('tables/coho1.csv', index_col=False)
 data = data.style.hide_index().set_properties(**{'text-align': 'left'})
 
 data.set_table_styles(
@@ -192,7 +192,7 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-data = pd.read_csv('coho2.csv', index_col=False)
+data = pd.read_csv('tables/coho2.csv', index_col=False)
 data = data.style.hide_index().set_properties(**{'text-align': 'left'})
 
 data.set_table_styles(
@@ -209,7 +209,7 @@ glue("Table5", data)
 # *Coho Salmon population assessments in the Horsefly River watershed. Conservation Unit assessments were undertaken by the [Pacific Salmon Foundation](https://www.salmonexplorer.ca/#!/fraser/chinook/middle-fraser-river-spring-5-2) ([2020](https://salmonwatersheds.ca/libraryfiles/lib_459.pdf)). Designated Unit assessments were undertaken by [COSEWIC](https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/cosewic-assessments-status-reports/chinook-salmon-2018.html) (2016).*
 # ```
 
-# ```{include} /planning-md.md
+# ```{include} /content/planning-md.md
 # :start-after: "Coho Salmon are the most widely"
 # :end-before: "Sockeye Salmon have historically"
 # ```
@@ -221,7 +221,7 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-data = pd.read_csv('Sockeye1.csv', index_col=False)
+data = pd.read_csv('tables/Sockeye1.csv', index_col=False)
 data = data.style.hide_index().set_properties(**{'text-align': 'left'})
 
 data.set_table_styles(
@@ -236,7 +236,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-data = pd.read_csv('Sockeye2.csv', index_col=False)
+data = pd.read_csv('tables/Sockeye2.csv', index_col=False)
 data = data.style.hide_index().set_properties(**{'text-align': 'left'})
 
 data.set_table_styles(
@@ -253,6 +253,6 @@ glue("Table6", data)
 # *Sockeye Salmon population assessments in the Horsefly River watershed. Conservation Unit assessments were undertaken by the [Pacific Salmon Foundation](https://www.salmonexplorer.ca/#!/fraser/chinook/middle-fraser-river-spring-5-2) ([2020](https://salmonwatersheds.ca/libraryfiles/lib_459.pdf)). Designated Unit assessments were undertaken by [COSEWIC](https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/cosewic-assessments-status-reports/chinook-salmon-2018.html) (2017).*
 # ```
 
-# ```{include} /planning-md.md
+# ```{include} /content/planning-md.md
 # :start-after: "### Sockeye Salmon | Sqlelten7ùwi | Oncorhynchus nerka"
 # ```

@@ -109,7 +109,7 @@ data.set_table_styles(
 glue("Table16", data)
 
 
-# ```{include} /AppendixB-md.md
+# ```{include} /content/AppendixB-md.md
 # :start-after: "# Appendix B"
 # :end-before: "The barrier prioritization analysis ranked barriers"
 # ```
@@ -120,7 +120,7 @@ glue("Table16", data)
 # *Spawning and rearing habitat connectivity gain requirements to meet WCRP goals in the Horsefly River watershed. The measures of currently accessible and total habitat values are derived from the Intrinsic Potential habitat model described in Appendix B.*
 # ```
 
-# ```{include} /AppendixB-md.md
+# ```{include} /content/AppendixB-md.md
 # :start-after: "km of spawning or rearing habitat ({numref}`table16`):"
 # :end-before: "Out of the {glue:text}`inter_num`"
 # ```
@@ -128,7 +128,7 @@ glue("Table16", data)
 # In[3]:
 
 
-data = pd.read_csv('Table17.csv', index_col=False)
+data = pd.read_csv('tables/Table17.csv', index_col=False)
 data = data.replace(np.nan, '', regex=True)
 
 data = data.style.hide_index().set_properties(**{'text-align': 'left'})
@@ -148,7 +148,7 @@ glue("Table17", data)
 # In[4]:
 
 
-data = pd.read_csv('table18.csv', index_col=False)
+data = pd.read_csv('tables/table18.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
@@ -175,7 +175,7 @@ glue("inter_num", num_p)
 # In[5]:
 
 
-data = pd.read_csv('priority_barriers.csv', index_col=False)
+data = pd.read_csv('tables/priority_barriers.csv', index_col=False)
 
 #pd.options.display.max_columns=10
 
@@ -202,7 +202,7 @@ glue("prior_num", num_p)
 # *The Horsefly River watershed priority barrier list, which includes barriers that have undergone field assessment, been reviewed by the planning team, and selected to pursue for proactive remediation.*
 # ```
 
-# ```{include} /AppendixB-md.md
+# ```{include} /content/AppendixB-md.md
 # :start-after: "please see {cite}`Mazany-Wright2021-rz`."
 # :end-before: "There are currently {glue:text}`prior_num`"
 # ```
@@ -214,7 +214,7 @@ def df_style(val):
     return "font-weight: bold"
 
 
-data = pd.read_csv('Table20.csv', index_col=False)
+data = pd.read_csv('tables/Table20.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
@@ -235,14 +235,14 @@ glue("Table20", data)
 # *Field assessment requirements for the intermediate barrier list in the Horsefly River watershed. The cost per barrier values are estimates based on previously completed field work. The habitat confirmation count is based on the assumption that the 12 barriers requiring barrier assessments will also require a subsequent confirmation. In the case that some barriers are identified as unsuitable candidates for habitat confirmations, the total cost will be reduced.*
 # ```
 
-# ```{include} /AppendixB-md.md
+# ```{include} /content/AppendixB-md.md
 # :start-after: "selection as a final barrier to pursue for remediation:"
 # ```
 
 # In[7]:
 
 
-data = pd.read_csv('Table21.csv', index_col=False)
+data = pd.read_csv('tables/Table21.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 

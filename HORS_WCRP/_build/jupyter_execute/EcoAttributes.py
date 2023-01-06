@@ -3,7 +3,7 @@
 
 # # Connectivity Status Assessment and Action Plan
 
-# ```{include} /ecoattributes-md.md
+# ```{include} /content/ecoattributes-md.md
 # :start-after: "# Connectivity Status Assessment and Action Plan"
 # :end-before: "# Barrier Types"
 # ```
@@ -171,7 +171,7 @@ glue("Table7", data)
 
 # # Barrier Types
 
-# ```{include} /ecoattributes-md.md
+# ```{include} /content/ecoattributes-md.md
 # :start-after: "# Barrier Types"
 # :end-before: "### Small Dams (<3 m height)"
 # ```
@@ -293,13 +293,13 @@ sum_road = (barrier_severity('ROAD, RESOURCE/OTHER')[1], barrier_severity('ROAD,
 glue("sum", sum(sum_road))
 
 
-# ```{include} /ecoattributes-md.md
+# ```{include} /content/ecoattributes-md.md
 # :start-after: "### Small Dams (<3 m height)"
 # :end-before: "# Goals"
 # ```
 
 # 
-# ```{figure} figure3.png
+# ```{figure} figures/figure3.png
 # ---
 # height: 400px
 # width: 1000px
@@ -340,7 +340,7 @@ glue("Table9", data)
 # *Goals to improve (1) spawning and rearing and (2) overwintering habitat connectivity for target species in the Horsefly River watershed over the lifespan of the WCRP (2021-2040). The goals were established through discussions with the planning team and represent the resulting desired state of connectivity in the watershed. The goals are subject to change as more information and data are collected over the course of the plan timeline (e.g., the current connectivity status is updated based on barrier field assessments).*
 # ```
 
-# ```{include} /ecoattributes-md.md
+# ```{include} /content/ecoattributes-md.md
 # :start-after: "# Goals"
 # :end-before: "## Strategy 1: Crossing Remediation"
 # ```
@@ -357,7 +357,7 @@ import numpy as np
 from IPython.display import display
 import pandas as pd
 
-data = pd.read_csv('Strategy1.csv', index_col=False, skip_blank_lines=False )
+data = pd.read_csv('tables/Strategy1.csv', index_col=False, skip_blank_lines=False )
  
 def fix_table(val):
     return str(val)
@@ -392,7 +392,7 @@ display(data)
 # In[9]:
 
 
-data = pd.read_csv('Strategy2.csv', escapechar='\n', index_col=False)
+data = pd.read_csv('tables/Strategy2.csv', escapechar='\n', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
@@ -410,7 +410,7 @@ data.set_table_styles(
 # In[10]:
 
 
-data = pd.read_csv('Strategy3.csv', index_col=False)
+data = pd.read_csv('tables/Strategy3.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
@@ -430,7 +430,7 @@ data.set_table_styles(
 
 import pandas as pd
 
-data = pd.read_csv('Strategy4.csv', index_col=False)
+data = pd.read_csv('tables/Strategy4.csv', index_col=False)
 
 
 
@@ -449,7 +449,7 @@ data.set_table_styles(
 # In[12]:
 
 
-data = pd.read_csv('Strategy5.csv', index_col=False)
+data = pd.read_csv('tables/Strategy5.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
@@ -461,13 +461,13 @@ data.set_table_styles(
 [dict(selector = 'th', props=[('text-align', 'left')])])
 
 
-# ```{include} /ecoattributes-md.md
+# ```{include} /content/ecoattributes-md.md
 # :start-after: "## Strategy 5: Communication and Education"
 # :end-before: "# Operational Plan"
 # ```
 
 # 
-# ```{figure} figure4.png
+# ```{figure} figures/figure4.png
 # ---
 # height: 400px
 # width: 1000px
@@ -475,7 +475,7 @@ data.set_table_styles(
 # ---
 # *Theory of change developed by the planning team for the actions identified under Strategy 1: Crossing Remediation in the Horsefly River watershed.*
 # ```
-# ```{figure} figure5.png
+# ```{figure} figures/figure5.png
 # ---
 # height: 400px
 # width: 1000px
@@ -483,7 +483,7 @@ data.set_table_styles(
 # ---
 # *Theory of change developed by the planning team for the actions identified under Strategy 2: Lateral Barrier Remediation in the Horsefly River watershed.*
 # ```
-# ```{figure} figure6.png
+# ```{figure} figures/figure6.png
 # ---
 # height: 400px
 # width: 1000px
@@ -491,7 +491,7 @@ data.set_table_styles(
 # ---
 # *Theory of change developed by the planning team for the actions identified under Strategy 3: Dam Remediation in the Horsefly River watershed.*
 # ```
-# ```{figure} figure7.png
+# ```{figure} figures/figure7.png
 # ---
 # height: 400px
 # width: 1000px
@@ -503,7 +503,7 @@ data.set_table_styles(
 
 # # Operational Plan
 
-# ```{include} /ecoattributes-md.md
+# ```{include} /content/ecoattributes-md.md
 # :start-after: "# Operational Plan"
 # :end-before: "# Funding Sources"
 # ```
@@ -519,7 +519,7 @@ def df_operation(val):
     return "background-color: black; color: white"
 
 
-data = pd.read_csv('Table13.csv', index_col=False)
+data = pd.read_csv('tables/Table13.csv', index_col=False)
 
 data = data.replace(np.nan, '', regex=True)
 
@@ -546,7 +546,7 @@ glue("Table13", data)
 from IPython.display import display
 import pandas as pd
 
-data = pd.read_csv('Table14.csv', index_col=False)
+data = pd.read_csv('tables/Table14.csv', index_col=False)
 
 data = data.style.hide_index().set_properties(**{'text-align': 'left'})
 
