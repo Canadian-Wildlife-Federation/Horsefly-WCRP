@@ -1,7 +1,7 @@
 # Horsefly River Watershed Secwepemcúl’ecw Connectivity Remediation Plan: 2021 - 2040
 
 
-![foto](figures/spawn.jpg.jpg)
+![foto](../figures/spawn.jpg)
 
 
 **Canadian Wildlife Federation**
