@@ -3,7 +3,7 @@
 
 title: Horsefly River WCRP
 author: Canadian Wildlife Federation
-logo: Logo.png
+logo: logo.png
 
 
 # Force re-execution of notebooks on each build.
