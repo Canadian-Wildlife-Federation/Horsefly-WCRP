@@ -1,0 +1,20 @@
+{
+  "plan.qmd": {
+    "plan.html": "64ed7ba5"
+  },
+  "index.qmd": {
+    "index.html": "65b06eb6"
+  },
+  "summary.qmd": {
+    "summary.html": "68d77f14"
+  },
+  "references.qmd": {
+    "references.html": "f788e677"
+  },
+  "appendixA.qmd": {
+    "appendixA.html": "6be8d301"
+  },
+  "appendixB.qmd": {
+    "appendixB.html": "7530078c"
+  }
+}
