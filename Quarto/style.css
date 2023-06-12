@@ -1,6 +1,12 @@
+
+p.style {
+  text-align: justify;
+}
+
 p.caption {
   color: #008270;
   margin-top: 10px;
+  text-align: left;
 }
 p code {
   white-space: inherit;
@@ -32,10 +38,17 @@ th {
 }
 
 .quarto-title-block .quarto-title-banner {
-  /* background-image: url(images/logo.png); */
+  /* background-image: url(images/spawn.jpg);  */
   background-size: 200px;
   background-position: left;
   background-repeat: no-repeat;
   padding-left: 10px;
   background-origin: content-box;
 }
+
+
+
+/* .output {
+  max-height: 500px;
+  overflow-x: scroll;
+  } */

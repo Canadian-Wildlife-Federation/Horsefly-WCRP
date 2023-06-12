@@ -1,121 +1,73 @@
-# Horsefly River Watershed Secwepemcúl’ecw Connectivity Remediation Plan: 2021 - 2040 {-}
+<!-- # Horsefly River Watershed Secwepemcúl’ecw Connectivity Remediation Plan: 2021 - 2040 {-} -->
 
-## Appendix B {-}
+# Appendix B {-}
 
-```{python}
-#| echo: false
-#| warning: false
+## Situation Analysis {-}
 
-import pandas as pd
-import numpy as np
-import warnings
-import requests
-import json
-import pandas
+The following situation model was developed by the WCRP planning team to “map” the project context and brainstorm potential actions for implementation. Green text is used to identify actions that were selected for implementation (see Strategies & Actions), and red text is used to identify actions that the project team has decided to exclude from the current iteration of the plan, as they were either outside of the project scope, or were deemed to be ineffective by the planning team. 
 
-def barrier_extent(barrier_type):
+![Situation analysis developed by the planning team to identify factors that contribute to fragmentation (orange boxes), biophysical results (brown boxes), and potential strategies/actions to improve connectivity (yellow hexagons) for target species in the Horsefly River watershed.](images/figure3.png){#fig-sitan}
 
-    request = 'http://159.89.114.239:9002/functions/postgisftw.wcrp_barrier_extent/items.json?watershed_group_code=HORS&barrier_type=' + barrier_type
+## Strategies & Actions {-}
 
-    response_api = requests.get(request)
-    parse = response_api.text
-    result = json.loads(parse)
+Effectiveness evaluation of identified conservation strategies and associated actions to improve connectivity for target species in the Horsefly River watershed. The planning team identified five broad strategies to implement through this WCRP, 1) crossing remediation, 2) lateral barrier remediation, 3) dam remediation, 4) barrier prevention, and 5) communication and education. Individual actions were qualitatively evaluated based on the anticipated effect each action will have on realizing on-the-ground gains in connectivity. Effectiveness ratings are based on a combination of "Feasibility and "Impact", Feasibility is defined as the degree to which the project team can implement the action within realistic constraints (financial, time, ethical, etc.) and Impact is the degree to which the action is likely to contribute to achieving one or more of the goals established in this plan.
 
-    blocked_km = result[0]['all_habitat_blocked_km']
-    blocked_pct = result[0]['extent_pct']
-
-    return blocked_km, blocked_pct
-
-def barrier_count(barrier_type):
-    request = 'http://159.89.114.239:9002/functions/postgisftw.wcrp_barrier_count/items.json?watershed_group_code=HORS&barrier_type=' + barrier_type
-
-    response_api = requests.get(request)
-    parse = response_api.text
-    result = json.loads(parse)
-
-    n_passable = result[0]['n_passable']
-    n_barrier = result[0]['n_barrier']
-    n_potential = result[0]['n_potential']
-    n_unknown = result[0]['n_unknown']
-
-    sum_bar = (n_passable, n_barrier, n_potential, n_unknown)
-
-    return n_passable, n_barrier, n_potential, n_unknown, sum(sum_bar)
-
-def barrier_severity(barrier_type):
-
-    request = 'http://159.89.114.239:9002/functions/postgisftw.wcrp_barrier_severity/items.json?watershed_group_code=HORS&barrier_type=' + barrier_type
-
-    response_api = requests.get(request)
-    parse = response_api.text
-    result = json.loads(parse)
-
-    n_assessed_barrier = result[0]['n_assessed_barrier']
-    n_assess_total = result[0]['n_assess_total']
-    pct_assessed_barrier = result[0]['pct_assessed_barrier']
-
-    return n_assessed_barrier, n_assess_total, pct_assessed_barrier
-
-def watershed_connectivity(habitat_type):
-
-    request = 'http://159.89.114.239:9002/functions/postgisftw.wcrp_watershed_connectivity_status/items.json?watershed_group_code=HORS&barrier_type=' + habitat_type
-
-    response_api = requests.get(request)
-    parse = response_api.text
-    result = json.loads(parse)
-
-    connect_stat = result[0]['connectivity_status']
-
-    return str(round(connect_stat))
-
-warnings.filterwarnings('ignore')
-
-total = 526.95 #total km in HORS
-access = round(total * (int(watershed_connectivity("ALL"))/100),2)
-gain = round((total*0.96)-access,2)
-```
-
-```{r}
-#| echo: false
-#| warning: false
-
-library(reticulate)
-
-gain <- py$gain
-
-```
-
-## Horsefly River Watershed Barrier Prioritization Summary {-}
-
-The primary conservation outcome of the WCRP will be the remediation of barriers to connectivity in the Horsefly River watershed. To achieve Goal 1 in this plan, it is necessary to prioritize and identify a suite of barriers that, if remediated, will provide access to a minimum of `r gain` km of spawning or rearing habitat (@tbl-table16):
-
-
+## Strategy 1: Crossing Remediation {-}
 ```{python echo=FALSE}
-#| label: tbl-table16
-#| tbl-cap: "Spawning and rearing habitat connectivity gain requirements to meet WCRP goals in the Horsefly River watershed. The measures of currently accessible and total habitat values are derived from the Intrinsic Potential habitat model described in Appendix B."
+#| label: tbl-S1
+#| tbl-cap: "Strategy 1"
 #| warning: false
 #| echo: false
 
-import pandas as pd
 import numpy as np
-import matplotlib as mpl
-import warnings
+from IPython.display import display
+import pandas as pd
 
-warnings.filterwarnings('ignore')
+data = pd.read_csv('data/Strategy1.csv', index_col=False, skip_blank_lines=False )
+ 
+def fix_table(val):
+    return str(val)
 
-total = 526.95 #total km in HORS
-access = round(total * (int(watershed_connectivity("ALL"))/100),2)
-gain = round((total*0.96)-access,2)
+def highlighttab7(val):
+    red = '#ff0000;'
+    yellow = '#ffff00;'
+    lgreen = '#92d050;'
+    dgreen = '#03853e;'
 
-df = pd.DataFrame({"Habitat Type":["Spawning and Rearing"],
-                   "Currently accessible (km)":[str(access)],
-                   "Total": [str(total)],
-                   "Current Connectivity Status":[str(watershed_connectivity("ALL"))+"%"],
-                   "Goal": ["96%"],
-                   "Gain required (km)": [str(gain)]
-                   })
+    if val=="Medium" or val=="Need more information": color = yellow
+    elif val=="Very high" or val=="Very effective" : color = lgreen
+    elif val =="High" or val=="Effective": color = dgreen
+    else: color = 'white'
+    return 'background-color: %s' % color
 
-data = df.style.hide_index().set_properties(**{'text-align': 'left'})
+data = data.replace(np.nan, '', regex=True)
+
+data = data.applymap(fix_table)
+
+data = data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+data.set_table_styles(
+   [{
+       'selector': 'th',
+       'props': [('background-color', '#008270'),('text-align', 'left')]
+   }])
+
+```
+
+
+## Strategy 2: Lateral Barrier Remediation {-}
+```{python echo=FALSE}
+#| label: tbl-S2
+#| tbl-cap: "Strategy 2"
+#| warning: false
+#| echo: false
+
+data = pd.read_csv('data/Strategy2.csv', escapechar='\n', index_col=False)
+
+data = data.replace(np.nan, '', regex=True)
+
+data = data.applymap(fix_table)
+
+data = data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
 
 data.set_table_styles(
    [{
@@ -126,90 +78,130 @@ data.set_table_styles(
 ```
 
 
-The barrier prioritization analysis ranked barriers by the amount of habitat blocked to produce an "intermediate barrier list" comprising more barriers than are needed to achieve the goals. A longer list of barriers is needed due to the inherent assumptions in the connectivity model, habitat model, and gaps in available data. Barriers that have been modelled (i.e., points where streams and road/rail networks intersect) are assumed to be barriers until field verification is undertaken and structures that have been assessed as "potential" barriers (e.g., may be passable at certain flow levels or for certain life history stages) require further investigation before a definitive remediation decision is made. Additionally, the habitat model identifies stream segments that have the potential to support spawning or rearing habitat for target species but does not attempt to quantify habitat quality or suitability (see Appendix B), which will require additional field verification once barrier assessments have completed. As such, the intermediate list of barriers below (@tbl-intermediate) should be considered as a starting point in the prioritization process and represents structures that are a priority to evaluate further through barrier assessment and habitat confirmations because some structures will likely be passable, others will not be associated with usable habitat, and others may not be feasible to remediate because of logistic considerations. The intermediate barrier list was updated following the barrier assessments and habitat confirmations that were undertaken during the 2021 field season - some barriers were moved forward to the "priority barrier list" (see @tbl-priority) and others were eliminated from consideration due to one or more of the considerations discussed above (see @tbl-remove). The priority barrier list represents structures that were confirmed to be partial or full barriers to fish passage and that block access to confirmed habitat. Barriers on the priority list were reviewed by planning team members and selected for inclusion for proactive pursual of remediation.  For more details on the barrier prioritization model, please see @Mazany-Wright2021-rz.
-
-
-
-```{r remove, echo = FALSE, results = 'asis'}
-#| label: tbl-remove
-#| tbl-cap: "List of barriers that were prioritized as part of the first iteration of the intermediate barrier list (field assessments occurred during the 2021 field season) but were removed from consideration for pursual of proactive remediation following discussion with the planning team due to these structures not existing, being passable, not be associated with usable habitat, or deemed not feasible to remediate because of logistic considerations."
+## Strategy 3: Dam Remediation {-}
+```{python echo=FALSE}
+#| label: tbl-S3
+#| tbl-cap: "Strategy 3"
 #| warning: false
 #| echo: false
 
-library("flextable")
+data = pd.read_csv('data/Strategy3.csv', index_col=False)
 
-data <- read.csv("data/Table17.csv", check.names=FALSE)
-ft <- flextable(data)
-ft <- bg(ft, bg = "#008270", part = "header")
-ft <- color(ft, color = "white", part = "header")
-ft <- set_caption(ft)
-ft |> autofit() 
-```
+data = data.replace(np.nan, '', regex=True)
 
-```{r intermediate, echo = FALSE, results = 'asis'}
-#| label: tbl-intermediate
-#| tbl-cap: "Updated intermediate barrier list resulting from the second barrier prioritization analysis in the Horsefly River watershed. After assessing the potential barriers on the first iteration of the intermediate list (2021 field season) and either identifying them as remediation priorities or eliminating them from consideration (e.g., because they passed fish or did hot have suitable habitat upstream), the remaining potential barriers in the watershed were re-prioritized. The barriers on this list were prioritized to exceed the connectivity goals of the plan. Barriers highlighted in the same colour represent sets of barriers that have been prioritized as a group. In the Barrier Status column, P = potential barrier and B = confirmed barrier. All barrier assessment data is compiled from the BC Provincial Stream Crossing Inventory System."
-#| warning: false
-#| echo: false
+data = data.applymap(fix_table)
 
-library("flextable")
+data = data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
 
-data <- read.csv("data/Table18.csv", check.names=FALSE)
-inter_num <- length(data)
-ft <- flextable(data)
-ft <- bg(ft, bg = "#008270", part = "header")
-ft <- color(ft, color = "white", part = "header")
-ft <- set_caption(ft)
-ft |> autofit() 
-```
+data.set_table_styles(
+   [{
+       'selector': 'th',
+       'props': [('background-color', '#008270'),('text-align', 'left')]
+   }])
 
-```{r priority, echo = FALSE, results = 'asis'}
-#| label: tbl-priority
-#| tbl-cap: "The Horsefly River watershed priority barrier list, which includes barriers that have undergone field assessment, been reviewed by the planning team, and selected to pursue for proactive remediation."
-#| warning: false
-#| echo: false
-
-library("flextable")
-
-data <- read.csv("data/priority_barriers.csv", check.names=FALSE)
-prior_num <- length(data)
-ft <- flextable(data)
-ft <- bg(ft, bg = "#008270", part = "header")
-ft <- color(ft, color = "white", part = "header")
-ft <- set_caption(ft)
-ft |> autofit() 
 ```
 
 
-Out of the `r inter_num` on the intermediate list, 16 require further field assessment before selection as a final barrier to pursue for remediation: 
-
-```{r fieldreq, echo = FALSE, results = 'asis'}
-#| label: tbl-fieldreq
-#| tbl-cap: "Field assessment requirements for the intermediate barrier list in the Horsefly River watershed. The cost per barrier values are estimates based on previously completed field work. The habitat confirmation count is based on the assumption that the 12 barriers requiring barrier assessments will also require a subsequent confirmation. In the case that some barriers are identified as unsuitable candidates for habitat confirmations, the total cost will be reduced."
+## Strategy 4: Barrier Prevention {-}
+```{python echo=FALSE}
+#| label: tbl-S4
+#| tbl-cap: "Strategy 4"
 #| warning: false
 #| echo: false
 
-library("flextable")
+import pandas as pd
 
-data <- read.csv("data/Table20.csv", check.names=FALSE)
-ft <- flextable(data)
-ft <- bg(ft, bg = "#008270", part = "header")
-ft <- color(ft, color = "white", part = "header")
-ft <- set_caption(ft)
-ft |> autofit() 
+data = pd.read_csv('data/Strategy4.csv', index_col=False)
+
+data = data.applymap(fix_table)
+
+data = data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+
+data.set_table_styles(
+   [{
+       'selector': 'th',
+       'props': [('background-color', '#008270'),('text-align', 'left')]
+   }])
+
 ```
 
-There are currently `r prior_num` barriers on the priority barrier list, which will be pursued for proactive remediation to achieve the connectivity goals in this plan:
-
-```{r remcost, echo = FALSE, results = 'asis'}
-#| label: tbl-remcost
-#| tbl-cap: "Preliminary barrier remediation cost estimate to reach connectivity goals in the Horsefly River watershed. Cost per barrier values are estimated based on the average cost of previously completed projects. Barrier counts and total costs are subject to change as more information is collected through the implementation of this plan."
+## Strategy 5: Communication and Education {-}
+```{python echo=FALSE}
+#| label: tbl-S5
+#| tbl-cap: "Strategy 5"
 #| warning: false
 #| echo: false
 
+data = pd.read_csv('data/Strategy5.csv', index_col=False)
+
+data = data.replace(np.nan, '', regex=True)
+
+data = data.applymap(fix_table)
+
+data = data.style.applymap(highlighttab7).hide_index().set_properties(**{'text-align': 'left'})
+
+data.set_table_styles(
+   [{
+       'selector': 'th',
+       'props': [('background-color', '#008270'),('text-align', 'left')]
+   }])
+```
+
+## Theories of Change & Objectives {-}
+
+Theories of Change are explicit assumptions around how the identified actions will achieve gains in connectivity and contribute towards reaching the goals of the plan. To develop Theories of Change, the planning team developed explicit assumptions for each strategy which helped to clarify the rationale used for undertaking actions and provided an opportunity for feedback on invalid assumptions or missing opportunities. The Theories of Change are results oriented and clearly define the expected outcome. The following theory of change models were developed by the WCRP planning team to “map” the causal (“if-then”) progression of assumptions of how the actions within a strategy work together to achieve project goals. 
+
+![Theory of change developed by the planning team for the actions identified under Strategy 1: Crossing Remediation in the Horsefly River watershed.](images/figure4.png){#fig-stra1}
+
+![Theory of change developed by the planning team for the actions identified under Strategy 2: Lateral Barrier Remediation in the Horsefly River watershed.](images/figure4.png){#fig-stra2}
+
+![Theory of change developed by the planning team for the actions identified under Strategy 3: Dam Remediation in the Horsefly River watershed.](images/figure6.png){#fig-stra3}
+
+![Theory of change developed by the planning team for the actions identified under Strategy 4: Barrier Prevention in the Horsefly River watershed.](images/figure7.png){#fig-stra4}
+
+## Operational Plan {-}
+
+The operational plan represents a preliminary exercise undertaken by the planning team to identify the potential leads, potential participants, and estimated cost for the implementation of each action in the Horsefly River watershed. The table below summarizes individuals, groups, or organizations that the planning team felt could lead or participate in the implementation of the plan and should be interpreted as the first step in on-going planning and engagement to develop more detailed and sophisticated action plans for each entry in the table. The individuals, groups, and organizations listed under the "Lead(s)" or "Potential Participants" columns are those that provisionally expressed interest in participating in one of those roles or were suggested by the planning team for further engagement (denoted in bold), for those that are not members of the planning team. The leads, participants, and estimated costs in the operational plan are not binding nor an official commitment of resources, but rather provide a roadmap for future coordination and engagement to work towards implementation of the WCRP.
+
+```{python opplan, echo=FALSE}
+#| label: tbl-opplan
+#| tbl-cap: "Operational plan to support the implementation of strategies and actions to improve connectivity for target species in the Horsefly River watershed."
+#| warning: false
+#| echo: false
+
+from IPython.display import display
+import pandas as pd
+import numpy as np
+
+def df_operation(val):
+    return "background-color: black; color: white"
+
+
+data = pd.read_csv('data/Table13.csv', index_col=False)
+
+data = data.replace(np.nan, '', regex=True)
+
+rows = pd.IndexSlice[[0,10,16,23,26,29,30,31], :]
+
+data = data.style.applymap(df_operation, subset=rows).hide_index().set_properties(**{'text-align': 'left'})
+data.set_table_styles(
+   [{
+       'selector': 'th',
+       'props': [('background-color', '#008270'),('text-align', 'left')]
+   }])
+
+```
+
+
+## Funding Sources {-}
+```{r fund, echo = FALSE, results = 'asis'}
+#| label: tbl-fund
+#| tbl-cap: "Potential funding sources for plan implementation in the Horsefly River watershed. The Canadian Wildlife Federation and the planning team can coordinate proposal submission through these sources."
+#| warning: false
+
 library("flextable")
 
-data <- read.csv("data/Table21.csv", check.names=FALSE)
+data <- read.csv("data/Table14.csv", check.names=FALSE)
 ft <- flextable(data)
 ft <- bg(ft, bg = "#008270", part = "header")
 ft <- color(ft, color = "white", part = "header")

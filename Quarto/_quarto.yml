@@ -11,10 +11,12 @@ book:
     - index.qmd
     - plan.qmd
     - summary.qmd
+    - barrier.qmd
     - references.qmd
   appendices: 
     - appendixA.qmd
     - appendixB.qmd 
+    - appendixC.qmd
   
   
   sidebar: 
@@ -47,8 +49,8 @@ format:
     toc: true
     number-sections: true
     highlight-style: github
-    reference-doc: custom-reference-doc.docx
-    tbl-colwidths: auto
+    # reference-doc: custom-reference-doc.docx
+    tbl-colwidths: [40, 30, 30]
     keep-md: true
     keep-ipynb: true
 
