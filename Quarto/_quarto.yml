@@ -40,6 +40,9 @@ format:
     css: style.css
     theme: cosmo
     toc-title: "HORS WCRP"
+    crossref:
+      fig-title: '**Figure**'
+      tbl-title: '**Table**'
   pdf: 
     toc: true
     toc-depth: 2

@@ -1,8 +1,6 @@
-
-p.style {
-  text-align: justify;
+caption, .table-caption, caption.p {
+  text-align: left !important;
 }
-
 p.caption {
   color: #008270;
   margin-top: 10px;
@@ -45,6 +43,8 @@ th {
   padding-left: 10px;
   background-origin: content-box;
 }
+
+.listing p{   font-weight:bold; }
 
 
 
