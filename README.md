@@ -18,5 +18,6 @@ In order to replicate the HORS-WCRP for other watersheds in BC using Quarto Book
 For the libraries to work properly, it is recommended to install a "virtual environment" in python on your local machine. Find a useful resource for creating a virtual environment in python here: https://docs.python.org/3/library/venv.html.
  - Change the text within the qmd files to reflect the information for the watershed you wish to make an WCRP for. Additionally, change the code in the API calls to reflect the watershed. For example, 'http://159.89.114.239:9002/functions/postgisftw.wcrp_barrier_extent/items.json?watershed_group_code=HORS&barrier_type=' for the Horsefly becomes 'http://159.89.114.239:9002/functions/postgisftw.wcrp_barrier_extent/items.json?watershed_group_code=BULK&barrier_type=' for the Bulkley.
  - In order to reflect new API changes that alter habitat numbers within your watershed, your repo must be first cloned, then the quarto book should be rendered before pushing the changes back to GitHub.
+ - In order to change text within the document, look through the .qmd files and find the one you wish to alter. Be careful not to change the "@" labels as they poin to specific tables that are cross referenced within the document. See [here](https://www.markdownguide.org/basic-syntax/) for more info on how to make certain syntax changes within .qmd files.
 
 
